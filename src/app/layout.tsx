@@ -1,9 +1,17 @@
 import type { Metadata } from "next";
-import { Lexend_Deca } from "next/font/google";
+import { Inter, Space_Mono } from "next/font/google";
 import "./globals.css";
+import { QueryProvider } from "@/components/providers/query-provider";
+import { Toaster } from "@/components/ui/sonner";
 
-const font = Lexend_Deca({
+const font = Inter({
   subsets: ["latin"],
+});
+
+const spaceMono = Space_Mono({
+  variable: "--font-space-mono",
+  subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
@@ -17,8 +25,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={` ${font.className} antialiased`}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className={` ${font.className} ${spaceMono.variable} antialiased`}>
+        <QueryProvider>
+          <Toaster />
+
+          {children}
+        </QueryProvider>
+      </body>
     </html>
   );
 }
