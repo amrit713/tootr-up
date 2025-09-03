@@ -1,11 +1,8 @@
 import { Hono } from "hono";
-import { auth } from "@/lib/auth";
+import { auth, Variables } from "@/lib/auth";
 
 const app = new Hono<{
-    Variables: {
-        user: typeof auth.$Infer.Session.user | null;
-        session: typeof auth.$Infer.Session.session | null;
-    };
+    Variables: Variables
 }>()
     .use("*", async (c, next) => {
         const session = await auth.api.getSession({ headers: c.req.raw.headers });
