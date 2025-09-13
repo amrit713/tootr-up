@@ -1,13 +1,11 @@
-import { ButtonLoader } from "@/components/global/button-loader";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import { currentUser } from "@/lib/current-user";
 
-export default function Home() {
-  return (
-    <div className="">
-      <Button>
-        <ButtonLoader label="Click" loadingText="Clicking" isLoading={true} />
-      </Button>
-    </div>
-  );
+import { redirect } from "next/navigation";
+
+export default async function Home() {
+  const user = await currentUser();
+  if (user) {
+    redirect("/sign-in");
+  }
+  return <div className=""></div>;
 }

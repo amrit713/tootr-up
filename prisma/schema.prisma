@@ -15,7 +15,7 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(uuid())
+  id            String     @id @default(uuid())
   name          String
   email         String
   emailVerified Boolean
@@ -24,6 +24,8 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
+  Lead          Lead[]
+  FollowUp      FollowUp[]
 
   @@unique([email])
   @@map("user")
@@ -72,4 +74,126 @@ model Verification {
   updatedAt  DateTime?
 
   @@map("verification")
+}
+
+model Program {
+  id   String @id @default(uuid())
+  name String
+}
+
+model Lead {
+  id     String @id @default(uuid())
+  number String @unique // ✅ required
+
+  //TODO: need to add assignee id
+
+  studentName String?
+  parentName  String?
+
+  email      String?
+  age        Int?
+  grade      String?
+  gender     Gender?
+  schoolName String?
+  address    String?
+  status     LeadStatus     @default(NEW)
+  source     LeadSource?
+  branch     CompanyBranch?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  // Programs as dropdown (array of IDs)
+  programs String[]
+
+  followups FollowUp[]
+
+  student Student?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FollowUp {
+  id       String         @id @default(uuid())
+  due_date DateTime
+  priority Priority
+  remark   String?
+  status   FollowUpStatus @default(NEW)
+
+  leadId String
+  lead   Lead   @relation(fields: [leadId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Student {
+  id           String        @id @default(uuid())
+  number       String        @unique
+  name         String
+  parentName   String
+  email        String
+  age          Int
+  grade        String
+  gender       Gender
+  schoolName   String
+  address      String
+  enrolledDate DateTime      @default(now())
+  branch       CompanyBranch
+
+  // Optional: if you still want to track which lead converted
+  leadId String @unique
+  lead   Lead   @relation(fields: [leadId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum LeadStatus {
+  NEW
+  ONGOING
+  CRITICAL
+  CONVERTED
+  LOST
+}
+
+enum FollowUpStatus {
+  NEW
+  ONGOING
+  CRITICAL
+  CONVERTED
+  LOST
+}
+
+enum CompanyBranch {
+  PATAN
+  BAUDHA
+  BAFAL
+}
+
+enum LeadSource {
+  REFERRAL
+  WALK_IN
+  WEBSITE
+  FACEBOOK
+  WHATSAPP
+  INSTAGRAM
+  OTHER
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
 }

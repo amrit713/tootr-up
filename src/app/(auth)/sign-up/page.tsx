@@ -4,10 +4,10 @@ import { currentUser } from "@/lib/current-user";
 import { SignUpView } from "@/features/auth/components/sign-up";
 
 async function SignupPage() {
-  //   const user = await currentUser();
-  //   if (user) {
-  //     redirect("/");
-  //   }
+  const user = await currentUser();
+  if (user) {
+    redirect("/");
+  }
   return <SignUpView />;
 }
 
