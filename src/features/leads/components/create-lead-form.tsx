@@ -3,8 +3,6 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { leadSchema } from "@/schema";
@@ -54,20 +52,7 @@ export const CreateLeadForm = ({ onCancel }: CreateLeadFormProps) => {
 
   const form = useForm<z.infer<typeof leadSchema>>({
     resolver: zodResolver(leadSchema),
-    defaultValues: {
-      number: "",
-      parentName: "",
-      age: "",
-      email: "",
-      gender: undefined,
-      schoolName: "",
-      address: "",
-      grade: "",
-      status: undefined,
-      source: undefined,
-      branch: undefined,
-      programs: undefined,
-    },
+    defaultValues: {},
   });
 
   const onSubmit = (values: z.infer<typeof leadSchema>) => {
@@ -99,7 +84,6 @@ export const CreateLeadForm = ({ onCancel }: CreateLeadFormProps) => {
         </CardTitle>
       </CardHeader>
       <div className="px-6">
-        <Separator />
         <Form {...form}>
           <form
             action=""
@@ -350,6 +334,7 @@ export const CreateLeadForm = ({ onCancel }: CreateLeadFormProps) => {
                           <MultiSelectItem
                             value={program.name}
                             key={program.id}
+                            className="capitalize"
                           >
                             {program.name}
                           </MultiSelectItem>

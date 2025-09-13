@@ -8,6 +8,7 @@ import { Variables } from "@/lib/auth"
 import { authMiddleware } from "@/lib/hono-middleware";
 import { leadSchema, updateLeadSchema } from "@/schema";
 import { db } from "@/lib/db";
+import { Priority } from "@/generated/prisma";
 
 
 const app = new Hono<{ Variables: Variables }>()
@@ -17,7 +18,7 @@ const app = new Hono<{ Variables: Variables }>()
             throw new HTTPException(401, { message: "Unauthorized" });
         }
 
-        const { number, parentName, age, grade, gender, schoolName, address, status, source, branch, email, programs } = c.req.valid("json")
+        const { number, parentName, age, grade, gender, schoolName, address, status, source, branch, email, programs, studentName } = c.req.valid("json")
 
         const existinglead = await db.lead.findUnique({
             where: {
@@ -31,13 +32,28 @@ const app = new Hono<{ Variables: Variables }>()
 
         const lead = await db.lead.create({
             data: {
-                number, parentName, age: age ? Number(age) : undefined, grade, gender, schoolName, address, status, source, branch, userId: user.id, email, programs: programs && [...programs]
+                number, parentName, age: age ? Number(age) : undefined, grade, gender, studentName, schoolName, address, status, source, branch, userId: user.id, email, programs: programs && [...programs],
+                followups: {
+                    create: {
+                        due_date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+                        priority: Priority.LOW,
+                        userId: user.id,
+
+                    }
+                }
             }
+
         })
+
+
+
 
         if (!lead) {
             throw new HTTPException(500, { message: "Server Error" })
         }
+
+
+
 
         return c.json({
             data: lead
@@ -50,7 +66,30 @@ const app = new Hono<{ Variables: Variables }>()
             throw new HTTPException(401, { message: "Unauthorized" });
         }
 
-        const leads = await db.lead.findMany()
+        const leads = await db.lead.findMany({
+            include: {
+                user: {
+                    select: {
+                        name: true, id: true
+                    }
+                },
+                followups: {
+                    select: {
+                        due_date: true,
+                        priority: true,
+                        status: true
+                    },
+                    orderBy: {
+                        createdAt: "desc"
+                    }
+                }
+
+
+            },
+            orderBy: {
+                createdAt: "desc"
+            }
+        })
 
         if (!leads) {
             throw new HTTPException(404, { message: "Leads not found" })
@@ -74,8 +113,13 @@ const app = new Hono<{ Variables: Variables }>()
 
         const lead = await db.lead.findUnique({
             where: {
-                id: leadId
+                id: leadId,
+
+            },
+            include: {
+                user: true,
             }
+
         })
 
         if (!lead) {

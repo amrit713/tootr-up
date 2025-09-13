@@ -1,17 +1,13 @@
-import { LeadView } from "@/features/leads/views/lead-view";
 import { currentUser } from "@/lib/current-user";
 import { redirect } from "next/navigation";
+import React from "react";
 
-async function LeadsPage() {
+async function StudentsPage() {
   const user = await currentUser();
   if (user) {
     redirect("/sign-in");
   }
-  return (
-    <main>
-      <LeadView />
-    </main>
-  );
+  return <div>StudentsPage</div>;
 }
 
-export default LeadsPage;
+export default StudentsPage;

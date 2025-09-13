@@ -2,7 +2,7 @@
 import { create } from "zustand";
 
 export type ModalType =
-    "createLead" | "updateLead"
+    "createLead" | "updateLead" | "createFollowUp"
 
 
 interface ModalStore {

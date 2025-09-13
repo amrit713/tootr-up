@@ -1,5 +1,6 @@
 "use client";
 
+import { UserButton } from "@/features/auth/components/user-button";
 import { Button } from "../ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
@@ -33,12 +34,13 @@ export const Navbar = () => {
         <div className="flex flex-col ">
           <p className="text-lg font-bold ">Dashboard</p>
           <span className="text-neutral-500 text-sm">
-            {" "}
             Monitor all of your leads and follow up here
           </span>
         </div>
       </div>
-      <div className="">user</div>
+      <div className="">
+        <UserButton />
+      </div>
     </nav>
   );
 };

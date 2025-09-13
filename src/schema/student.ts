@@ -5,27 +5,27 @@ import { CompanyBranch, Gender, LeadSource, LeadStatus } from "@/generated/prism
 export const studentSchema = z.object({
     number: z.string().regex(/^\d{10}$/, "Invalid phone number"),
     parentName: z.string().min(3, "parent name must be at least 3 digit"),
-    email: z.email(),
+    email: z.string().email(),
     age: z.number(),
     grade: z.string(),
-    gender: z.enum(Gender),
+    gender: z.nativeEnum(Gender),
     schoolName: z.string(),
     address: z.string(),
-    status: z.enum(LeadStatus),
-    source: z.enum(LeadSource),
-    branch: z.enum(CompanyBranch)
+    status: z.nativeEnum(LeadStatus),
+    source: z.nativeEnum(LeadSource),
+    branch: z.nativeEnum(CompanyBranch)
 
 })
 export const updateStudentSchema = z.object({
     number: z.string().regex(/^\d{10}$/, "Invalid phone number").optional(),
-    email: z.email().optional(),
+    email: z.string().email().optional(),
     parentName: z.string().min(3, "parent name must be at least 3 digit").optional(),
     age: z.number().optional(),
     grade: z.string().optional(),
-    gender: z.enum(Gender).optional(),
+    gender: z.nativeEnum(Gender).optional(),
     schoolName: z.string().optional(),
     address: z.string().optional(),
-    status: z.enum(LeadStatus).optional(),
-    source: z.enum(LeadSource).optional(),
-    branch: z.enum(CompanyBranch).optional()
+    status: z.nativeEnum(LeadStatus).optional(),
+    source: z.nativeEnum(LeadSource).optional(),
+    branch: z.nativeEnum(CompanyBranch).optional()
 })

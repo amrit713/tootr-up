@@ -1,5 +1,8 @@
 "use client";
 
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+
 import {
   Sidebar,
   SidebarGroup,
@@ -12,11 +15,13 @@ import {
 } from "@/components/ui/sidebar";
 import { SIDEBAR_MENU_ITEM } from "@/constants";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { Logo } from "./logo";
 
 export const AppSidebar = () => {
+  const pathname = usePathname();
+  console.log(pathname);
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="h-16  flex justify-center">
@@ -33,12 +38,22 @@ export const AppSidebar = () => {
             {SIDEBAR_MENU_ITEM.map((item) => {
               return (
                 <SidebarMenuItem key={item.label}>
-                  <SidebarMenuButton className=" hover:bg-white transition rounded font-medium hover:text-black text-neutral-500 ">
+                  <SidebarMenuButton
+                    className={cn(
+                      " hover:bg-white transition rounded font-medium hover:text-black  text-neutral-500  ",
+                      pathname === item.href && "text-black bg-white"
+                    )}
+                  >
                     <Link
                       href={item.href}
                       className={cn("flex flex-items-center gap-2 ")}
                     >
-                      <item.icon className="size-5 text-neutral-500" />
+                      <item.icon
+                        className={cn(
+                          "size-5 text-neutral-500  ",
+                          pathname === item.href && "text-black "
+                        )}
+                      />
                       <span>{item.label}</span>
                     </Link>
                   </SidebarMenuButton>

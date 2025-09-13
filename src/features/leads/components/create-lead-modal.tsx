@@ -1,5 +1,5 @@
 "use client";
-import { ResponsiveModal } from "@/components/global/responsive-dialog";
+import { ResponsiveModal } from "@/components/global/responsive-modal";
 
 import { CreateLeadForm } from "./create-lead-form";
 import { useModal } from "@/hooks/use-modal-store";
