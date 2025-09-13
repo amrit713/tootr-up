@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 async function LeadsPage() {
   const user = await currentUser();
-  if (user) {
+  if (!user) {
     redirect("/sign-in");
   }
   return (
