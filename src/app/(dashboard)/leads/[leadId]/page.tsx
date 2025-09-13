@@ -5,7 +5,7 @@ import React from "react";
 
 async function LeadsDetailPage() {
   const user = await currentUser();
-  if (user) {
+  if (!user) {
     redirect("/sign-in");
   }
   return (
