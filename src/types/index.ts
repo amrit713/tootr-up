@@ -12,4 +12,13 @@ export type LeadType = Omit<Lead, "createdAt" | "updatedAt"> & {
 }
 
 
+export type LeadDetailType = Omit<Lead, "createdAt" | "updatedAt"> & {
+    createdAt: string
+    updatedAt: string
+    user: {
+        name: string, email: string
+    },
+}
+
+
 

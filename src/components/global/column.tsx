@@ -110,7 +110,7 @@ export const columns: ColumnDef<LeadType>[] = [
       return (
         <div className="flex items-center gap-2">
           <Avatar className="size-6 hover:opacity-75 transition border border-netural-400  ">
-            <AvatarFallback className="bg-primary/10 font-medium text-primary flex items-center justify-center ">
+            <AvatarFallback className="bg-primary/10 font-medium text-primary dark:text-white flex items-center justify-center ">
               {name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>

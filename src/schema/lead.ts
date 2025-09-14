@@ -7,7 +7,9 @@ export const leadSchema = z.object({
     parentName: z.string().optional(),
     email: z.string().email().or(z.literal("")).optional(),
     studentName: z.string().optional(),
-    age: z.string().optional(),
+    age: z.string().regex(/^\d+$/, {
+        message: "Input must be a valid number (digits only)",
+    }).optional(),
     grade: z.string().optional(),
     gender: z.nativeEnum(Gender).optional(),
     schoolName: z.string().optional(),
@@ -22,9 +24,10 @@ export const updateLeadSchema = z.object({
     number: z.string().regex(/^\d{10}$/, "Invalid phone number").optional(),
     email: z.string().email().or(z.literal("")).optional(),
     parentName: z.string().optional(),
+    studentName: z.string().optional(),
     age: z.string().regex(/^\d+$/, {
         message: "Input must be a valid number (digits only)",
-    }).optional().or(z.literal("")),
+    }).optional(),
     grade: z.string().optional(),
     gender: z.nativeEnum(Gender).optional(),
     schoolName: z.string().optional(),

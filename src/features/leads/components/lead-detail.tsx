@@ -1,45 +1,55 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardHeader,
-} from "@/components/ui/card";
+import Link from "next/link";
 import { ArrowLeft, EditIcon, MoreVertical, TrashIcon } from "lucide-react";
+
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useGetLead } from "../api/use-get-lead";
 import { useLeadId } from "../hooks/use-lead-id";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { cn, snakeCaseToTitleCase } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+import { cn, snakeCaseToTitleCase } from "@/lib/utils";
+import { useModal } from "@/hooks/use-modal-store";
+import { useRouter } from "next/navigation";
+import { LeadDetailType } from "@/types";
 
-export const LeadDetail = () => {
-  const leadId = useLeadId();
+interface Props {
+  lead?: LeadDetailType;
+  leadId: string;
+}
 
-  const { data: lead } = useGetLead(leadId);
+export const LeadDetail = ({ lead, leadId }: Props) => {
+  const { onOpen } = useModal();
+  const router = useRouter();
+
   console.log(lead);
   return (
     <Card className="">
       <CardHeader className="flex items-center justify-between">
-        <Button variant={"ghost"} size={"icon"} className="rounded-full">
+        <Button
+          variant={"ghost"}
+          className="rounded-full"
+          size={"icon"}
+          onClick={() => router.push("/leads")}
+        >
           <ArrowLeft />
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant={"outline"} className="rounded-full" size={"icon"}>
+            <Button variant={"ghost"} className="rounded-full" size={"icon"}>
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onOpen("updateLead")}>
               <EditIcon /> Edit
             </DropdownMenuItem>
 
@@ -51,8 +61,8 @@ export const LeadDetail = () => {
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
         <div className="flex flex-col gap-2 items-center justify-center">
-          <Avatar className="size-20 text-4xl  font-space text-primary font-bold ">
-            <AvatarFallback>
+          <Avatar className="size-20 text-4xl  font-space text-primary font-bold  ">
+            <AvatarFallback className="capitalize dark:bg-blue-600/10 dark:text-white">
               {lead?.parentName ? lead.parentName.charAt(0) : "L"}
             </AvatarFallback>
           </Avatar>
@@ -72,9 +82,11 @@ export const LeadDetail = () => {
         <Separator />
         <div className="">
           <p className="font-space font-semibold">Created By:</p>
-          <div className=" flex items-center gap-2 text-gray-700">
-            <Avatar className="capitalize font-medium">
-              <AvatarFallback>{lead?.user.name.charAt(0)}</AvatarFallback>
+          <div className=" flex items-center gap-2 text-gray-700 dark:text-gray-300">
+            <Avatar className="capitalize font-semibold">
+              <AvatarFallback className="bg-green-600/10">
+                {lead?.user.name.charAt(0)}
+              </AvatarFallback>
             </Avatar>
             <p className="capitalize">{lead?.user.name}</p>
           </div>
@@ -87,15 +99,18 @@ export const LeadDetail = () => {
           <div className="mt-4 flex   gap-6">
             <div className="flex flex-col text-sm ">
               <p className=" font-medium">Number</p>
-              <p className="text-gray-600 capitalize"> {lead?.number}</p>
+              <p className="text-gray-600 dark:text-gray-300 capitalize">
+                {" "}
+                {lead?.number}
+              </p>
             </div>
 
             <div className="flex flex-col text-sm ">
               <p className=" font-medium">Email</p>
               <p
                 className={cn(
-                  "text-gray-600 capitalize",
-                  !lead?.email && "text-gray-400 text-xs"
+                  "text-gray-600 dark:text-gray-300 ",
+                  !lead?.email && "text-gray-400 dark:text-gray-500  text-xs"
                 )}
               >
                 {" "}
@@ -109,8 +124,9 @@ export const LeadDetail = () => {
               <p className=" font-medium">Name</p>
               <p
                 className={cn(
-                  "text-gray-600 capitalize",
-                  !lead?.parentName && "text-gray-400 text-xs"
+                  "text-gray-600 capitalize dark:text-gray-300",
+                  !lead?.parentName &&
+                    "text-gray-400 dark:text-gray-500 text-xs"
                 )}
               >
                 {" "}
@@ -122,8 +138,8 @@ export const LeadDetail = () => {
               <p className=" font-medium">Address</p>
               <p
                 className={cn(
-                  "text-gray-600 capitalize",
-                  !lead?.address && "text-gray-400 text-xs"
+                  "text-gray-600 dark:text-gray-300 capitalize",
+                  !lead?.address && "text-gray-400 dark:text-gray-500 text-xs"
                 )}
               >
                 {" "}
@@ -142,8 +158,9 @@ export const LeadDetail = () => {
               <p className=" font-medium">Name</p>
               <p
                 className={cn(
-                  "text-gray-600 capitalize",
-                  !lead?.studentName && "text-gray-400 text-xs"
+                  "text-gray-600 dark:text-gray-300 capitalize",
+                  !lead?.studentName &&
+                    "text-gray-400 dark:text-gray-500 text-xs"
                 )}
               >
                 {" "}
@@ -155,8 +172,9 @@ export const LeadDetail = () => {
               <p className=" font-medium">School Name</p>
               <p
                 className={cn(
-                  "text-gray-600 capitalize",
-                  !lead?.schoolName && "text-gray-400 text-xs"
+                  "text-gray-600 dark:text-gray-300 capitalize",
+                  !lead?.schoolName &&
+                    "text-gray-400 dark:text-gray-500 text-xs"
                 )}
               >
                 {" "}
@@ -169,8 +187,8 @@ export const LeadDetail = () => {
                 <p className="tex font-medium">Age</p>
                 <p
                   className={cn(
-                    "text-gray-600 capitalize",
-                    !lead?.age && "text-gray-400 text-xs"
+                    "text-gray-600 dark:text-gray-300 capitalize",
+                    !lead?.age && "text-gray-400 dark:text-gray-500 text-xs"
                   )}
                 >
                   {" "}
@@ -182,8 +200,8 @@ export const LeadDetail = () => {
                 <p className=" font-medium">Grade</p>
                 <p
                   className={cn(
-                    "text-gray-600 capitalize",
-                    !lead?.grade && "text-gray-400 text-xs"
+                    "text-gray-600 dark:text-gray-300 capitalize",
+                    !lead?.grade && "text-gray-400 dark:text-gray-500 text-xs"
                   )}
                 >
                   {" "}
@@ -194,8 +212,8 @@ export const LeadDetail = () => {
                 <p className=" font-medium">Gender</p>
                 <p
                   className={cn(
-                    "text-gray-600 capitalize",
-                    !lead?.gender && "text-gray-400 text-xs"
+                    "text-gray-600 dark:text-gray-300 capitalize",
+                    !lead?.gender && "text-gray-400 dark:text-gray-500 text-xs"
                   )}
                 >
                   {" "}
@@ -209,8 +227,8 @@ export const LeadDetail = () => {
                 <p className=" font-medium">Branch</p>
                 <p
                   className={cn(
-                    "text-gray-600 capitalize",
-                    !lead?.branch && "text-gray-400 text-xs"
+                    "text-gray-600 dark:text-gray-300 capitalize",
+                    !lead?.branch && "text-gray-400 dark:text-gray-500 text-xs"
                   )}
                 >
                   {" "}
@@ -224,8 +242,8 @@ export const LeadDetail = () => {
                 <p className="font-medium">Source</p>
                 <p
                   className={cn(
-                    "text-gray-600 capitalize",
-                    !lead?.source && "text-gray-400 text-xs"
+                    "text-gray-600 dark:text-gray-300 capitalize",
+                    !lead?.source && "text-gray-400 dark:text-gray-500 text-xs"
                   )}
                 >
                   {" "}
@@ -238,15 +256,20 @@ export const LeadDetail = () => {
 
             <div className="flex flex-col text-sm ">
               <p className=" font-medium">Interested Program</p>
-              <div className="flex overflow-x-auto gap-2 ">
+              <div className="flex overflow-x-auto gap-2 mt-2 ">
                 {lead?.programs.length !== 0 ? (
                   lead?.programs.map((program, idx) => (
-                    <Badge key={idx} className="bg-green-50 text-black">
+                    <Badge
+                      key={idx}
+                      className="bg-green-300/20 dark:text-white text-black"
+                    >
                       {program}
                     </Badge>
                   ))
                 ) : (
-                  <p className="text-gray-400 text-xs">Not provided</p>
+                  <p className="text-gray-400 dark:text-gray-500 text-xs">
+                    Not provided
+                  </p>
                 )}
               </div>
             </div>

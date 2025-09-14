@@ -5,7 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { leadSchema } from "@/schema";
+import { leadSchema, updateLeadSchema } from "@/schema";
 
 import {
   Form,
@@ -18,7 +18,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-import { useCreateLead } from "../api/use-create-lead";
 import { cn, snakeCaseToTitleCase } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -28,12 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  CompanyBranch,
-  Gender,
-  LeadSource,
-  LeadStatus,
-} from "@/generated/prisma";
+import { CompanyBranch, LeadSource, LeadStatus } from "@/generated/prisma";
 import { useGetPrograms } from "@/features/programs/api/use-get-program";
 import {
   MultiSelect,
@@ -44,31 +38,48 @@ import {
 } from "@/components/ui/multi-select";
 import { ButtonLoader } from "@/components/global/button-loader";
 import { useModal } from "@/hooks/use-modal-store";
+import { useLeadId } from "../hooks/use-lead-id";
+import { useGetLead } from "../api/use-get-lead";
+import { useUpdateLead } from "../api/use-update-lead";
 
-interface CreateLeadFormProps {
-  onCancel?: () => void;
-}
-
-export const CreateLeadForm = ({ onCancel }: CreateLeadFormProps) => {
+export const UpdateLeadForm = () => {
   const { onClose } = useModal();
+  const leadId = useLeadId();
 
-  const { mutate: createLead, isPending } = useCreateLead();
+  const { data } = useGetLead(leadId);
+
+  const { mutate: updateLead, isPending } = useUpdateLead();
   const { data: programs } = useGetPrograms();
 
-  const form = useForm<z.infer<typeof leadSchema>>({
-    resolver: zodResolver(leadSchema),
-    defaultValues: {},
+  const form = useForm<z.infer<typeof updateLeadSchema>>({
+    resolver: zodResolver(updateLeadSchema),
+    defaultValues: {
+      number: data?.number,
+      email: data?.email ?? "",
+      parentName: data?.parentName ?? "",
+      status: data?.status ?? undefined,
+      source: data?.source ?? undefined,
+      programs: data?.programs ?? undefined,
+      branch: data?.branch ?? undefined,
+      studentName: data?.studentName ?? "",
+      address: data?.address ?? "",
+
+      schoolName: data?.schoolName ?? "",
+      grade: data?.grade ?? "",
+      age: data?.age?.toString() ?? undefined,
+      gender: data?.gender ?? undefined,
+    },
   });
 
-  const onSubmit = (values: z.infer<typeof leadSchema>) => {
+  const onSubmit = (values: z.infer<typeof updateLeadSchema>) => {
     console.log(values);
 
     const finalValues = {
       ...values,
     };
 
-    createLead(
-      { json: finalValues },
+    updateLead(
+      { json: finalValues, param: { leadId } },
       {
         onSuccess: () => {
           form.reset();
@@ -85,7 +96,7 @@ export const CreateLeadForm = ({ onCancel }: CreateLeadFormProps) => {
     >
       <CardHeader className="flex px-6 ">
         <CardTitle className="font-bold text-xl font-space  text-center w-full">
-          Create a Lead
+          Update a Lead
         </CardTitle>
       </CardHeader>
       <div className="px-6">
@@ -162,43 +173,23 @@ export const CreateLeadForm = ({ onCancel }: CreateLeadFormProps) => {
               Student Information
             </h2>
 
-            <div className="flex  gap-4 w-full">
-              <FormField
-                control={form.control}
-                name="studentName"
-                render={({ field }) => (
-                  <FormItem className=" flex flex-col gap-4 w-full">
-                    <FormLabel> Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        disabled={isPending}
-                        placeholder="Enter a name"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="schoolName"
-                render={({ field }) => (
-                  <FormItem className=" flex flex-col gap-4 w-full">
-                    <FormLabel> School Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        disabled={isPending}
-                        placeholder="Enter a  school name"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
+            <FormField
+              control={form.control}
+              name="studentName"
+              render={({ field }) => (
+                <FormItem className=" flex flex-col gap-4">
+                  <FormLabel> Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isPending}
+                      placeholder="Enter a name"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <div className="flex  gap-4 w-full">
               <FormField
                 control={form.control}
@@ -208,7 +199,6 @@ export const CreateLeadForm = ({ onCancel }: CreateLeadFormProps) => {
                     <FormLabel> Age</FormLabel>
                     <FormControl>
                       <Input
-                        type="number"
                         disabled={isPending}
                         placeholder="Enter age"
                         {...field}
@@ -231,32 +221,6 @@ export const CreateLeadForm = ({ onCancel }: CreateLeadFormProps) => {
                         placeholder="Enter a Grade"
                         {...field}
                       />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="gender"
-                render={({ field }) => (
-                  <FormItem className=" flex flex-col gap-4 w-full">
-                    <FormLabel> Gender</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select a Status " />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {Object.values(Gender).map((gender, idx) => (
-                            <SelectItem key={idx} value={gender}>
-                              {snakeCaseToTitleCase(gender)}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
                     </FormControl>
                   </FormItem>
                 )}
@@ -401,18 +365,13 @@ export const CreateLeadForm = ({ onCancel }: CreateLeadFormProps) => {
             <Separator className="my-2" />
 
             <div className="flex items-center  gap-4 ">
-              <Button
-                variant={"secondary"}
-                type="button"
-                className={cn("flex-1", !onCancel && "invisible")}
-                onClick={onClose}
-              >
+              <Button variant={"secondary"} type="button" className={"flex-1"}>
                 Cancel
               </Button>
               <Button type="submit" disabled={isPending} className="flex-1">
                 <ButtonLoader
-                  label="create lead"
-                  loadingText="creating"
+                  label="Update lead"
+                  loadingText="Updating"
                   isLoading={isPending}
                 />
               </Button>

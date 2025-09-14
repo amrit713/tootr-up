@@ -117,7 +117,13 @@ const app = new Hono<{ Variables: Variables }>()
 
             },
             include: {
-                user: true,
+                user: {
+
+                    select: {
+                        name: true,
+                        email: true
+                    }
+                }
             }
 
         })

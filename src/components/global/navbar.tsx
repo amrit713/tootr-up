@@ -3,6 +3,7 @@
 import { UserButton } from "@/features/auth/components/user-button";
 import { Button } from "../ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { ModeToggle } from "./mode-toggle";
 
 const pathnameMap = {
   leads: {
@@ -38,7 +39,8 @@ export const Navbar = () => {
           </span>
         </div>
       </div>
-      <div className="">
+      <div className="flex gap-4 ">
+        <ModeToggle />
         <UserButton />
       </div>
     </nav>

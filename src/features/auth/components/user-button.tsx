@@ -41,7 +41,7 @@ export const UserButton = () => {
   };
 
   if (isLoading) {
-    <div className="size-10  flex items-center justify-center bg-primary/10 border-neutral-400 rounded-full">
+    <div className="size-10  flex items-center justify-center bg-green-600/10 border-neutral-400 rounded-full">
       <Loader2 className="size-4 animate-spin text-muted-foreground" />
     </div>;
   }
@@ -65,7 +65,7 @@ export const UserButton = () => {
           onClick={() => setDrop(true)}
         >
           <Avatar className="size-9 hover:opacity-75 transition border border-netural-400  ">
-            <AvatarFallback className="bg-primary/10 font-bold text-primary flex items-center justify-center  ">
+            <AvatarFallback className="bg-green-600/10 font-bold text-dark dark:text-white flex items-center justify-center  ">
               {avatarFallback}
             </AvatarFallback>
           </Avatar>
@@ -79,7 +79,7 @@ export const UserButton = () => {
         >
           <div className="flex  items-center  gap-2 px-2.5 py-4   ">
             <Avatar className="size-[52px] transition border border-netural-400 ">
-              <AvatarFallback className="bg-primary/10 font-medium text-primary flex text-xl items-center justify-center">
+              <AvatarFallback className="bg-primary/10 font-medium text-primary dark:text-white flex text-xl items-center justify-center">
                 {avatarFallback}
               </AvatarFallback>
             </Avatar>

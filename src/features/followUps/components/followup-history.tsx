@@ -13,19 +13,25 @@ import { useGetFollowUps } from "@/features/followUps/api/use-get-followups";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Followup } from "./followup";
 import { useModal } from "@/hooks/use-modal-store";
+import { LeadStatus } from "@/generated/prisma";
 
-export const FollowupHistory = () => {
+export const FollowupHistory = ({ status }: { status: LeadStatus }) => {
   const leadId = useLeadId();
   const { onOpen } = useModal();
 
   const { data: followups } = useGetFollowUps({ leadId });
 
   return (
-    <Card className=" shadow-none border-none p-0">
+    <Card className=" shadow-none border-none dark:bg-background p-0">
       <CardHeader className="flex justify-between items-center">
         <CardTitle className="">Follow History({followups?.total})</CardTitle>
         <CardAction>
-          <Button onClick={() => onOpen("createFollowUp")}>
+          <Button
+            onClick={() => onOpen("createFollowUp")}
+            disabled={
+              status === LeadStatus.CONVERTED || status === LeadStatus.LOST
+            }
+          >
             New follow up
           </Button>
         </CardAction>
@@ -43,6 +49,7 @@ export const FollowupHistory = () => {
                 name={followup.user.name}
                 email={followup.user.email}
                 status={followup.status}
+                id={followup.id}
               />
             ))}
           </div>

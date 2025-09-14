@@ -20,7 +20,9 @@ import { Logo } from "./logo";
 
 export const AppSidebar = () => {
   const pathname = usePathname();
-  console.log(pathname);
+  const path = pathname.split("/")[1];
+
+  console.log(path);
 
   return (
     <Sidebar collapsible="icon">
@@ -40,8 +42,9 @@ export const AppSidebar = () => {
                 <SidebarMenuItem key={item.label}>
                   <SidebarMenuButton
                     className={cn(
-                      " hover:bg-white transition rounded font-medium hover:text-black  text-neutral-500  ",
-                      pathname === item.href && "text-black bg-white"
+                      " hover:bg-white transition rounded font-medium hover:text-black dark:hover:bg-gray-800 dark:hover:text-white  text-neutral-500  ",
+                      path === item.href &&
+                        "text-black bg-white dark:bg-gray-800 dark:text-white"
                     )}
                   >
                     <Link
@@ -51,7 +54,7 @@ export const AppSidebar = () => {
                       <item.icon
                         className={cn(
                           "size-5 text-neutral-500  ",
-                          pathname === item.href && "text-black "
+                          path === item.href && "text-black dark:text-white "
                         )}
                       />
                       <span>{item.label}</span>

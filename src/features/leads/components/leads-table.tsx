@@ -56,7 +56,7 @@ export function DataTable<TData, TValue>({
     <div>
       {/* server side filtering */}
       <div className="rounded-md border ">
-        <Table className="overflow-x-scroll">
+        <Table className="overflow-x-scroll ">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -82,6 +82,7 @@ export function DataTable<TData, TValue>({
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
+                    className="hover:cursor-pointer "
                     onClick={() => {
                       router.push(`/leads/${(row.original as any).id}` as any);
                     }}
