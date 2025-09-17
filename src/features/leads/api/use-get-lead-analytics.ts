@@ -8,7 +8,7 @@ import { client } from "@/lib/rpc";
 
 export const useGetLeadAnalytics = () => {
     const query = useQuery({
-        queryKey: ["analytics",],
+        queryKey: ["analytics"],
         queryFn: async () => {
             const response = await client.api.leads.analytics.$get()
 
