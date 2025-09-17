@@ -22,7 +22,7 @@ import { Edit } from "lucide-react";
 import { FollowRemark } from "./follow-remark";
 
 interface Props {
-  due_date: string;
+  due_date?: string;
   priority: FollowUpPriority;
   remark?: string | null;
   name: string;
@@ -46,7 +46,13 @@ export const Followup = ({
         <div className="flex flex-col">
           <p className="font-semibold">Due Date:</p>
 
-          <FollowUpDate value={due_date} className="text-sm font-normal" />
+          {due_date ? (
+            <FollowUpDate value={due_date} className="text-sm font-normal" />
+          ) : (
+            <p className="text-xs text-gray-400 dark:text-gray-500">
+              no due date to follow
+            </p>
+          )}
         </div>
         <Priority priority={priority} className=" text-sm" />
       </CardHeader>

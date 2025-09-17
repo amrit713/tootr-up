@@ -17,8 +17,6 @@ export const useCreateFollowUp = () => {
         json,
       });
 
-      console.log(response);
-
       if (!response.ok) {
         const error = await response.text();
         throw new Error(error);
@@ -31,7 +29,6 @@ export const useCreateFollowUp = () => {
       queryClient.invalidateQueries({ queryKey: ["lead"] });
     },
     onError: (error) => {
-      console.log(error);
       toast.error(error.message);
     },
   });

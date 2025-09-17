@@ -15,7 +15,7 @@ import { Followup } from "./followup";
 import { useModal } from "@/hooks/use-modal-store";
 import { LeadStatus } from "@/generated/prisma";
 
-export const FollowupHistory = ({ status }: { status: LeadStatus }) => {
+export const FollowupHistory = ({ status }: { status?: LeadStatus }) => {
   const leadId = useLeadId();
   const { onOpen } = useModal();
 
@@ -43,7 +43,7 @@ export const FollowupHistory = ({ status }: { status: LeadStatus }) => {
             {followups?.data?.map((followup) => (
               <Followup
                 key={followup.id}
-                due_date={followup.due_date}
+                due_date={followup.due_date ? followup.due_date : undefined}
                 priority={followup.priority}
                 remark={followup.remark}
                 name={followup.user.name}

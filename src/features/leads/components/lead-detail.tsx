@@ -30,7 +30,6 @@ export const LeadDetail = ({ lead, leadId }: Props) => {
   const { onOpen } = useModal();
   const router = useRouter();
 
-  console.log(lead);
   return (
     <Card className="">
       <CardHeader className="flex items-center justify-between">

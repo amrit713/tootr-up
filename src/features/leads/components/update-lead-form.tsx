@@ -72,8 +72,6 @@ export const UpdateLeadForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof updateLeadSchema>) => {
-    console.log(values);
-
     const finalValues = {
       ...values,
     };

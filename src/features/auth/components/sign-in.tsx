@@ -28,8 +28,6 @@ import { useLogin } from "../api/use-login";
 export const SignInView = () => {
   const { mutate, isPending, error } = useLogin();
 
-  console.log(error);
-
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {

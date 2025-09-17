@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 
 import {
@@ -11,7 +11,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSubButton,
 } from "@/components/ui/sidebar";
 import { SIDEBAR_MENU_ITEM } from "@/constants";
 import { cn } from "@/lib/utils";
@@ -21,8 +20,7 @@ import { Logo } from "./logo";
 export const AppSidebar = () => {
   const pathname = usePathname();
   const path = pathname.split("/")[1];
-
-  console.log(path);
+  const router = useRouter();
 
   return (
     <Sidebar collapsible="icon">
@@ -46,11 +44,9 @@ export const AppSidebar = () => {
                       path === item.href &&
                         "text-black bg-white dark:bg-gray-800 dark:text-white"
                     )}
+                    onClick={() => router.push(`/${item.href}`)}
                   >
-                    <Link
-                      href={item.href}
-                      className={cn("flex flex-items-center gap-2 ")}
-                    >
+                    <div className={cn("flex flex-items-center gap-2 ")}>
                       <item.icon
                         className={cn(
                           "size-5 text-neutral-500  ",
@@ -58,7 +54,7 @@ export const AppSidebar = () => {
                         )}
                       />
                       <span>{item.label}</span>
-                    </Link>
+                    </div>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               );

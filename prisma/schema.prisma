@@ -99,6 +99,7 @@ model Lead {
   status     LeadStatus     @default(NEW)
   source     LeadSource?
   branch     CompanyBranch?
+  due_date   DateTime?
 
   userId String
   user   User   @relation(fields: [userId], references: [id])
@@ -116,7 +117,7 @@ model Lead {
 
 model FollowUp {
   id       String         @id @default(uuid())
-  due_date DateTime
+  due_date DateTime?
   priority Priority
   remark   String?
   status   FollowUpStatus @default(NEW)

@@ -44,9 +44,9 @@ const app = new Hono<{ Variables: Variables }>()
         const lead = await db.lead.create({
             data: {
                 number, parentName, age: age ? Number(age) : undefined, grade, gender, studentName, schoolName, address, status, source, branch, userId: user.id, email, programs: programs && [...programs],
+
                 followups: {
                     create: {
-                        due_date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
                         priority: Priority.LOW,
                         userId: user.id,
 
@@ -78,7 +78,7 @@ const app = new Hono<{ Variables: Variables }>()
         }
 
         const { search, dueDate, status } = c.req.valid("query")
-        console.log("🚀 ~ dueDate:", dueDate && new Date(dueDate))
+
 
 
 
@@ -92,11 +92,7 @@ const app = new Hono<{ Variables: Variables }>()
                     mode: "insensitive"
                 } : undefined,
 
-                followups: dueDate ? {
-                    some: {
-                        due_date: new Date(dueDate) // This will filter leads that have at least one follow-up with the specified due_date
-                    }
-                } : undefined,
+                due_date: dueDate ? new Date(dueDate) : undefined
             },
             include: {
                 user: {
@@ -108,7 +104,7 @@ const app = new Hono<{ Variables: Variables }>()
                 followups: {
                     take: 1,
                     select: {
-                        due_date: true,
+
                         priority: true,
                         status: true
                     },
@@ -125,11 +121,6 @@ const app = new Hono<{ Variables: Variables }>()
         if (!leads) {
             throw new HTTPException(404, { message: "Leads not found" })
         }
-        console.log("🚀 ~ leads:", leads[0]?.followups)
-
-
-
-
 
         return c.json({
             totalLead: leads.length,

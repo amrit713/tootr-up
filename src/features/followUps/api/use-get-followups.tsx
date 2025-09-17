@@ -16,7 +16,7 @@ export const useGetFollowUps = ({ leadId }: Props) => {
         throw new Error("failed to fetch follow ups");
       }
       const { data, total } = await response.json();
-      console.log(data);
+
       return { data, total };
     },
   });

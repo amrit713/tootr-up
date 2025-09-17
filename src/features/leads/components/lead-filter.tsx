@@ -20,7 +20,6 @@ import { Button } from "@/components/ui/button";
 
 export const LeadFilter = () => {
   const { status, search, dueDate, setFilter, resetFilters } = useLeadFilters();
-  console.log("🚀 ~ LeadFilter ~ dueDate:", dueDate);
 
   const onStatusChange = (value: string) => {
     if (value === "all") {
@@ -76,9 +75,9 @@ export const LeadFilter = () => {
         placeholder="Due date"
         className=" w-full h-9 md:w-auto"
         value={dueDate ? new Date(dueDate) : undefined}
-        onChange={(date) =>
-          setFilter("dueDate", date ? date.toISOString() : undefined)
-        }
+        onChange={(date) => {
+          setFilter("dueDate", date ? date.toISOString() : undefined);
+        }}
       />
 
       {(search || dueDate || status) && (

@@ -41,7 +41,7 @@ const app = new Hono<{ Variables: Variables }>()
             throw new HTTPException(500, { message: "Internal server Error" });
         }
 
-        console.log(followups)
+
 
         return c.json({
             data: followups,
@@ -63,7 +63,7 @@ const app = new Hono<{ Variables: Variables }>()
 
         const { due_date, remark, priority, status, leadId } = c.req.valid("json")
 
-        console.log(due_date)
+
 
         const lead = await db.lead.findUnique({
             where: {
@@ -92,7 +92,8 @@ const app = new Hono<{ Variables: Variables }>()
                 id: leadId
             },
             data: {
-                status: followUp.status
+                status: followUp.status,
+                due_date: followUp.due_date
             }
         })
 

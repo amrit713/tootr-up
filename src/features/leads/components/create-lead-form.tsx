@@ -61,8 +61,6 @@ export const CreateLeadForm = ({ onCancel }: CreateLeadFormProps) => {
   });
 
   const onSubmit = (values: z.infer<typeof leadSchema>) => {
-    console.log(values);
-
     const finalValues = {
       ...values,
     };

@@ -53,8 +53,6 @@ export const CreateFollowUpForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof followUpSchema>) => {
-    console.log(values);
-
     const finalValues = {
       ...values,
       leadId,
