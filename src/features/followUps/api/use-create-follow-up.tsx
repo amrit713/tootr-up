@@ -23,10 +23,11 @@ export const useCreateFollowUp = () => {
       }
       return await response.json();
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success("follow up created");
       queryClient.invalidateQueries({ queryKey: ["followUps"] });
       queryClient.invalidateQueries({ queryKey: ["lead"] });
+      queryClient.invalidateQueries({ queryKey: ["analytics"] });
     },
     onError: (error) => {
       toast.error(error.message);

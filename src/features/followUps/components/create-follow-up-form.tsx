@@ -187,16 +187,11 @@ export const CreateFollowUpForm = () => {
               >
                 Cancel
               </Button>
-              <Button
-                type="submit"
-                //  disabled={isPending}
-                className="flex-1"
-              >
+              <Button type="submit" disabled={isPending} className="flex-1">
                 <ButtonLoader
                   label="create follow-up"
                   loadingText="creating"
-
-                  // isLoading={isPending}
+                  isLoading={isPending}
                 />
               </Button>
             </div>

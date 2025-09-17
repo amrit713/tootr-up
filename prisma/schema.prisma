@@ -109,6 +109,7 @@ model Lead {
 
   followups FollowUp[]
 
+  //TODOD: need to change 
   student Student?
 
   createdAt DateTime @default(now())

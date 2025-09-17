@@ -23,6 +23,7 @@ export const useUpdateLead = () => {
       toast.success("Lead updated");
       queryClient.invalidateQueries({ queryKey: ["leads"] });
       queryClient.invalidateQueries({ queryKey: ["lead"] });
+      queryClient.invalidateQueries({ queryKey: ["analytics"] });
     },
     onError: (error) => {
       toast.error(error.message);
