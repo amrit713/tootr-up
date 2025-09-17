@@ -1,4 +1,4 @@
-import { LeadView } from "@/features/leads/views/lead-view";
+import { LeadsView } from "@/features/leads/views/leads-view";
 import { currentUser } from "@/lib/current-user";
 import { redirect } from "next/navigation";
 
@@ -9,7 +9,7 @@ async function LeadsPage() {
   }
   return (
     <main>
-      <LeadView />
+      <LeadsView />
     </main>
   );
 }

@@ -2,13 +2,24 @@ import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 // import { z } from "zod";
 import { HTTPException } from "hono/http-exception";
+import { endOfMonth, startOfMonth, subMonths } from "date-fns";
 
 
 import { Variables } from "@/lib/auth"
 import { authMiddleware } from "@/lib/hono-middleware";
 import { leadSchema, updateLeadSchema } from "@/schema";
 import { db } from "@/lib/db";
-import { Priority } from "@/generated/prisma";
+import { LeadStatus, Priority } from "@/generated/prisma";
+import z from "zod";
+
+
+
+const filterSchema = z.object({
+    search: z.string().nullish(),
+    dueDate: z.string().nullish(),
+    status: z.nativeEnum(LeadStatus).nullish()
+
+})
 
 
 const app = new Hono<{ Variables: Variables }>()
@@ -60,20 +71,42 @@ const app = new Hono<{ Variables: Variables }>()
         })
 
     })
-    .get("/", authMiddleware, async (c) => {
+    .get("/", authMiddleware, zValidator("query", filterSchema), async (c) => {
         const user = c.get("user")
         if (!user) {
             throw new HTTPException(401, { message: "Unauthorized" });
         }
 
+        const { search, dueDate, status } = c.req.valid("query")
+        console.log("🚀 ~ dueDate:", dueDate && new Date(dueDate))
+
+
+
+
+
         const leads = await db.lead.findMany({
+            where: {
+                status: status || undefined,
+                number: search ? {
+                    contains: search,
+                    mode: "insensitive"
+                } : undefined,
+
+                followups: dueDate ? {
+                    some: {
+                        due_date: new Date(dueDate) // This will filter leads that have at least one follow-up with the specified due_date
+                    }
+                } : undefined,
+            },
             include: {
                 user: {
                     select: {
-                        name: true, id: true
+                        name: true,
+                        id: true
                     }
                 },
                 followups: {
+                    take: 1,
                     select: {
                         due_date: true,
                         priority: true,
@@ -83,8 +116,6 @@ const app = new Hono<{ Variables: Variables }>()
                         createdAt: "desc"
                     }
                 }
-
-
             },
             orderBy: {
                 createdAt: "desc"
@@ -94,10 +125,59 @@ const app = new Hono<{ Variables: Variables }>()
         if (!leads) {
             throw new HTTPException(404, { message: "Leads not found" })
         }
+        console.log("🚀 ~ leads:", leads[0]?.followups)
+
+
+
+
 
         return c.json({
             totalLead: leads.length,
             data: leads
+        })
+    })
+    .get("/analytics", authMiddleware, async (c) => {
+        const user = c.get("user")
+        if (!user) {
+            throw new HTTPException(401, { message: "Unauthorized" });
+        }
+
+        const now = new Date();
+        const thisMonthStart = startOfMonth(now);
+        const thisMonthEnd = endOfMonth(now);
+        const lastMonthStart = startOfMonth(subMonths(now, 1));
+        const lastMonthEnd = endOfMonth(subMonths(now, 1));
+
+        const totalLeadCount = await db.lead.count({})
+        const convertedLead = await db.lead.count({
+            where: {
+                status: LeadStatus.CONVERTED
+            }
+        })
+        const lostLead = await db.lead.count({
+            where: {
+                status: LeadStatus.LOST
+            }
+        })
+        const criticalLead = await db.lead.count({
+            where: {
+                status: LeadStatus.CRITICAL
+            }
+        })
+
+        const convertedPrecentage = (convertedLead / totalLeadCount) * 100
+        const lostPrecentage = (lostLead / totalLeadCount) * 100
+        const criticalPrecentage = (criticalLead / totalLeadCount) * 100
+
+
+
+        return c.json({
+            data: {
+                totalLead: totalLeadCount,
+                lostLead,
+                criticalLead, convertedLead,
+                lostPrecentage, criticalPrecentage, convertedPrecentage
+            }
         })
     })
     .get("/:leadId", authMiddleware, async c => {
@@ -191,6 +271,7 @@ const app = new Hono<{ Variables: Variables }>()
             data: leadId
         })
     })
+
 
 
 export default app

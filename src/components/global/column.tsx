@@ -134,7 +134,7 @@ export const columns: ColumnDef<LeadType>[] = [
       );
     },
     cell: ({ row }) => {
-      const due_date = row.original.followups[0].due_date;
+      const due_date = row.original.followups[0]?.due_date;
       return <FollowUpDate value={due_date} />;
     },
   },
