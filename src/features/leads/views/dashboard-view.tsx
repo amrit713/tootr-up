@@ -19,7 +19,7 @@ import { LeadPieChart } from "../components/lead-pie-chart";
 export const DashboardView = () => {
   const { data } = useGetLeadAnalytics();
 
-  const formatted = useMemo(() => new Date().toISOString(), []);
+  const formatted = useMemo(() => new Date().toString(), []);
 
   const { data: leads } = useGetLeads({
     dueDate: formatted,
