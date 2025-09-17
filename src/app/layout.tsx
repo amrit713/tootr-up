@@ -39,6 +39,9 @@ export default function RootLayout({
             <Toaster />
 
             {children}
+
+            {/* TODO:need to handle loading and error state
+             */}
             <Analytics />
           </QueryProvider>
         </ThemeProvider>
