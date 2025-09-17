@@ -1,3 +1,5 @@
+import { LeadFilter } from "@/features/leads/components/lead-filter";
+import { DashboardView } from "@/features/leads/views/dashboard-view";
 import { currentUser } from "@/lib/current-user";
 
 import { redirect } from "next/navigation";
@@ -7,5 +9,9 @@ export default async function Home() {
   if (!user) {
     redirect("/sign-in");
   }
-  return <div className=""></div>;
+  return (
+    <div className="">
+      <DashboardView />
+    </div>
+  );
 }

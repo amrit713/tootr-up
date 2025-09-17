@@ -7,7 +7,7 @@ import { HTTPException } from "hono/http-exception";
 import { authMiddleware } from "@/lib/hono-middleware";
 import { Variables } from "@/lib/auth"
 import { db } from "@/lib/db";
-import { followUpSchema, leadSchema } from "@/schema";
+import { followUpSchema, leadSchema, updateFollowUpSchema } from "@/schema";
 
 
 const app = new Hono<{ Variables: Variables }>()
@@ -41,7 +41,7 @@ const app = new Hono<{ Variables: Variables }>()
             throw new HTTPException(500, { message: "Internal server Error" });
         }
 
-        console.log(followups)
+
 
         return c.json({
             data: followups,
@@ -53,19 +53,17 @@ const app = new Hono<{ Variables: Variables }>()
 
     })
     .post("/", authMiddleware, zValidator("json", followUpSchema), async (c) => {
-        console.log("hello")
+
         const user = c.get("user")
         if (!user) {
             throw new HTTPException(401, { message: "Unauthorized" });
         }
 
-
         //TODO: need to check lead exist with this id or not first
 
         const { due_date, remark, priority, status, leadId } = c.req.valid("json")
-        console.log("🚀 ~ due_date:", due_date)
 
-        console.log(due_date)
+
 
         const lead = await db.lead.findUnique({
             where: {
@@ -94,7 +92,8 @@ const app = new Hono<{ Variables: Variables }>()
                 id: leadId
             },
             data: {
-                status: followUp.status
+                status: followUp.status,
+                due_date: followUp.due_date
             }
         })
 
@@ -103,6 +102,38 @@ const app = new Hono<{ Variables: Variables }>()
         }
 
         return c.json({ data: followUp })
+
+    })
+    .patch("/:followUpId", authMiddleware, zValidator("json", updateFollowUpSchema), async (c) => {
+        const user = c.get("user")
+        if (!user) {
+            throw new HTTPException(401, { message: "Unauthorized" });
+        }
+
+        const { followUpId } = c.req.param()
+        if (!followUpId) {
+            throw new HTTPException(400, { message: "follow up id is not provided" });
+        }
+
+        const { remark, due_date, } = c.req.valid("json")
+
+        const updatedFollowUp = await db.followUp.update({
+            where: {
+                id: followUpId
+            },
+            data: {
+                remark, due_date
+            }
+        })
+        if (!updatedFollowUp) {
+            throw new HTTPException(404, { message: "Follow up  not found" })
+        }
+
+
+        return c.json({
+            data: updatedFollowUp
+        })
+
 
     })
 

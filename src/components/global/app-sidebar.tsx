@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 
 import {
@@ -11,7 +11,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSubButton,
 } from "@/components/ui/sidebar";
 import { SIDEBAR_MENU_ITEM } from "@/constants";
 import { cn } from "@/lib/utils";
@@ -20,7 +19,8 @@ import { Logo } from "./logo";
 
 export const AppSidebar = () => {
   const pathname = usePathname();
-  console.log(pathname);
+  const path = pathname.split("/")[1];
+  const router = useRouter();
 
   return (
     <Sidebar collapsible="icon">
@@ -40,22 +40,21 @@ export const AppSidebar = () => {
                 <SidebarMenuItem key={item.label}>
                   <SidebarMenuButton
                     className={cn(
-                      " hover:bg-white transition rounded font-medium hover:text-black  text-neutral-500  ",
-                      pathname === item.href && "text-black bg-white"
+                      " hover:bg-white transition rounded font-medium hover:text-black dark:hover:bg-gray-800 dark:hover:text-white  text-neutral-500  ",
+                      path === item.href &&
+                        "text-black bg-white dark:bg-gray-800 dark:text-white"
                     )}
+                    onClick={() => router.push(`/${item.href}`)}
                   >
-                    <Link
-                      href={item.href}
-                      className={cn("flex flex-items-center gap-2 ")}
-                    >
+                    <div className={cn("flex flex-items-center gap-2 ")}>
                       <item.icon
                         className={cn(
                           "size-5 text-neutral-500  ",
-                          pathname === item.href && "text-black "
+                          path === item.href && "text-black dark:text-white "
                         )}
                       />
                       <span>{item.label}</span>
-                    </Link>
+                    </div>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               );

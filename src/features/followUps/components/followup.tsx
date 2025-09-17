@@ -19,14 +19,16 @@ import { date } from "better-auth";
 import { cn, getDueDateLabel } from "@/lib/utils";
 import { useState } from "react";
 import { Edit } from "lucide-react";
+import { FollowRemark } from "./follow-remark";
 
 interface Props {
-  due_date: string;
+  due_date?: string;
   priority: FollowUpPriority;
   remark?: string | null;
   name: string;
   email: string;
   status: FollowUpStatus;
+  id: string;
 }
 
 export const Followup = ({
@@ -36,30 +38,26 @@ export const Followup = ({
   email,
   status,
   name,
+  id,
 }: Props) => {
   return (
-    <Card className="shadow-none border-none bg-gray-50">
+    <Card className="shadow-none border-none bg-gray-50 dark:bg-card">
       <CardHeader className="flex items-center justify-between">
         <div className="flex flex-col">
-          <p className="  font-semibold">Due Date:</p>
+          <p className="font-semibold">Due Date:</p>
 
-          <FollowUpDate value={due_date} className="text-sm t" />
+          {due_date ? (
+            <FollowUpDate value={due_date} className="text-sm font-normal" />
+          ) : (
+            <p className="text-xs text-gray-400 dark:text-gray-500">
+              no due date to follow
+            </p>
+          )}
         </div>
         <Priority priority={priority} className=" text-sm" />
       </CardHeader>
       <CardContent>
-        <div className="flex items-center justify-between">
-          <p className=" font-semibold">Remark:</p>
-          <Button variant={"ghost"} size={"icon"}>
-            <Edit />
-          </Button>
-        </div>
-
-        <span
-          className={cn("text-gray-600 text-sm", !remark && "text-gray-400 ")}
-        >
-          {remark ? remark : "Not provided yet!"}
-        </span>
+        <FollowRemark remark={remark} id={id} />
       </CardContent>
       <Separator />
       <CardFooter className="flex justify-between ">
@@ -71,7 +69,9 @@ export const Followup = ({
           </Avatar>
           <div className="flex flex-col gap-0">
             <span className="text-sm font-medium  capitalize">{name}</span>
-            <span className="text-xs text-gray-600">{email}</span>
+            <span className="text-xs text-gray-600 dark:text-gray-300">
+              {email}
+            </span>
           </div>
         </div>
 

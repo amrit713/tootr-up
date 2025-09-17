@@ -53,8 +53,6 @@ export const CreateFollowUpForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof followUpSchema>) => {
-    console.log(values);
-
     const finalValues = {
       ...values,
       leadId,
@@ -189,16 +187,11 @@ export const CreateFollowUpForm = () => {
               >
                 Cancel
               </Button>
-              <Button
-                type="submit"
-                //  disabled={isPending}
-                className="flex-1"
-              >
+              <Button type="submit" disabled={isPending} className="flex-1">
                 <ButtonLoader
                   label="create follow-up"
                   loadingText="creating"
-
-                  // isLoading={isPending}
+                  isLoading={isPending}
                 />
               </Button>
             </div>

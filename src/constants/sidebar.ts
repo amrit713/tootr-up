@@ -3,25 +3,25 @@ import { HomeIcon, SettingsIcon, SpotlightIcon, UsersIcon } from "lucide-react";
 export const SIDEBAR_MENU_ITEM = [
     {
         label: "Home",
-        href: "/",
+        href: "",
         icon: HomeIcon,
 
     },
     {
         label: "Leads",
-        href: "/leads",
+        href: "leads",
         icon: SpotlightIcon,
 
     },
     {
         label: "Students",
-        href: "/students",
+        href: "students",
         icon: UsersIcon,
 
     },
     {
         label: "Settings",
-        href: "/settings",
+        href: "settings",
         icon: SettingsIcon,
     },
 

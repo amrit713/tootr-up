@@ -3,19 +3,15 @@ import { InferRequestType, InferResponseType } from "hono";
 
 import { client } from "@/lib/rpc";
 import { toast } from "sonner";
-import { leadSchema } from "@/schema";
 
-type ResponseType = InferResponseType<(typeof client.api.followups)["$post"]>;
-type RequestType = InferRequestType<(typeof client.api.followups)["$post"]>;
-
-export const useCreateFollowUp = () => {
+type ResponseType = InferResponseType<(typeof client.api.leads)[":leadId"]["$patch"]>;
+type RequestType = InferRequestType<(typeof client.api.leads)[":leadId"]["$patch"]>;
+export const useUpdateLead = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
-    mutationFn: async ({ json }) => {
-      const response = await client.api.followups.$post({
-        json,
-      });
+    mutationFn: async ({ json, param }) => {
+      const response = await client.api.leads[":leadId"]["$patch"]({ json, param });
 
       if (!response.ok) {
         const error = await response.text();
@@ -24,8 +20,8 @@ export const useCreateFollowUp = () => {
       return await response.json();
     },
     onSuccess: () => {
-      toast.success("follow up created");
-      queryClient.invalidateQueries({ queryKey: ["followUps"] });
+      toast.success("Lead updated");
+      queryClient.invalidateQueries({ queryKey: ["leads"] });
       queryClient.invalidateQueries({ queryKey: ["lead"] });
       queryClient.invalidateQueries({ queryKey: ["analytics"] });
     },

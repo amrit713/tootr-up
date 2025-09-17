@@ -2,13 +2,24 @@ import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 // import { z } from "zod";
 import { HTTPException } from "hono/http-exception";
+import { endOfMonth, startOfMonth, subMonths } from "date-fns";
 
 
 import { Variables } from "@/lib/auth"
 import { authMiddleware } from "@/lib/hono-middleware";
 import { leadSchema, updateLeadSchema } from "@/schema";
 import { db } from "@/lib/db";
-import { Priority } from "@/generated/prisma";
+import { LeadStatus, Priority } from "@/generated/prisma";
+import z from "zod";
+
+
+
+const filterSchema = z.object({
+    search: z.string().nullish(),
+    dueDate: z.string().nullish(),
+    status: z.nativeEnum(LeadStatus).nullish()
+
+})
 
 
 const app = new Hono<{ Variables: Variables }>()
@@ -33,9 +44,9 @@ const app = new Hono<{ Variables: Variables }>()
         const lead = await db.lead.create({
             data: {
                 number, parentName, age: age ? Number(age) : undefined, grade, gender, studentName, schoolName, address, status, source, branch, userId: user.id, email, programs: programs && [...programs],
+
                 followups: {
                     create: {
-                        due_date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
                         priority: Priority.LOW,
                         userId: user.id,
 
@@ -60,22 +71,40 @@ const app = new Hono<{ Variables: Variables }>()
         })
 
     })
-    .get("/", authMiddleware, async (c) => {
+    .get("/", authMiddleware, zValidator("query", filterSchema), async (c) => {
         const user = c.get("user")
         if (!user) {
             throw new HTTPException(401, { message: "Unauthorized" });
         }
 
+        const { search, dueDate, status } = c.req.valid("query")
+
+
+
+
+
+
         const leads = await db.lead.findMany({
+            where: {
+                status: status || undefined,
+                number: search ? {
+                    contains: search,
+                    mode: "insensitive"
+                } : undefined,
+
+                due_date: dueDate ? new Date(dueDate) : undefined
+            },
             include: {
                 user: {
                     select: {
-                        name: true, id: true
+                        name: true,
+                        id: true
                     }
                 },
                 followups: {
+                    take: 1,
                     select: {
-                        due_date: true,
+
                         priority: true,
                         status: true
                     },
@@ -83,8 +112,6 @@ const app = new Hono<{ Variables: Variables }>()
                         createdAt: "desc"
                     }
                 }
-
-
             },
             orderBy: {
                 createdAt: "desc"
@@ -98,6 +125,50 @@ const app = new Hono<{ Variables: Variables }>()
         return c.json({
             totalLead: leads.length,
             data: leads
+        })
+    })
+    .get("/analytics", authMiddleware, async (c) => {
+        const user = c.get("user")
+        if (!user) {
+            throw new HTTPException(401, { message: "Unauthorized" });
+        }
+
+        const now = new Date();
+        const thisMonthStart = startOfMonth(now);
+        const thisMonthEnd = endOfMonth(now);
+        const lastMonthStart = startOfMonth(subMonths(now, 1));
+        const lastMonthEnd = endOfMonth(subMonths(now, 1));
+
+        const totalLeadCount = await db.lead.count({})
+        const convertedLead = await db.lead.count({
+            where: {
+                status: LeadStatus.CONVERTED
+            }
+        })
+        const lostLead = await db.lead.count({
+            where: {
+                status: LeadStatus.LOST
+            }
+        })
+        const criticalLead = await db.lead.count({
+            where: {
+                status: LeadStatus.CRITICAL
+            }
+        })
+
+        const convertedPrecentage = (convertedLead / totalLeadCount) * 100
+        const lostPrecentage = (lostLead / totalLeadCount) * 100
+        const criticalPrecentage = (criticalLead / totalLeadCount) * 100
+
+
+
+        return c.json({
+            data: {
+                totalLead: totalLeadCount,
+                lostLead,
+                criticalLead, convertedLead,
+                lostPrecentage, criticalPrecentage, convertedPrecentage
+            }
         })
     })
     .get("/:leadId", authMiddleware, async c => {
@@ -117,7 +188,13 @@ const app = new Hono<{ Variables: Variables }>()
 
             },
             include: {
-                user: true,
+                user: {
+
+                    select: {
+                        name: true,
+                        email: true
+                    }
+                }
             }
 
         })
@@ -185,6 +262,7 @@ const app = new Hono<{ Variables: Variables }>()
             data: leadId
         })
     })
+
 
 
 export default app

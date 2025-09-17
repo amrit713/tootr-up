@@ -2,13 +2,12 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreVertical } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { LeadType } from "@/types";
-import { Avatar, AvatarFallback } from "../ui/avatar";
-import { Badge } from "../ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { snakeCaseToTitleCase } from "@/lib/utils";
-import { Priority } from "./priority";
-import { Priority as LeadPriority } from "@/generated/prisma";
+
 import { FollowUpDate } from "@/features/followUps/components/follow-up-date";
 
 export const columns: ColumnDef<LeadType>[] = [
@@ -28,44 +27,6 @@ export const columns: ColumnDef<LeadType>[] = [
     cell: ({ row }) => {
       const number = row.original.number;
       return <p className="line-clamp-1">{number}</p>;
-    },
-  },
-
-  {
-    accessorKey: "parentName",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Parent Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const parentName = row.original.parentName;
-      return <p className="line-clamp-1">{parentName ? parentName : "_"}</p>;
-    },
-  },
-
-  {
-    accessorKey: "studentName",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Student Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const studentName = row.original.studentName;
-      return <p className="line-clamp-1">{studentName ? studentName : "_"}</p>;
     },
   },
 
@@ -136,43 +97,6 @@ export const columns: ColumnDef<LeadType>[] = [
     cell: ({ row }) => {
       const due_date = row.original.due_date;
       return <>{due_date ? <FollowUpDate value={due_date} /> : "-"}</>;
-    },
-  },
-
-  {
-    accessorKey: "branch",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Branch
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const branch = row.original.branch;
-      return <p className="line-clamp-1">{branch ? branch : "_"}</p>;
-    },
-  },
-  {
-    accessorKey: "priority",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Priority
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const priority = row.original.followups[0].priority;
-      return <Priority priority={priority} />;
     },
   },
 ];
