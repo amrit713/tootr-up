@@ -22,6 +22,7 @@ export const useCreateLead = () => {
     onSuccess: () => {
       toast.success("Lead created");
       queryClient.invalidateQueries({ queryKey: ["leads"] });
+      queryClient.invalidateQueries({ queryKey:["analytics"] });
     },
     onError: (error) => {
       toast.error(error.message);

@@ -80,6 +80,20 @@ const app = new Hono<{ Variables: Variables }>()
         const { search, dueDate, status } = c.req.valid("query")
 
 
+        let startOfDay;
+        let endOfDay;
+
+        if (dueDate) {
+
+            const date = new Date(dueDate)
+
+            startOfDay = new Date(date.setHours(0, 0, 0, 0))
+            endOfDay = new Date(date.setHours(23, 59, 59, 999));
+        }
+
+
+
+
 
 
 
@@ -92,7 +106,10 @@ const app = new Hono<{ Variables: Variables }>()
                     mode: "insensitive"
                 } : undefined,
 
-                due_date: dueDate ? new Date(dueDate) : undefined
+                due_date: dueDate ? {
+                    gte: startOfDay,
+                    lte: endOfDay
+                } : undefined
             },
             include: {
                 user: {
