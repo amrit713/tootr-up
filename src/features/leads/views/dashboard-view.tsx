@@ -22,6 +22,15 @@ export const DashboardView = () => {
   const { data, isError, isLoading: analyticsLoading } = useGetLeadAnalytics();
 
   const formatted = useMemo(() => new Date().toString(), []);
+  console.log("🚀 ~ DashboardView ~ formatted:", formatted);
+  const asianDate = useMemo(
+    () =>
+      new Date(formatted).toLocaleDateString("en-US", {
+        timeZone: "Asia/Kathmandu",
+      }),
+    []
+  );
+  console.log("🚀 ~ DashboardView ~ asianDate:", asianDate);
 
   const { data: leads, isLoading: leadsLoading } = useGetLeads({
     dueDate: formatted,
