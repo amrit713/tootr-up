@@ -9,15 +9,25 @@ import { DataTable } from "@/features/leads/components/leads-table";
 import { columns } from "@/components/global/column";
 import { useGetLeads } from "../api/use-get-leads";
 import { LeadFilter } from "../components/lead-filter";
-import { Gender } from "@/generated/prisma";
-import { snakeCaseToTitleCase } from "@/lib/utils";
+
 import { useLeadFilters } from "@/hooks/use-filter";
+import { ErrorState } from "@/components/global/error-state";
 
 export const LeadsView = () => {
   const { onOpen } = useModal();
   const { search, status, dueDate } = useLeadFilters();
 
-  const { data: leads } = useGetLeads({ search, status, dueDate });
+  const {
+    data: leads,
+    isLoading,
+    isError,
+  } = useGetLeads({ search, status, dueDate });
+
+  if (isError) {
+    return (
+      <ErrorState title="Leads not found" description="unable to find leads" />
+    );
+  }
   return (
     <div className="flex flex-col gap-8">
       <div className="flex items-center justify-between">
@@ -29,7 +39,7 @@ export const LeadsView = () => {
       <div className="">
         <LeadFilter />
       </div>
-      <DataTable columns={columns} data={leads ?? []} />
+      <DataTable columns={columns} data={leads || []} isLoading={isLoading} />
     </div>
   );
 };
