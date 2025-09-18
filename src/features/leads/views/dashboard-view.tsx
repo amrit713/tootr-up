@@ -10,20 +10,40 @@ import { useGetLeadAnalytics } from "../api/use-get-lead-analytics";
 import { AnalyticsCard } from "../components/analytics-card";
 import { TodayFollowUpTable } from "../components/today-follow-up-table";
 import { columns } from "@/features/leads/components/dashboard-column";
-import { useLeadFilters } from "@/hooks/use-filter";
+
 import { useGetLeads } from "../api/use-get-leads";
 import { useEffect, useMemo } from "react";
 import { format } from "date-fns";
 import { LeadPieChart } from "../components/lead-pie-chart";
+import { ErrorState } from "@/components/global/error-state";
+import { LoadingState } from "@/components/global/loading-state";
 
 export const DashboardView = () => {
-  const { data } = useGetLeadAnalytics();
+  const { data, isError, isLoading: analyticsLoading } = useGetLeadAnalytics();
 
   const formatted = useMemo(() => new Date().toString(), []);
 
-  const { data: leads } = useGetLeads({
+  const { data: leads, isLoading: leadsLoading } = useGetLeads({
     dueDate: formatted,
   });
+
+  if (isError) {
+    return (
+      <ErrorState
+        title="Oops! Dashboard Error"
+        description="Something went wrong while loading your dashboard. Please try again."
+      />
+    );
+  }
+
+  if (analyticsLoading || leadsLoading) {
+    return (
+      <LoadingState
+        title="Preparing Your Dashboard"
+        description="Hang tight! We’re setting up your overview."
+      />
+    );
+  }
 
   return (
     <main className="flex gap-8  flex-col">

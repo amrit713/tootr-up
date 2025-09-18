@@ -80,12 +80,18 @@ const app = new Hono<{ Variables: Variables }>()
         const { search, dueDate, status } = c.req.valid("query")
 
 
+
+
         let startOfDay;
         let endOfDay;
 
         if (dueDate) {
 
-            const date = new Date(dueDate)
+            const display = new Date(dueDate).toLocaleDateString("en-US", { timeZone: "Asia/Kathmandu" })
+
+            const date = new Date(display)
+
+
 
             startOfDay = new Date(date.setHours(0, 0, 0, 0))
             endOfDay = new Date(date.setHours(23, 59, 59, 999));

@@ -14,12 +14,32 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Followup } from "./followup";
 import { useModal } from "@/hooks/use-modal-store";
 import { LeadStatus } from "@/generated/prisma";
+import { ErrorState } from "@/components/global/error-state";
+import { LoadingState } from "@/components/global/loading-state";
 
 export const FollowupHistory = ({ status }: { status?: LeadStatus }) => {
   const leadId = useLeadId();
   const { onOpen } = useModal();
 
-  const { data: followups } = useGetFollowUps({ leadId });
+  const { data: followups, isLoading, isError } = useGetFollowUps({ leadId });
+
+  if (isError) {
+    return (
+      <ErrorState
+        title="No Follow-ups Available"
+        description="Something went wrong while loading follow-ups. Please try again."
+      />
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <LoadingState
+        title="Getting Follow-ups Ready"
+        description="Hang on! We’re pulling in your follow-up list."
+      />
+    );
+  }
 
   return (
     <Card className=" shadow-none border-none dark:bg-background p-0">
