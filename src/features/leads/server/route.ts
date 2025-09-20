@@ -147,7 +147,8 @@ const app = new Hono<{ Variables: Variables }>()
 
         return c.json({
             totalLead: leads.length,
-            data: leads
+            data: leads,
+            date: dueDate
         })
     })
     .get("/analytics", authMiddleware, async (c) => {
