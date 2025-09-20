@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
 
-import { Inter, Space_Mono } from "next/font/google";
+import { Roboto, PT_Sans } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 
-const font = Inter({
+const font = Roboto({
   subsets: ["latin"],
 });
 
-const spaceMono = Space_Mono({
+const spaceMono = PT_Sans({
   variable: "--font-space-mono",
   subsets: ["latin"],
   weight: ["400", "700"],

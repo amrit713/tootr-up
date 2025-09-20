@@ -78,7 +78,7 @@ const app = new Hono<{ Variables: Variables }>()
         }
 
         const { search, dueDate, status } = c.req.valid("query")
-        console.log("🚀 ~ dueDate:", dueDate)
+
 
 
 
