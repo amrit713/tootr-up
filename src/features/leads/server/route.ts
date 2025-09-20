@@ -89,15 +89,18 @@ const app = new Hono<{ Variables: Variables }>()
         if (dueDate) {
 
 
-            const date = new Date(dueDate);
-            const anotherone = new Date(dueDate).toISOString()
-            console.log("🚀 ~ anotherone:", anotherone)
-            console.log('date:', date)
+            const date = new Date(dueDate)
+
+
 
 
 
             startOfDay = new Date(date.setHours(0, 0, 0, 0))
             endOfDay = new Date(date.setHours(23, 59, 59, 999));
+            console.log("🚀 ~ startOfDay:", startOfDay)
+            console.log("🚀 ~ endOfDay:", endOfDay)
+
+
         }
 
 
@@ -119,6 +122,8 @@ const app = new Hono<{ Variables: Variables }>()
                     gte: startOfDay,
                     lte: endOfDay
                 } : undefined
+
+                // due_date: dueDate ? dueDate : undefined
             },
             include: {
                 user: {
@@ -154,7 +159,7 @@ const app = new Hono<{ Variables: Variables }>()
         return c.json({
             totalLead: leads.length,
             data: leads,
-            due_date: dueDate
+            startOfDay, endOfDay
         })
     })
     .get("/analytics", authMiddleware, async (c) => {

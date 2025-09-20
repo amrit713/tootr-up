@@ -21,18 +21,8 @@ import { LoadingState } from "@/components/global/loading-state";
 export const DashboardView = () => {
   const { data, isError, isLoading: analyticsLoading } = useGetLeadAnalytics();
 
-  const formatted = useMemo(() => new Date().toString(), []);
-  console.log("🚀 ~ DashboardView ~ formatted:", formatted);
-  const asianDate = useMemo(() => {
-    const nowDate = new Date(formatted).toLocaleDateString("en-US", {
-      timeZone: "Asia/Kathmandu",
-    });
-
-    const localDate = new Date(nowDate);
-
-    return localDate.toISOString();
-  }, []);
-  console.log("🚀 ~ DashboardView ~ asianDate:", asianDate);
+  const formatted = useMemo(() => new Date().toLocaleDateString(), []);
+  console.log("🚀 ~ DashboardView ~ formatted:", new Date(formatted));
 
   const { data: leads, isLoading: leadsLoading } = useGetLeads({
     dueDate: formatted,

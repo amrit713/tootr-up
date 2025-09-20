@@ -26,8 +26,10 @@ export const useGetLeads = ({ status, dueDate, search }: useGetLeadsProps) => {
             if (!response.ok) {
                 throw new Error("failed to fetch leads");
             }
-            const { data, due_date } = await response.json();
-            console.log("🚀 ~ useGetLeads ~ due_date:", due_date)
+            const { data, startOfDay, endOfDay } = await response.json();
+            console.log("🚀 ~ useGetLeads ~ endOfDay:", endOfDay)
+            console.log("🚀 ~ useGetLeads ~ startOfDay:", startOfDay)
+
 
 
             return data;
