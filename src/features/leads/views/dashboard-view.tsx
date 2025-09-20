@@ -12,7 +12,7 @@ import { TodayFollowUpTable } from "../components/today-follow-up-table";
 import { columns } from "@/features/leads/components/dashboard-column";
 
 import { useGetLeads } from "../api/use-get-leads";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { format } from "date-fns";
 import { LeadPieChart } from "../components/lead-pie-chart";
 import { ErrorState } from "@/components/global/error-state";
@@ -21,7 +21,15 @@ import { LoadingState } from "@/components/global/loading-state";
 export const DashboardView = () => {
   const { data, isError, isLoading: analyticsLoading } = useGetLeadAnalytics();
 
-  const formatted = useMemo(() => new Date().toLocaleDateString(), []);
+  const formatted = useMemo(() => {
+    const todayDate = new Date();
+
+    const previouDate = new Date(
+      todayDate.setDate(todayDate.getDate() - 1)
+    ).toLocaleDateString();
+
+    return previouDate;
+  }, []);
   console.log("🚀 ~ DashboardView ~ formatted:", new Date(formatted));
 
   const { data: leads, isLoading: leadsLoading } = useGetLeads({
