@@ -78,6 +78,7 @@ const app = new Hono<{ Variables: Variables }>()
         }
 
         const { search, dueDate, status } = c.req.valid("query")
+        console.log("🚀 ~ dueDate:", dueDate)
 
 
 
@@ -87,9 +88,11 @@ const app = new Hono<{ Variables: Variables }>()
 
         if (dueDate) {
 
-            const display = new Date(dueDate).toLocaleDateString("en-US", { timeZone: "Asia/Kathmandu" })
 
-            const date = new Date(display)
+            const date = new Date(dueDate);
+            const anotherone = new Date(dueDate).toISOString()
+            console.log("🚀 ~ anotherone:", anotherone)
+            console.log('date:', date)
 
 
 
@@ -141,13 +144,17 @@ const app = new Hono<{ Variables: Variables }>()
             }
         })
 
+
         if (!leads) {
             throw new HTTPException(404, { message: "Leads not found" })
         }
 
+
+
         return c.json({
             totalLead: leads.length,
-            data: leads
+            data: leads,
+            due_date: dueDate
         })
     })
     .get("/analytics", authMiddleware, async (c) => {

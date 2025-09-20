@@ -23,13 +23,15 @@ export const DashboardView = () => {
 
   const formatted = useMemo(() => new Date().toString(), []);
   console.log("🚀 ~ DashboardView ~ formatted:", formatted);
-  const asianDate = useMemo(
-    () =>
-      new Date(formatted).toLocaleDateString("en-US", {
-        timeZone: "Asia/Kathmandu",
-      }),
-    []
-  );
+  const asianDate = useMemo(() => {
+    const nowDate = new Date(formatted).toLocaleDateString("en-US", {
+      timeZone: "Asia/Kathmandu",
+    });
+
+    const localDate = new Date(nowDate);
+
+    return localDate.toISOString();
+  }, []);
   console.log("🚀 ~ DashboardView ~ asianDate:", asianDate);
 
   const { data: leads, isLoading: leadsLoading } = useGetLeads({
