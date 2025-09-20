@@ -24,13 +24,16 @@ export const DashboardView = () => {
   const formatted = useMemo(() => {
     const todayDate = new Date();
 
-    const previouDate = new Date(
-      todayDate.setDate(todayDate.getDate() - 1)
-    ).toLocaleDateString();
+    let date = todayDate.toLocaleDateString();
 
-    return previouDate;
+    if (process.env.NODE_ENV === "production") {
+      date = new Date(
+        todayDate.setDate(todayDate.getDate() - 1)
+      ).toLocaleDateString();
+    }
+
+    return date;
   }, []);
-  console.log("🚀 ~ DashboardView ~ formatted:", new Date(formatted));
 
   const { data: leads, isLoading: leadsLoading } = useGetLeads({
     dueDate: formatted,

@@ -97,8 +97,7 @@ const app = new Hono<{ Variables: Variables }>()
 
             startOfDay = new Date(date.setHours(0, 0, 0, 0))
             endOfDay = new Date(date.setHours(23, 59, 59, 999));
-            console.log("🚀 ~ startOfDay:", startOfDay)
-            console.log("🚀 ~ endOfDay:", endOfDay)
+
 
 
         }
