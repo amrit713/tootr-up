@@ -7,6 +7,7 @@ async function LeadsPage() {
   if (!user) {
     redirect("/sign-in");
   }
+
   return (
     <main>
       <LeadsView />

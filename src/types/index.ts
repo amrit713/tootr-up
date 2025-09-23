@@ -1,4 +1,4 @@
-import { FollowUp, FollowUpStatus, Lead, Priority } from "@/generated/prisma";
+import { FollowUp, FollowUpStatus, Lead, Priority, User } from "@/generated/prisma";
 import { string } from "zod";
 
 
@@ -23,5 +23,10 @@ export type LeadDetailType = Omit<Lead, "createdAt" | "updatedAt" | "due_date"> 
     },
 }
 
+
+export type UserType = Omit<User, "createdAt" | "updatedAt"> & {
+    createdAt: string
+    updatedAt: string
+}
 
 

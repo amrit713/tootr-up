@@ -1,4 +1,3 @@
-import { LeadFilter } from "@/features/leads/components/lead-filter";
 import { DashboardView } from "@/features/leads/views/dashboard-view";
 import { currentUser } from "@/lib/current-user";
 
