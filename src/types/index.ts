@@ -1,4 +1,5 @@
 import { FollowUp, FollowUpStatus, Lead, Priority, User } from "@/generated/prisma";
+import { UserWithRole } from "better-auth/plugins";
 import { string } from "zod";
 
 
@@ -24,9 +25,6 @@ export type LeadDetailType = Omit<Lead, "createdAt" | "updatedAt" | "due_date"> 
 }
 
 
-export type UserType = Omit<User, "createdAt" | "updatedAt"> & {
-    createdAt: string
-    updatedAt: string
-}
+export type UserType = UserWithRole & { status: string }
 
 

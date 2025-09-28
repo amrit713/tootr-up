@@ -90,11 +90,6 @@ model Verification {
   @@map("verification")
 }
 
-model Program {
-  id   String @id @default(uuid())
-  name String
-}
-
 model Lead {
   id     String @id @default(uuid())
   number String @unique // ✅ required
@@ -123,11 +118,9 @@ model Lead {
 
   followups FollowUp[]
 
-  //TODOD: need to change 
-  student Student?
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  studentId String?
 }
 
 model FollowUp {
@@ -147,26 +140,81 @@ model FollowUp {
   updatedAt DateTime @updatedAt
 }
 
+//!student part started
+model Branch {
+  id   String @id @default(uuid())
+  name String
+
+  programs  BranchProgram[]
+  students  Student[]
+  createdAt DateTime        @default(now())
+}
+
+model Program {
+  id        String          @id @default(uuid())
+  name      String
+  branches  BranchProgram[]
+  createdAt DateTime        @default(now())
+}
+
+model BranchProgram {
+  id        String @id @default(uuid())
+  branchId  String
+  programId String
+
+  branch  Branch  @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  program Program @relation(fields: [programId], references: [id], onDelete: Cascade)
+
+  timetables TimeTable[]
+
+  @@unique([branchId, programId])
+}
+
+model TimeTable {
+  id              String        @id @default(uuid())
+  branchProgramId String
+  branchProgram   BranchProgram @relation(fields: [branchProgramId], references: [id], onDelete: Cascade)
+
+  startTime String // "09:00"
+  endTime   String // "12:00"
+  label     String? // e.g. "Morning", "Afternoon"
+
+  studentSelections StudentEnrollment[]
+}
+
+model StudentEnrollment {
+  id          String @id @default(uuid())
+  studentId   String
+  timeTableId String
+
+  student   Student   @relation(fields: [studentId], references: [id])
+  timeTable TimeTable @relation(fields: [timeTableId], references: [id], onDelete: Cascade) // need to imporve
+}
+
 model Student {
-  id           String        @id @default(uuid())
-  number       String        @unique
-  name         String
-  parentName   String
-  email        String
-  age          Int
-  grade        String
-  gender       Gender
-  schoolName   String
-  address      String
-  enrolledDate DateTime      @default(now())
-  branch       CompanyBranch
+  id              String    @id @default(uuid())
+  number          String    @unique
+  secondaryNumber String    @unique
+  name            String
+  parentName      String
+  email           String?
+  age             Int
+  grade           String
+  gender          Gender
+  schoolName      String
+  address         String
+  enrolledDate    DateTime  @default(now())
+  startedDate     DateTime?
 
   // Optional: if you still want to track which lead converted
-  leadId String @unique
-  lead   Lead   @relation(fields: [leadId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  StudentEnrollment StudentEnrollment[]
+
+  Branch   Branch? @relation(fields: [branchId], references: [id])
+  branchId String?
 }
 
 enum LeadStatus {

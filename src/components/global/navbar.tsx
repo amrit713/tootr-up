@@ -4,6 +4,7 @@ import { UserButton } from "@/features/auth/components/user-button";
 import { Button } from "../ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ModeToggle } from "./mode-toggle";
+import { usePathname } from "next/navigation";
 
 const pathnameMap = {
   leads: {
@@ -11,13 +12,13 @@ const pathnameMap = {
     description: "View all of your leads here",
   },
   students: {
-    title: "Leads",
-    description: "View all of your leads here",
+    title: "Students",
+    description: "View all of your students here",
   },
 
   settings: {
     title: "Settings",
-    description: "View all of your project here",
+    description: "View and edit the settings",
   },
 };
 const defaultMap = {
@@ -26,6 +27,14 @@ const defaultMap = {
 };
 
 export const Navbar = () => {
+  const pathname = usePathname();
+
+  const pathnameParts = pathname.split("/");
+
+  const pathnameKey = pathnameParts[1] as keyof typeof pathnameMap;
+
+  const { title, description } = pathnameMap[pathnameKey] || defaultMap;
+
   return (
     <nav className=" h-[5rem] flex justify-between items-center">
       <div className="flex items-center gap-4">
@@ -33,10 +42,8 @@ export const Navbar = () => {
           <SidebarTrigger size={"lg"} />
         </Button>
         <div className="flex flex-col ">
-          <p className="text-lg font-bold ">Dashboard</p>
-          <span className="text-neutral-500 text-sm">
-            Monitor all of your leads and follow up here
-          </span>
+          <p className="text-lg font-bold ">{title}</p>
+          <span className="text-neutral-500 text-sm">{description}</span>
         </div>
       </div>
       <div className="flex gap-4 ">

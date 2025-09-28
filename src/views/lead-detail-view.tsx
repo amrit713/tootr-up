@@ -1,10 +1,10 @@
 "use client";
 
 import { ErrorState } from "@/components/global/error-state";
-import { FollowupHistory } from "../../followUps/components/followup-history";
-import { useGetLead } from "../api/use-get-lead";
-import { LeadDetail } from "../components/lead-detail";
-import { useLeadId } from "../hooks/use-lead-id";
+import { FollowupHistory } from "../features/followUps/components/followup-history";
+import { useGetLead } from "../features/leads/api/use-get-lead";
+import { LeadDetail } from "../features/leads/components/lead-detail";
+import { useLeadId } from "../features/leads/hooks/use-lead-id";
 import { LoadingState } from "@/components/global/loading-state";
 import { Card } from "@/components/ui/card";
 

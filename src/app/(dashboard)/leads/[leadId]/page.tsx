@@ -1,4 +1,4 @@
-import { LeadDetailView } from "@/features/leads/views/lead-detail-view";
+import { LeadDetailView } from "@/views/lead-detail-view";
 import { currentUser } from "@/lib/current-user";
 import { redirect } from "next/navigation";
 import React from "react";

@@ -1,4 +1,4 @@
-import { LeadsView } from "@/features/leads/views/leads-view";
+import { LeadsView } from "@/views/leads-view";
 import { currentUser } from "@/lib/current-user";
 import { redirect } from "next/navigation";
 

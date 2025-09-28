@@ -1,4 +1,5 @@
 import { currentUser } from "@/lib/current-user";
+import { StudentView } from "@/views/students-view";
 import { redirect } from "next/navigation";
 import React from "react";
 
@@ -7,7 +8,7 @@ async function StudentsPage() {
   if (!user) {
     redirect("/sign-in");
   }
-  return <div>StudentsPage</div>;
+  return <StudentView />;
 }
 
 export default StudentsPage;

@@ -122,7 +122,7 @@ const app = new Hono<{ Variables: Variables }>()
                     lte: endOfDay
                 } : undefined
 
-                // due_date: dueDate ? dueDate : undefined
+
             },
             include: {
                 user: {
