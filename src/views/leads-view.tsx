@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button";
 import { useModal } from "@/hooks/use-modal-store";
 import { DataTable } from "@/features/leads/components/leads-table";
 import { columns } from "@/components/global/column";
-import { useGetLeads } from "../api/use-get-leads";
-import { LeadFilter } from "../components/lead-filter";
+import { useGetLeads } from "../features/leads/api/use-get-leads";
+import { LeadFilter } from "../features/leads/components/lead-filter";
 
 import { useLeadFilters } from "@/hooks/use-filter";
 import { ErrorState } from "@/components/global/error-state";

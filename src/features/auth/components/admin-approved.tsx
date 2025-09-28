@@ -5,9 +5,8 @@ import { useGetUsers } from "../api/get-all-user";
 import { UserTable } from "./user-table";
 import { columns } from "./user-column";
 
-export const UserView = () => {
+export const AdminApproved = () => {
   const { data, isError, isLoading } = useGetUsers();
-  console.log("🚀 ~ UserView ~ users:", data);
 
   if (isError) {
     return (

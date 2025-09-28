@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { authClient } from "@/lib/auth-client";
+import { UserType } from "@/types";
 
 export const useGetUsers = () => {
   const query = useQuery({
@@ -12,7 +13,6 @@ export const useGetUsers = () => {
         console.error("Error fetching users:", error);
       }
 
-      console.log(data);
       return data;
     },
   });

@@ -3,22 +3,17 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, Check, MoreVertical, TicketCheck, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { UserType } from "@/types";
+
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { cn, snakeCaseToTitleCase } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { UserWithRole } from "better-auth/plugins";
-import { UserStatus } from "@/generated/prisma";
+import { User, UserStatus } from "@/generated/prisma";
 import { format } from "date-fns";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { useUpdateUserStatus } from "../api/use-update-status";
+import { UserType } from "@/types";
 
-export const columns: ColumnDef<UserWithRole & { status: UserStatus }>[] = [
+export const columns: ColumnDef<UserWithRole>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -79,7 +74,7 @@ export const columns: ColumnDef<UserWithRole & { status: UserStatus }>[] = [
       );
     },
     cell: ({ row }) => {
-      const { status } = row.original;
+      const { status } = row.original as UserType;
       return (
         <Badge
           className={cn(
@@ -116,7 +111,7 @@ export const columns: ColumnDef<UserWithRole & { status: UserStatus }>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const { status, id } = row.original;
+      const { status, id } = row.original as UserType;
 
       const { mutate, isPending } = useUpdateUserStatus();
       const changeStatus = (status: UserStatus) => {

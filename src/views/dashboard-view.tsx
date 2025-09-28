@@ -6,15 +6,15 @@ import {
   Spotlight,
   TriangleAlertIcon,
 } from "lucide-react";
-import { useGetLeadAnalytics } from "../api/use-get-lead-analytics";
-import { AnalyticsCard } from "../components/analytics-card";
-import { TodayFollowUpTable } from "../components/today-follow-up-table";
+import { useGetLeadAnalytics } from "../features/leads/api/use-get-lead-analytics";
+import { AnalyticsCard } from "../features/leads/components/analytics-card";
+import { TodayFollowUpTable } from "../features/leads/components/today-follow-up-table";
 import { columns } from "@/features/leads/components/dashboard-column";
 
-import { useGetLeads } from "../api/use-get-leads";
+import { useGetLeads } from "../features/leads/api/use-get-leads";
 import { useMemo } from "react";
 import { format } from "date-fns";
-import { LeadPieChart } from "../components/lead-pie-chart";
+import { LeadPieChart } from "../features/leads/components/lead-pie-chart";
 import { ErrorState } from "@/components/global/error-state";
 import { LoadingState } from "@/components/global/loading-state";
 

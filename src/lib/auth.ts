@@ -53,7 +53,7 @@ export const auth = betterAuth({
                         ]
                     });
 
-                    console.log(user)
+
                     if (user) {
                         if (user.status === UserStatus.PENDING) {
                             throw new APIError("FORBIDDEN", { message: "Account pending approval." });

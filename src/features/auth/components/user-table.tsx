@@ -37,6 +37,10 @@ export function UserTable<TData, TValue>({
   isLoading,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0,
+    pageSize: 8,
+  });
 
   const table = useReactTable({
     data,
@@ -49,13 +53,20 @@ export function UserTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     state: {
       sorting,
+      pagination,
     },
+
+    onPaginationChange: setPagination,
   });
 
+  React.useEffect(() => {
+    table.setPageSize(8);
+  }, [table]);
+
   return (
-    <div>
+    <div className="max-h-[60vh] ">
       {/* server side filtering */}
-      <div className="rounded-md border ">
+      <div className="rounded-md border  ">
         {isLoading ? (
           <LoadingState
             title="Loading Leads"

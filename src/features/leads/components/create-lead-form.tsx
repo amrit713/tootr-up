@@ -34,7 +34,7 @@ import {
   LeadSource,
   LeadStatus,
 } from "@/generated/prisma";
-import { useGetPrograms } from "@/features/programs/api/use-get-program";
+import { useGetPrograms } from "@/features/programs/api/use-get-programs";
 import {
   MultiSelect,
   MultiSelectContent,
