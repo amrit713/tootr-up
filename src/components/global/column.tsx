@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Badge } from "../ui/badge";
 import { snakeCaseToTitleCase } from "@/lib/utils";
 import { Priority } from "./priority";
-import { Priority as LeadPriority } from "@/generated/prisma";
+
 import { FollowUpDate } from "@/features/followUps/components/follow-up-date";
 
 export const columns: ColumnDef<LeadType>[] = [
@@ -153,7 +153,7 @@ export const columns: ColumnDef<LeadType>[] = [
       );
     },
     cell: ({ row }) => {
-      const branch = row.original.branch;
+      const branch = row.original.branch?.name;
       return <p className="line-clamp-1">{branch ? branch : "_"}</p>;
     },
   },

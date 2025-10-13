@@ -16,8 +16,10 @@ import { useModal } from "@/hooks/use-modal-store";
 import { LeadStatus } from "@/generated/prisma";
 import { ErrorState } from "@/components/global/error-state";
 import { LoadingState } from "@/components/global/loading-state";
+import { useRouter } from "next/navigation";
 
 export const FollowupHistory = ({ status }: { status?: LeadStatus }) => {
+  const router = useRouter();
   const leadId = useLeadId();
   const { onOpen } = useModal();
 
@@ -46,14 +48,20 @@ export const FollowupHistory = ({ status }: { status?: LeadStatus }) => {
       <CardHeader className="flex justify-between items-center">
         <CardTitle className="">Follow History({followups?.total})</CardTitle>
         <CardAction>
-          <Button
-            onClick={() => onOpen("createFollowUp")}
-            disabled={
-              status === LeadStatus.CONVERTED || status === LeadStatus.LOST
-            }
-          >
-            New follow up
-          </Button>
+          {status !== LeadStatus.CONVERTED ? (
+            <Button
+              onClick={() => onOpen("createFollowUp")}
+              disabled={status === LeadStatus.LOST}
+            >
+              New follow up
+            </Button>
+          ) : (
+            <Button
+              onClick={() => router.push(`/students/create?leadId=${leadId}`)}
+            >
+              Add to Student
+            </Button>
+          )}
         </CardAction>
       </CardHeader>
 

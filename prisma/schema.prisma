@@ -105,13 +105,15 @@ model Lead {
   gender     Gender?
   schoolName String?
   address    String?
-  status     LeadStatus     @default(NEW)
+  status     LeadStatus  @default(NEW)
   source     LeadSource?
-  branch     CompanyBranch?
-  due_date   DateTime?
+  branchId   String?
+
+  due_date DateTime?
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User    @relation(fields: [userId], references: [id])
+  branch Branch? @relation(fields: [branchId], references: [id])
 
   // Programs as dropdown (array of IDs)
   programs String[]
@@ -148,6 +150,7 @@ model Branch {
   programs  BranchProgram[]
   students  Student[]
   createdAt DateTime        @default(now())
+  Lead      Lead[]
 }
 
 model Program {
@@ -165,7 +168,8 @@ model BranchProgram {
   branch  Branch  @relation(fields: [branchId], references: [id], onDelete: Cascade)
   program Program @relation(fields: [programId], references: [id], onDelete: Cascade)
 
-  timetables TimeTable[]
+  timetables        TimeTable[]
+  StudentEnrollment StudentEnrollment[]
 
   @@unique([branchId, programId])
 }
@@ -183,12 +187,17 @@ model TimeTable {
 }
 
 model StudentEnrollment {
-  id          String @id @default(uuid())
-  studentId   String
-  timeTableId String
+  id              String @id @default(uuid())
+  studentId       String
+  timeTableId     String
+  branchProgramId String
 
-  student   Student   @relation(fields: [studentId], references: [id])
-  timeTable TimeTable @relation(fields: [timeTableId], references: [id], onDelete: Cascade) // need to imporve
+  branchProgram BranchProgram @relation(fields: [branchProgramId], references: [id], onDelete: Cascade)
+  student       Student       @relation(fields: [studentId], references: [id])
+  timeTable     TimeTable     @relation(fields: [timeTableId], references: [id], onDelete: Cascade) // need to imporve
+  Attendance    Attendance[]
+
+  @@unique([studentId, branchProgramId])
 }
 
 model Student {
@@ -213,8 +222,52 @@ model Student {
 
   StudentEnrollment StudentEnrollment[]
 
-  Branch   Branch? @relation(fields: [branchId], references: [id])
-  branchId String?
+  Branch   Branch    @relation(fields: [branchId], references: [id])
+  branchId String
+  Payment  Payment[]
+}
+
+model Attendance {
+  id     String           @id @default(uuid())
+  date   DateTime         @default(now())
+  status AttendanceStatus @default(PRESENT)
+
+  studentEnrollmentId String
+  studentEnrollment   StudentEnrollment @relation(fields: [studentEnrollmentId], references: [id], onDelete: Cascade)
+}
+
+model Payment {
+  id        String  @id @default(uuid())
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  totalFee              Float
+  totalFeeAfterDiscount Float
+  taxableAmount         Float
+  vatAmount             Float
+  paidAmount            Float         @default(0)
+  dueAmount             Float         @default(0)
+  discountPrice         Float         @default(0)
+  lastPaidDate          DateTime?
+  paymentStatus         PaymentStatus @default(PENDING)
+
+  classCount Int     @default(0) // tracks classes per cycle (12)
+  isRenewed  Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum PaymentStatus {
+  PENDING
+  PARTIAL
+  PAID
+  OVERDUE
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
 }
 
 enum LeadStatus {
@@ -223,6 +276,7 @@ enum LeadStatus {
   CRITICAL
   CONVERTED
   LOST
+  DEMO
 }
 
 enum FollowUpStatus {
@@ -231,6 +285,7 @@ enum FollowUpStatus {
   CRITICAL
   CONVERTED
   LOST
+  DEMO
 }
 
 enum CompanyBranch {

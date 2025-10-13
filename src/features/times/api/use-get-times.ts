@@ -7,6 +7,10 @@ export const useGetTimes = ({ branchProgramId }: { branchProgramId: string }) =>
     const query = useQuery({
         queryKey: ["times", branchProgramId],
         queryFn: async () => {
+
+            if (!branchProgramId) {
+                return null
+            }
             const response = await client.api.times.$get({ query: { branchProgramId } })
 
             if (!response.ok) {

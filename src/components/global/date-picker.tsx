@@ -28,7 +28,7 @@ export const DatePicker = ({
 }: DatePickerProps) => {
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger className="shadow-none" asChild>
         <Button
           variant={"outline"}
           size={"lg"}

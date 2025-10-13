@@ -1,6 +1,14 @@
-import { FollowUp, FollowUpStatus, Lead, Priority, User } from "@/generated/prisma";
+
+
+
+
+import { FollowUpStatus, Lead, Priority, } from "@/generated/prisma";
 import { UserWithRole } from "better-auth/plugins";
-import { string } from "zod";
+
+import { StudentType } from "./students";
+
+export type { StudentType }
+
 
 
 export type LeadType = Omit<Lead, "createdAt" | "updatedAt" | "due_date"> & {
@@ -10,6 +18,9 @@ export type LeadType = Omit<Lead, "createdAt" | "updatedAt" | "due_date"> & {
     user: {
         name: string, id: string
     },
+    branch: {
+        name: string
+    } | null;
     followups: { priority: Priority, status: FollowUpStatus }[]
 }
 
@@ -22,6 +33,10 @@ export type LeadDetailType = Omit<Lead, "createdAt" | "updatedAt" | "due_date"> 
     user: {
         name: string, email: string
     },
+
+    branch: {
+        name: string
+    } | null
 }
 
 

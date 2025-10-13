@@ -16,7 +16,7 @@ export const leadSchema = z.object({
     address: z.string().optional(),
     status: z.nativeEnum(LeadStatus).optional(),
     source: z.nativeEnum(LeadSource).optional(),
-    branch: z.nativeEnum(CompanyBranch).optional(),
+    branchId: z.string().optional(),
     programs: z.array(z.string()).optional()
 })
 
@@ -34,7 +34,7 @@ export const updateLeadSchema = z.object({
     address: z.string().optional(),
     status: z.nativeEnum(LeadStatus).optional(),
     source: z.nativeEnum(LeadSource).optional(),
-    branch: z.nativeEnum(CompanyBranch).optional(),
+    branchId: z.string().optional(),
     programs: z.array(z.string()).optional()
 })
 
