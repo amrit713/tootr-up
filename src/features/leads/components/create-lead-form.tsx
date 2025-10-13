@@ -28,12 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  CompanyBranch,
-  Gender,
-  LeadSource,
-  LeadStatus,
-} from "@/generated/prisma";
+import { Gender, LeadSource, LeadStatus } from "@/generated/prisma";
 import { useGetPrograms } from "@/features/programs/api/use-get-programs";
 import {
   MultiSelect,
@@ -44,6 +39,7 @@ import {
 } from "@/components/ui/multi-select";
 import { ButtonLoader } from "@/components/global/button-loader";
 import { useModal } from "@/hooks/use-modal-store";
+import { useGetBranches } from "@/features/branches/api/use-get-branches";
 
 interface CreateLeadFormProps {
   onCancel?: () => void;
@@ -54,6 +50,7 @@ export const CreateLeadForm = ({ onCancel }: CreateLeadFormProps) => {
 
   const { mutate: createLead, isPending } = useCreateLead();
   const { data: programs } = useGetPrograms();
+  const { data: branches } = useGetBranches();
 
   const form = useForm<z.infer<typeof leadSchema>>({
     resolver: zodResolver(leadSchema),
@@ -309,7 +306,7 @@ export const CreateLeadForm = ({ onCancel }: CreateLeadFormProps) => {
               />
               <FormField
                 control={form.control}
-                name="branch"
+                name="branchId"
                 render={({ field }) => (
                   <FormItem className="pl-4 md:pl-0 flex flex-col gap-4 w-full">
                     <FormLabel>Branch</FormLabel>
@@ -322,9 +319,13 @@ export const CreateLeadForm = ({ onCancel }: CreateLeadFormProps) => {
                           <SelectValue placeholder="Select a Branch " />
                         </SelectTrigger>
                         <SelectContent>
-                          {Object.values(CompanyBranch).map((branch, idx) => (
-                            <SelectItem key={idx} value={branch}>
-                              {snakeCaseToTitleCase(branch)}
+                          {branches?.map((branch) => (
+                            <SelectItem
+                              key={branch.id}
+                              value={branch.id}
+                              className="capitalize"
+                            >
+                              {branch.name}
                             </SelectItem>
                           ))}
                         </SelectContent>

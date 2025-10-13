@@ -4,7 +4,6 @@ import * as React from "react";
 
 import {
   ColumnDef,
-  ColumnFiltersState,
   SortingState,
   flexRender,
   getCoreRowModel,
@@ -34,7 +33,7 @@ interface DataTableProps<TData, TValue> {
   total: number;
 }
 
-export function DataTable<TData, TValue>({
+export function StudentsTable<TData, TValue>({
   columns,
   data,
   isLoading,
@@ -52,10 +51,10 @@ export function DataTable<TData, TValue>({
     data,
     columns,
     onPaginationChange: setPagination,
-    onSortingChange: setSorting,
 
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
 
     getFilteredRowModel: getFilteredRowModel(),
@@ -68,15 +67,15 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       {/* server side filtering */}
-      <div>
+      <div className="">
         {isLoading ? (
           <LoadingState
-            title="Loading Leads"
-            description="Just a moment, preparing your lead list."
+            title="Loading students"
+            description="Just a moment, preparing your students list."
           />
         ) : (
-          <Table className="overflow-x-scroll ">
-            <TableHeader>
+          <Table className="overflow-x-scroll  ">
+            <TableHeader className="">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow
                   key={headerGroup.id}
@@ -86,7 +85,7 @@ export function DataTable<TData, TValue>({
                 >
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead key={header.id}>
+                      <TableHead key={header.id} className="inline flex-1">
                         {header.isPlaceholder
                           ? null
                           : flexRender(
@@ -106,10 +105,10 @@ export function DataTable<TData, TValue>({
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && "selected"}
-                      className="cursor-pointer !border-x-1 !border-y-1  shadow-none bg-background p-.5 rounded-lg hover:bg-primary/5 flex items-start justify-between"
+                      className="cursor-pointer !border-x-1 !border-y-1  shadow-none bg-background p-1 rounded-lg hover:bg-primary/5 flex"
                       onClick={() => {
                         router.push(
-                          `/leads/${(row.original as any).id}` as any
+                          `/students/${(row.original as any).id}` as any
                         );
                       }}
                     >
@@ -128,7 +127,7 @@ export function DataTable<TData, TValue>({
                 <TableRow>
                   <TableCell
                     colSpan={columns.length}
-                    className="h-19 text-center text-muted-foreground "
+                    className="h-19 text-center text-muted-foreground"
                   >
                     No results.
                   </TableCell>

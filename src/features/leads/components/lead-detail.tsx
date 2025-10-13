@@ -1,12 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { ArrowLeft, EditIcon, MoreVertical, TrashIcon } from "lucide-react";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useGetLead } from "../api/use-get-lead";
-import { useLeadId } from "../hooks/use-lead-id";
+
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
@@ -110,7 +108,7 @@ export const LeadDetail = ({ lead, leadId }: Props) => {
                 <p
                   className={cn(
                     "text-gray-600 dark:text-gray-300 ",
-                    !lead?.email && "text-gray-400 dark:text-gray-500  text-xs"
+                    !lead?.email && "text-gray-400 dark:text-gray-500  text-xs",
                   )}
                 >
                   {" "}
@@ -126,7 +124,7 @@ export const LeadDetail = ({ lead, leadId }: Props) => {
                   className={cn(
                     "text-gray-600 capitalize dark:text-gray-300",
                     !lead?.parentName &&
-                      "text-gray-400 dark:text-gray-500 text-xs"
+                      "text-gray-400 dark:text-gray-500 text-xs",
                   )}
                 >
                   {" "}
@@ -139,7 +137,8 @@ export const LeadDetail = ({ lead, leadId }: Props) => {
                 <p
                   className={cn(
                     "text-gray-600 dark:text-gray-300 capitalize",
-                    !lead?.address && "text-gray-400 dark:text-gray-500 text-xs"
+                    !lead?.address &&
+                      "text-gray-400 dark:text-gray-500 text-xs",
                   )}
                 >
                   {" "}
@@ -160,7 +159,7 @@ export const LeadDetail = ({ lead, leadId }: Props) => {
                   className={cn(
                     "text-gray-600 dark:text-gray-300 capitalize",
                     !lead?.studentName &&
-                      "text-gray-400 dark:text-gray-500 text-xs"
+                      "text-gray-400 dark:text-gray-500 text-xs",
                   )}
                 >
                   {" "}
@@ -174,7 +173,7 @@ export const LeadDetail = ({ lead, leadId }: Props) => {
                   className={cn(
                     "text-gray-600 dark:text-gray-300 capitalize",
                     !lead?.schoolName &&
-                      "text-gray-400 dark:text-gray-500 text-xs"
+                      "text-gray-400 dark:text-gray-500 text-xs",
                   )}
                 >
                   {" "}
@@ -188,7 +187,7 @@ export const LeadDetail = ({ lead, leadId }: Props) => {
                   <p
                     className={cn(
                       "text-gray-600 dark:text-gray-300 capitalize",
-                      !lead?.age && "text-gray-400 dark:text-gray-500 text-xs"
+                      !lead?.age && "text-gray-400 dark:text-gray-500 text-xs",
                     )}
                   >
                     {" "}
@@ -201,7 +200,8 @@ export const LeadDetail = ({ lead, leadId }: Props) => {
                   <p
                     className={cn(
                       "text-gray-600 dark:text-gray-300 capitalize",
-                      !lead?.grade && "text-gray-400 dark:text-gray-500 text-xs"
+                      !lead?.grade &&
+                        "text-gray-400 dark:text-gray-500 text-xs",
                     )}
                   >
                     {" "}
@@ -214,7 +214,7 @@ export const LeadDetail = ({ lead, leadId }: Props) => {
                     className={cn(
                       "text-gray-600 dark:text-gray-300 capitalize",
                       !lead?.gender &&
-                        "text-gray-400 dark:text-gray-500 text-xs"
+                        "text-gray-400 dark:text-gray-500 text-xs",
                     )}
                   >
                     {" "}
@@ -229,14 +229,12 @@ export const LeadDetail = ({ lead, leadId }: Props) => {
                   <p
                     className={cn(
                       "text-gray-600 dark:text-gray-300 capitalize",
-                      !lead?.branch &&
-                        "text-gray-400 dark:text-gray-500 text-xs"
+                      !lead?.branch?.name &&
+                        "text-gray-400 dark:text-gray-500 text-xs",
                     )}
                   >
                     {" "}
-                    {lead?.branch
-                      ? snakeCaseToTitleCase(lead.branch)
-                      : "Not provided"}
+                    {lead?.branch?.name ? lead.branch.name : "Not provided"}
                   </p>
                 </div>
 
@@ -246,7 +244,7 @@ export const LeadDetail = ({ lead, leadId }: Props) => {
                     className={cn(
                       "text-gray-600 dark:text-gray-300 capitalize",
                       !lead?.source &&
-                        "text-gray-400 dark:text-gray-500 text-xs"
+                        "text-gray-400 dark:text-gray-500 text-xs",
                     )}
                   >
                     {" "}

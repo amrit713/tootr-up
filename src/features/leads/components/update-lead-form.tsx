@@ -41,6 +41,7 @@ import { useModal } from "@/hooks/use-modal-store";
 import { useLeadId } from "../hooks/use-lead-id";
 import { useGetLead } from "../api/use-get-lead";
 import { useUpdateLead } from "../api/use-update-lead";
+import { useGetBranches } from "@/features/branches/api/use-get-branches";
 
 export const UpdateLeadForm = () => {
   const { onClose } = useModal();
@@ -50,6 +51,7 @@ export const UpdateLeadForm = () => {
 
   const { mutate: updateLead, isPending } = useUpdateLead();
   const { data: programs } = useGetPrograms();
+  const { data: branches } = useGetBranches();
 
   const form = useForm<z.infer<typeof updateLeadSchema>>({
     resolver: zodResolver(updateLeadSchema),
@@ -58,9 +60,10 @@ export const UpdateLeadForm = () => {
       email: data?.email ?? "",
       parentName: data?.parentName ?? "",
       status: data?.status ?? undefined,
+
       source: data?.source ?? undefined,
       programs: data?.programs ?? undefined,
-      branch: data?.branch ?? undefined,
+      branchId: data?.branchId ?? undefined,
       studentName: data?.studentName ?? "",
       address: data?.address ?? "",
 
@@ -273,7 +276,7 @@ export const UpdateLeadForm = () => {
               />
               <FormField
                 control={form.control}
-                name="branch"
+                name="branchId"
                 render={({ field }) => (
                   <FormItem className="pl-4 md:pl-0 flex flex-col gap-4 w-full">
                     <FormLabel>Branch</FormLabel>
@@ -286,9 +289,13 @@ export const UpdateLeadForm = () => {
                           <SelectValue placeholder="Select a Branch " />
                         </SelectTrigger>
                         <SelectContent>
-                          {Object.values(CompanyBranch).map((branch, idx) => (
-                            <SelectItem key={idx} value={branch}>
-                              {snakeCaseToTitleCase(branch)}
+                          {branches?.map((branch) => (
+                            <SelectItem
+                              key={branch.id}
+                              value={branch.id}
+                              className="capitalize"
+                            >
+                              {branch.name}
                             </SelectItem>
                           ))}
                         </SelectContent>

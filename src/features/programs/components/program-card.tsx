@@ -1,10 +1,24 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useConfirm } from "@/hooks/use-confirm";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { EditIcon, TrashIcon } from "lucide-react";
 import { useState } from "react";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ButtonLoader } from "@/components/global/button-loader";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+
+import { useConfirm } from "@/hooks/use-confirm";
+
 import { useDeleteProgram } from "../api/use-delete-program";
 import { useUpdateProgram } from "../api/use-update-program";
 
@@ -13,23 +27,32 @@ interface Props {
   id: string;
 }
 
+const schema = z.object({
+  name: z.string(),
+});
+
 export const ProgramCard = ({ name, id }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [value, setValue] = useState(name);
-  const [drop, setDrop] = useState(false);
 
-  const { mutate, isPending } = useDeleteProgram();
+  const { mutate } = useDeleteProgram();
   const { mutate: updateProgram, isPending: updatePending } =
     useUpdateProgram();
+
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      name: name,
+    },
+  });
 
   const [DeleteProgramDialog, deleteProgram] = useConfirm(
     `Delete ${name} program`,
     `Are you sure you want to delete ${name} program`
   );
 
-  const handleEditingProgram = () => {
+  const onSubmit = (values: z.infer<typeof schema>) => {
     updateProgram(
-      { json: { name: value }, param: { id } },
+      { json: { name: values.name }, param: { id } },
       {
         onSuccess: () => {
           setIsEditing(false);
@@ -40,7 +63,7 @@ export const ProgramCard = ({ name, id }: Props) => {
 
   const handleDeleteProgram = async () => {
     const ok = await deleteProgram();
-    setDrop(false);
+
     if (!ok) return;
     mutate(
       { param: { id } },
@@ -57,25 +80,50 @@ export const ProgramCard = ({ name, id }: Props) => {
       <DeleteProgramDialog />
       <div className="group py-2 px-4 bg-neutral-50 capitalize dark:bg-neutral-900  flex items-center justify-between ">
         {isEditing ? (
-          <div className=" w-full flex flex-col gap-2">
-            <Input
-              placeholder=""
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-            />
-            <div className="flex justify-end gap-2">
-              <Button
-                size={"sm"}
-                variant={"outline"}
-                onClick={() => setIsEditing(false)}
-              >
-                Cancel
-              </Button>
-              <Button size={"sm"} onClick={handleEditingProgram}>
-                Save
-              </Button>
-            </div>
-          </div>
+          <Form {...form}>
+            <form
+              action=""
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="w-full flex flex-col gap-2"
+            >
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormControl>
+                      <Input
+                        required
+                        disabled={updatePending}
+                        placeholder="update"
+                        {...field}
+                      />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="flex justify-end gap-2">
+                <Button
+                  type="button"
+                  size={"sm"}
+                  variant={"outline"}
+                  onClick={() => setIsEditing(false)}
+                >
+                  Cancel
+                </Button>
+                <Button size={"sm"} type="submit" disabled={updatePending}>
+                  <ButtonLoader
+                    label="Save"
+                    isLoading={updatePending}
+                    loadingText="Saving"
+                  />
+                </Button>
+              </div>
+            </form>
+          </Form>
         ) : (
           <p className="">{name}</p>
         )}

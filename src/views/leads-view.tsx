@@ -39,7 +39,12 @@ export const LeadsView = () => {
       <div className="">
         <LeadFilter />
       </div>
-      <DataTable columns={columns} data={leads || []} isLoading={isLoading} />
+      <DataTable
+        columns={columns}
+        data={leads || []}
+        isLoading={isLoading}
+        total={leads ? leads.length : 0}
+      />
     </div>
   );
 };

@@ -37,3 +37,22 @@ export function getDueDateLabel(dueDate: Date): string {
 
   return format(dueDate, "MMM dd, yyyy"); // fallback
 }
+
+
+export function currencyFormatter(amount: number | string = 0) {
+  const num = Number(amount) || 0;
+  const formatted = num.toLocaleString("en-IN", {
+
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+  return `Rs. ${formatted}`
+}
+
+
+export function vatCalculate(amount: number | string = 0) {
+  const num = Number(amount) || 0;
+
+  return num * 13 / 100
+}

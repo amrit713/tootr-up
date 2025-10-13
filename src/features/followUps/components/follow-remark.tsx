@@ -74,7 +74,7 @@ export const FollowRemark = ({ remark, id }: Props) => {
             rows={4}
             onChange={(e) => setValue(e.target.value)}
             disabled={isPending}
-            className=" shadow-none"
+            className=" shadow-none bg-background"
           />
           <Button
             size={"sm"}

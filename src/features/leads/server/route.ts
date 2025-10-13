@@ -29,7 +29,7 @@ const app = new Hono<{ Variables: Variables }>()
             throw new HTTPException(401, { message: "Unauthorized" });
         }
 
-        const { number, parentName, age, grade, gender, schoolName, address, status, source, branch, email, programs, studentName } = c.req.valid("json")
+        const { number, parentName, age, grade, gender, schoolName, address, status, source, branchId, email, programs, studentName } = c.req.valid("json")
 
         const existinglead = await db.lead.findUnique({
             where: {
@@ -43,7 +43,7 @@ const app = new Hono<{ Variables: Variables }>()
 
         const lead = await db.lead.create({
             data: {
-                number, parentName, age: age ? Number(age) : undefined, grade, gender, studentName, schoolName, address, status, source, branch, userId: user.id, email, programs: programs && [...programs],
+                number, parentName, age: age ? Number(age) : undefined, grade, gender, studentName, schoolName, address, status, source, branchId, userId: user.id, email, programs: programs && [...programs],
 
                 followups: {
                     create: {
@@ -55,16 +55,9 @@ const app = new Hono<{ Variables: Variables }>()
             }
 
         })
-
-
-
-
         if (!lead) {
             throw new HTTPException(500, { message: "Server Error" })
         }
-
-
-
 
         return c.json({
             data: lead
@@ -80,20 +73,11 @@ const app = new Hono<{ Variables: Variables }>()
         const { search, dueDate, status } = c.req.valid("query")
 
 
-
-
-
         let startOfDay;
         let endOfDay;
 
         if (dueDate) {
-
-
             const date = new Date(dueDate)
-
-
-
-
 
             startOfDay = new Date(date.setHours(0, 0, 0, 0))
             endOfDay = new Date(date.setHours(23, 59, 59, 999));
@@ -101,13 +85,6 @@ const app = new Hono<{ Variables: Variables }>()
 
 
         }
-
-
-
-
-
-
-
 
         const leads = await db.lead.findMany({
             where: {
@@ -125,6 +102,11 @@ const app = new Hono<{ Variables: Variables }>()
 
             },
             include: {
+                branch: {
+                    select: {
+                        name: true
+                    }
+                },
                 user: {
                     select: {
                         name: true,
@@ -228,6 +210,10 @@ const app = new Hono<{ Variables: Variables }>()
                         name: true,
                         email: true
                     }
+                }, branch: {
+                    select: {
+                        name: true
+                    }
                 }
             }
 
@@ -252,14 +238,14 @@ const app = new Hono<{ Variables: Variables }>()
             throw new HTTPException(404, { message: "No params Id found" });
         }
 
-        const { number, parentName, age, grade, gender, schoolName, address, status, source, branch, email, programs } = c.req.valid("json")
+        const { number, parentName, age, grade, gender, schoolName, address, status, source, branchId, email, programs } = c.req.valid("json")
 
         const lead = await db.lead.update({
             where: {
                 id: leadId
             },
             data: {
-                number, parentName, age: age ? Number(age) : undefined, grade, gender, schoolName, address, status, source, branch, email, programs: programs && [...programs]
+                number, parentName, age: age ? Number(age) : undefined, grade, gender, schoolName, address, status, source, branchId, email, programs: programs && [...programs]
             }
         })
 

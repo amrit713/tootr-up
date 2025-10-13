@@ -13,12 +13,6 @@ import {
   FollowUpStatus,
 } from "@/generated/prisma";
 import { FollowUpDate } from "./follow-up-date";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { date } from "better-auth";
-import { cn, getDueDateLabel } from "@/lib/utils";
-import { useState } from "react";
-import { Edit } from "lucide-react";
 import { FollowRemark } from "./follow-remark";
 
 interface Props {
@@ -57,7 +51,7 @@ export const Followup = ({
         <Priority priority={priority} className=" text-sm" />
       </CardHeader>
       <CardContent>
-        <FollowRemark remark={remark} id={id} />
+        <FollowRemark remark={remark ? remark : undefined} id={id} />
       </CardContent>
       <Separator />
       <CardFooter className="flex justify-between ">
