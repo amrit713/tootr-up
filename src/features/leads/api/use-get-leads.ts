@@ -6,27 +6,28 @@ import { client } from "@/lib/rpc";
 interface useGetLeadsProps {
     status?: string,
     dueDate?: string,
-    search?: string
+    search?: string,
+    assigneeId?: string
 
 }
 
 
-export const useGetLeads = ({ status, dueDate, search }: useGetLeadsProps) => {
+export const useGetLeads = ({ status, dueDate, search, assigneeId }: useGetLeadsProps) => {
     const query = useQuery({
-        queryKey: ["leads", status, dueDate, search],
+        queryKey: ["leads", status, dueDate, search, assigneeId],
         queryFn: async () => {
             const response = await client.api.leads.$get({
                 query: {
                     status,
                     dueDate,
-                    search
+                    search, assigneeId
                 }
             })
 
             if (!response.ok) {
                 throw new Error("failed to fetch leads");
             }
-            const { data, startOfDay, endOfDay } = await response.json();
+            const { data } = await response.json();
 
 
 

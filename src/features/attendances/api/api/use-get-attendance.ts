@@ -3,25 +3,32 @@ import { useQuery } from "@tanstack/react-query";
 import { client } from "@/lib/rpc";
 
 
-export const useGetTimes = ({ branchProgramId }: { branchProgramId?: string }) => {
+export const useGetAttendance = ({ id }: { id?: string }) => {
 
 
     const query = useQuery({
-        queryKey: ["times", branchProgramId],
+        queryKey: ["attendance", id],
+        enabled: !!id,
         queryFn: async () => {
-
-            if (!branchProgramId) {
+            if (!id) {
                 return null
             }
-            const response = await client.api.times.$get({ query: { branchProgramId } })
+
+            const response = await client.api.attendances[":id"]["$get"]({ param: { id } })
+
+
 
             if (!response.ok) {
-                throw new Error("failed to fetch times");
+                throw new Error("failed to fetch lead");
             }
             const { data } = await response.json();
 
+
+
+
             return data;
-        }
+        },
+
     })
 
     return query

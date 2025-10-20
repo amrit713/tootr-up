@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 import { useCreateLead } from "../api/use-create-lead";
 import { cn, snakeCaseToTitleCase } from "@/lib/utils";
@@ -40,6 +41,8 @@ import {
 import { ButtonLoader } from "@/components/global/button-loader";
 import { useModal } from "@/hooks/use-modal-store";
 import { useGetBranches } from "@/features/branches/api/use-get-branches";
+import { User } from "better-auth";
+import { useGetUsers } from "@/features/auth/api/get-all-user";
 
 interface CreateLeadFormProps {
   onCancel?: () => void;
@@ -51,6 +54,7 @@ export const CreateLeadForm = ({ onCancel }: CreateLeadFormProps) => {
   const { mutate: createLead, isPending } = useCreateLead();
   const { data: programs } = useGetPrograms();
   const { data: branches } = useGetBranches();
+  const { data } = useGetUsers();
 
   const form = useForm<z.infer<typeof leadSchema>>({
     resolver: zodResolver(leadSchema),
@@ -365,37 +369,80 @@ export const CreateLeadForm = ({ onCancel }: CreateLeadFormProps) => {
               />
             </div>
 
-            <FormField
-              control={form.control}
-              name="programs"
-              render={({ field }) => (
-                <FormItem className=" flex flex-col gap-4 w-full">
-                  <FormLabel> Interested Programs</FormLabel>
-                  <FormControl>
-                    <MultiSelect
-                      values={field.value ?? []}
-                      onValuesChange={field.onChange}
-                    >
-                      <MultiSelectTrigger className="w-full">
-                        <MultiSelectValue placeholder="Select programs" />
-                      </MultiSelectTrigger>
-                      <MultiSelectContent>
-                        {programs?.map((program) => (
-                          <MultiSelectItem
-                            value={program.name}
-                            key={program.id}
-                            className="capitalize"
-                          >
-                            {program.name}
-                          </MultiSelectItem>
-                        ))}
-                      </MultiSelectContent>
-                    </MultiSelect>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex gap-2 ">
+              <FormField
+                control={form.control}
+                name="assigneeId"
+                render={({ field }) => (
+                  <FormItem className="pl-4 md:pl-0 flex flex-col gap-4 w-full">
+                    <FormLabel>Assign To</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Assign Lead to " />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {data?.users.map((user) => (
+                            <SelectItem
+                              key={user.id}
+                              value={user.id}
+                              className="capitalize"
+                            >
+                              <div className="flex items-center gap-2">
+                                <Avatar className="size-6 hover:opacity-75 transition border border-netural-400  ">
+                                  <AvatarFallback className="bg-primary/10 font-medium text-primary dark:text-white flex items-center justify-center ">
+                                    {user.name.charAt(0).toUpperCase()}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <p className="capitalize text-sm font-medium">
+                                  {user.name}
+                                </p>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="programs"
+                render={({ field }) => (
+                  <FormItem className=" flex flex-col gap-4 w-full">
+                    <FormLabel> Interested Programs</FormLabel>
+                    <FormControl>
+                      <MultiSelect
+                        values={field.value ?? []}
+                        onValuesChange={field.onChange}
+                      >
+                        <MultiSelectTrigger className="w-full">
+                          <MultiSelectValue placeholder="Select programs" />
+                        </MultiSelectTrigger>
+                        <MultiSelectContent>
+                          {programs?.map((program) => (
+                            <MultiSelectItem
+                              value={program.name}
+                              key={program.id}
+                              className="capitalize"
+                            >
+                              {program.name}
+                            </MultiSelectItem>
+                          ))}
+                        </MultiSelectContent>
+                      </MultiSelect>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <Separator className="my-2" />
 

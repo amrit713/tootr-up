@@ -17,7 +17,8 @@ import z from "zod";
 const filterSchema = z.object({
     search: z.string().nullish(),
     dueDate: z.string().nullish(),
-    status: z.nativeEnum(LeadStatus).nullish()
+    status: z.nativeEnum(LeadStatus).nullish(),
+    assigneeId: z.string().nullish()
 
 })
 
@@ -29,7 +30,7 @@ const app = new Hono<{ Variables: Variables }>()
             throw new HTTPException(401, { message: "Unauthorized" });
         }
 
-        const { number, parentName, age, grade, gender, schoolName, address, status, source, branchId, email, programs, studentName } = c.req.valid("json")
+        const { number, parentName, age, grade, gender, schoolName, address, status, source, branchId, email, programs, assigneeId, studentName } = c.req.valid("json")
 
         const existinglead = await db.lead.findUnique({
             where: {
@@ -43,7 +44,7 @@ const app = new Hono<{ Variables: Variables }>()
 
         const lead = await db.lead.create({
             data: {
-                number, parentName, age: age ? Number(age) : undefined, grade, gender, studentName, schoolName, address, status, source, branchId, userId: user.id, email, programs: programs && [...programs],
+                number, parentName, age: age ? Number(age) : undefined, grade, gender, studentName, schoolName, address, status, source, branchId, userId: user.id, email, programs: programs && [...programs], assigneeId,
 
                 followups: {
                     create: {
@@ -70,7 +71,8 @@ const app = new Hono<{ Variables: Variables }>()
             throw new HTTPException(401, { message: "Unauthorized" });
         }
 
-        const { search, dueDate, status } = c.req.valid("query")
+        const { search, dueDate, status, assigneeId } = c.req.valid("query")
+
 
 
         let startOfDay;
@@ -97,7 +99,9 @@ const app = new Hono<{ Variables: Variables }>()
                 due_date: dueDate ? {
                     gte: startOfDay,
                     lte: endOfDay
-                } : undefined
+                } : undefined,
+                assigneeId: assigneeId ? assigneeId : undefined
+
 
 
             },
@@ -111,6 +115,11 @@ const app = new Hono<{ Variables: Variables }>()
                     select: {
                         name: true,
                         id: true
+                    }
+                },
+                assignee: {
+                    select: {
+                        name: true, id: true,
                     }
                 },
                 followups: {
@@ -209,8 +218,17 @@ const app = new Hono<{ Variables: Variables }>()
                     select: {
                         name: true,
                         email: true
+                    },
+
+                },
+
+
+                assignee: {
+                    select: {
+                        name: true, id: true,
                     }
-                }, branch: {
+                },
+                branch: {
                     select: {
                         name: true
                     }

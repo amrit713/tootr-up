@@ -15,13 +15,13 @@ import { ErrorState } from "@/components/global/error-state";
 
 export const LeadsView = () => {
   const { onOpen } = useModal();
-  const { search, status, dueDate } = useLeadFilters();
+  const { search, status, dueDate, assigneeId } = useLeadFilters();
 
   const {
     data: leads,
     isLoading,
     isError,
-  } = useGetLeads({ search, status, dueDate });
+  } = useGetLeads({ search, status, dueDate, assigneeId });
 
   if (isError) {
     return (
