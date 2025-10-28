@@ -30,8 +30,13 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
-  Lead          Lead[]
   FollowUp      FollowUp[]
+
+  // ✅ Leads created by this user
+  createdLeads Lead[] @relation("CreatedLeads")
+
+  // ✅ Leads assigned to this user
+  assignedLeads Lead[] @relation("AssignedLeads")
 
   status     UserStatus @default(PENDING)
   role       String     @default("user")
@@ -111,8 +116,14 @@ model Lead {
 
   due_date DateTime?
 
+  // ✅ The user who created the lead
   userId String
-  user   User    @relation(fields: [userId], references: [id])
+  user   User   @relation("CreatedLeads", fields: [userId], references: [id])
+
+  // ✅ The user who is assigned to the lead
+  assigneeId String?
+  assignee   User?   @relation("AssignedLeads", fields: [assigneeId], references: [id])
+
   branch Branch? @relation(fields: [branchId], references: [id])
 
   // Programs as dropdown (array of IDs)
@@ -187,15 +198,16 @@ model TimeTable {
 }
 
 model StudentEnrollment {
-  id              String @id @default(uuid())
+  id              String  @id @default(uuid())
   studentId       String
   timeTableId     String
   branchProgramId String
+  isActive        Boolean @default(true)
 
   branchProgram BranchProgram @relation(fields: [branchProgramId], references: [id], onDelete: Cascade)
   student       Student       @relation(fields: [studentId], references: [id])
   timeTable     TimeTable     @relation(fields: [timeTableId], references: [id], onDelete: Cascade) // need to imporve
-  Attendance    Attendance[]
+  attendance    Attendance[]
 
   @@unique([studentId, branchProgramId])
 }
@@ -213,6 +225,8 @@ model Student {
   schoolName      String
   address         String
   enrolledDate    DateTime  @default(now())
+  isActive        Boolean   @default(true)
+  image           String?
   startedDate     DateTime?
 
   // Optional: if you still want to track which lead converted
@@ -230,10 +244,12 @@ model Student {
 model Attendance {
   id     String           @id @default(uuid())
   date   DateTime         @default(now())
-  status AttendanceStatus @default(PRESENT)
+  status AttendanceStatus @default(ABSENT)
 
   studentEnrollmentId String
   studentEnrollment   StudentEnrollment @relation(fields: [studentEnrollmentId], references: [id], onDelete: Cascade)
+
+  @@unique([studentEnrollmentId, date])
 }
 
 model Payment {
@@ -277,6 +293,7 @@ enum LeadStatus {
   CONVERTED
   LOST
   DEMO
+  CALL_NOT_RECEIVED
 }
 
 enum FollowUpStatus {
@@ -286,6 +303,7 @@ enum FollowUpStatus {
   CONVERTED
   LOST
   DEMO
+  CALL_NOT_RECEIVED
 }
 
 enum CompanyBranch {

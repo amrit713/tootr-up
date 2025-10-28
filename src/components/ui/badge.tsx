@@ -30,6 +30,8 @@ const badgeVariants = cva(
           "border-transparent bg-emerald-400 text-neutral-900 hover:bg-emerald-400/80",
         [LeadStatus.DEMO]:
           "border-transparent bg-yellow-400 text-neutral-900 hover:bg-yellow-400/80",
+        [LeadStatus.CALL_NOT_RECEIVED]:
+          "border-transparent bg-cyan-400 text-neutral-900 hover:bg-cyan-400/80",
       },
     },
     defaultVariants: {

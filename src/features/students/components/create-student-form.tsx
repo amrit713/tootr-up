@@ -85,9 +85,9 @@ export const CreateStudentForm = ({ lead }: CreateStudentProps) => {
     createStudent(
       { json: values },
       {
-        onSuccess() {
+        onSuccess({ data }) {
           form.reset();
-          router.push("/students");
+          router.push(`/students/${data.id}`);
         },
       }
     );

@@ -34,7 +34,7 @@ export const LeadDetailView = () => {
             />
           </Card>
         ) : (
-          <LeadDetail lead={lead} leadId={leadId} />
+          <LeadDetail lead={lead} />
         )}
       </div>
       <div className=" col-span-4">

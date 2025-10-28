@@ -17,7 +17,8 @@ export const leadSchema = z.object({
     status: z.nativeEnum(LeadStatus).optional(),
     source: z.nativeEnum(LeadSource).optional(),
     branchId: z.string().optional(),
-    programs: z.array(z.string()).optional()
+    programs: z.array(z.string()).optional(),
+    assigneeId: z.string().optional(),
 })
 
 export const updateLeadSchema = z.object({
@@ -35,6 +36,7 @@ export const updateLeadSchema = z.object({
     status: z.nativeEnum(LeadStatus).optional(),
     source: z.nativeEnum(LeadSource).optional(),
     branchId: z.string().optional(),
+    assigneeId: z.string().optional(),
     programs: z.array(z.string()).optional()
 })
 

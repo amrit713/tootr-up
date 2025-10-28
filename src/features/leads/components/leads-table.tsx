@@ -81,12 +81,12 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={headerGroup.id}
                   className={
-                    "!border-x-1 !border-y-1  shadow-none bg-background p-1 rounded-lg flex items-center justify-between mb-2"
+                    "!border-x-1 !border-y-1  shadow-none bg-background py-1 rounded-lg flex items-center justify-between mb-2"
                   }
                 >
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead key={header.id}>
+                      <TableHead key={header.id} className="inline flex-1">
                         {header.isPlaceholder
                           ? null
                           : flexRender(
@@ -106,7 +106,7 @@ export function DataTable<TData, TValue>({
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && "selected"}
-                      className="cursor-pointer !border-x-1 !border-y-1  shadow-none bg-background p-.5 rounded-lg hover:bg-primary/5 flex items-start justify-between"
+                      className="cursor-pointer !border-x-1 !border-y-1  shadow-none bg-background p-1 rounded-lg hover:bg-primary/5 flex"
                       onClick={() => {
                         router.push(
                           `/leads/${(row.original as any).id}` as any

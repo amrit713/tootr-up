@@ -4,6 +4,7 @@ import { CreateBranchModal } from "@/features/branches/components/create-branch-
 import { CreateFollowUpModal } from "@/features/followUps/components/create-follow-up-model";
 import { CreateLeadModal } from "@/features/leads/components/create-lead-modal";
 import { UpdateLeadModal } from "@/features/leads/components/update-lead-modal";
+import { CreatePaymentModal } from "@/features/payments/components/create-payment-modal";
 
 import { CreateProgramModal } from "@/features/programs/components/create-program-modal";
 import { useEffect, useState } from "react";
@@ -26,6 +27,8 @@ export const ModalProvider = () => {
 
       <CreateBranchModal />
       <CreateProgramModal />
+
+      <CreatePaymentModal />
     </>
   );
 };

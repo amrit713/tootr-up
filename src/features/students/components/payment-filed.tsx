@@ -35,7 +35,7 @@ interface Props {
 export const PaymentField = ({ form, isPending }: Props) => {
   const totalFee = form.watch("totalFee");
 
-  const hanlerCalculate = () => {
+  const handleCalculate = () => {
     const selectedPrograms = form.getValues("enrolledPrograms");
     const programFee = form.getValues("programFee");
     const discountPercent = form.getValues("discountPercent");
@@ -110,7 +110,7 @@ export const PaymentField = ({ form, isPending }: Props) => {
         <Button
           type="button"
           disabled={!form.watch("programFee") || isPending}
-          onClick={hanlerCalculate}
+          onClick={handleCalculate}
         >
           Calculate
         </Button>

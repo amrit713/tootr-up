@@ -18,6 +18,7 @@ export const columns: ColumnDef<LeadType>[] = [
       return (
         <Button
           variant="ghost"
+          className=""
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Phone No.
@@ -37,6 +38,7 @@ export const columns: ColumnDef<LeadType>[] = [
       return (
         <Button
           variant="ghost"
+          className=""
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Parent Name
@@ -46,7 +48,7 @@ export const columns: ColumnDef<LeadType>[] = [
     },
     cell: ({ row }) => {
       const parentName = row.original.parentName;
-      return <p className="line-clamp-1">{parentName ? parentName : "_"}</p>;
+      return <p className="line-clamp-1">{parentName ? parentName : "--"}</p>;
     },
   },
 
@@ -56,6 +58,7 @@ export const columns: ColumnDef<LeadType>[] = [
       return (
         <Button
           variant="ghost"
+          className=""
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Student Name
@@ -65,7 +68,7 @@ export const columns: ColumnDef<LeadType>[] = [
     },
     cell: ({ row }) => {
       const studentName = row.original.studentName;
-      return <p className="line-clamp-1">{studentName ? studentName : "_"}</p>;
+      return <p className="line-clamp-1">{studentName ? studentName : "--"}</p>;
     },
   },
 
@@ -75,6 +78,7 @@ export const columns: ColumnDef<LeadType>[] = [
       return (
         <Button
           variant="ghost"
+          className=""
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Status
@@ -93,14 +97,52 @@ export const columns: ColumnDef<LeadType>[] = [
   },
 
   {
+    accessorKey: "assignee",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          className=""
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Assignee To
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+
+    cell: ({ row }) => {
+      const name = row.original.assignee?.name;
+
+      return (
+        <div className="flex items-center gap-2">
+          {name ? (
+            <div className="flex gap-2 items-center">
+              <Avatar className="size-6 hover:opacity-75 bg-amber-500/10 transition border border-netural-400  ">
+                <AvatarFallback className="bg-primary/10 font-medium text-primary dark:text-white flex items-center justify-center ">
+                  {name.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <p className="capitalize text-sm font-medium">{name}</p>
+            </div>
+          ) : (
+            <p>--</p>
+          )}
+        </div>
+      );
+    },
+  },
+
+  {
     accessorKey: "lead creator",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
+          className=""
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Received by
+          Lead Creator
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -126,6 +168,7 @@ export const columns: ColumnDef<LeadType>[] = [
       return (
         <Button
           variant="ghost"
+          className=""
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Due Date
@@ -141,10 +184,12 @@ export const columns: ColumnDef<LeadType>[] = [
 
   {
     accessorKey: "branch",
+
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
+          className=""
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Branch
@@ -154,25 +199,7 @@ export const columns: ColumnDef<LeadType>[] = [
     },
     cell: ({ row }) => {
       const branch = row.original.branch?.name;
-      return <p className="line-clamp-1">{branch ? branch : "_"}</p>;
-    },
-  },
-  {
-    accessorKey: "priority",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Priority
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const priority = row.original.followups[0].priority;
-      return <Priority priority={priority} />;
+      return <p className="line-clamp-1 ">{branch ? branch : "--"}</p>;
     },
   },
 ];

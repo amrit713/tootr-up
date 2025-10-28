@@ -17,15 +17,28 @@ import { snakeCaseToTitleCase } from "@/lib/utils";
 import { DatePicker } from "@/components/global/date-picker";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useGetUsers } from "@/features/auth/api/get-all-user";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export const LeadFilter = () => {
-  const { status, search, dueDate, setFilter, resetFilters } = useLeadFilters();
+  const { status, search, dueDate, setFilter, assigneeId, resetFilters } =
+    useLeadFilters();
+
+  const { data } = useGetUsers();
 
   const onStatusChange = (value: string) => {
     if (value === "all") {
       setFilter("status", undefined);
     } else {
       setFilter("status", value as LeadStatus);
+    }
+  };
+
+  const onAssigneIdChange = (value: string) => {
+    if (value === "all") {
+      setFilter("assigneeId", undefined);
+    } else {
+      setFilter("assigneeId", value);
     }
   };
 
@@ -71,6 +84,34 @@ export const LeadFilter = () => {
         </SelectContent>
       </Select>
 
+      <Select
+        defaultValue={assigneeId ?? undefined}
+        onValueChange={(value) => onAssigneIdChange(value)}
+      >
+        <SelectTrigger className="w-full md:w-auto ">
+          <div className="flex items-center pr-2">
+            <ListChecksIcon className="size-4 mr-2" />
+            <SelectValue placeholder="All Assignee" />
+          </div>
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value={"all"}>All Assignee</SelectItem>
+          <SelectSeparator />
+          {data?.users.map((user) => (
+            <SelectItem key={user.id} value={user.id}>
+              <div className="flex items-center gap-2">
+                <Avatar className="size-6 hover:opacity-75 transition border border-netural-400  ">
+                  <AvatarFallback className="bg-primary/10 font-medium text-primary dark:text-white flex items-center justify-center ">
+                    {user.name.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <p className="capitalize text-sm font-medium">{user.name}</p>
+              </div>
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
       <DatePicker
         placeholder="Due date"
         className=" w-full h-9 md:w-auto"
@@ -80,7 +121,7 @@ export const LeadFilter = () => {
         }}
       />
 
-      {(search || dueDate || status) && (
+      {(search || dueDate || status || assigneeId) && (
         <Button variant={"outline"} onClick={resetFilters}>
           clear
         </Button>
