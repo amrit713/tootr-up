@@ -7,6 +7,7 @@ import { HTTPException } from "hono/http-exception";
 import { authMiddleware } from "@/lib/hono-middleware";
 import { Variables } from "@/lib/auth"
 import { db } from "@/lib/db";
+import { AttendanceStatus } from "@/generated/prisma";
 
 
 
@@ -27,7 +28,7 @@ const app = new Hono<{ Variables: Variables }>()
         }
 
         const { program, slotTime, date } = c.req.valid("query")
-        console.log("🚀 ~ date:", date)
+
 
 
 
@@ -61,6 +62,48 @@ const app = new Hono<{ Variables: Variables }>()
         return c.json({
             data: studentEnrollments
         })
+    })
+    .get("/:id/analytics", authMiddleware, async (c) => {
+        const user = c.get("user")
+        if (!user) {
+            throw new HTTPException(401, { message: "Unauthorized" });
+        }
+
+        const { id } = c.req.param();
+
+
+        const totalAttendance = await db.attendance.count({
+            where: {
+                studentEnrollmentId: id
+            }
+        })
+
+        const absent = await db.attendance.count({
+            where: {
+                studentEnrollmentId: id,
+                status: AttendanceStatus.ABSENT
+            }
+        })
+
+        const present = await db.attendance.count({
+            where: {
+                studentEnrollmentId: id,
+                status: AttendanceStatus.PRESENT
+            }
+        })
+
+        const absentPrecentage = (absent / totalAttendance) * 100
+        const presentPrecentage = (present / totalAttendance) * 100
+
+
+        return c.json({
+            data: {
+                totalAttendance,
+                present, absent, absentPrecentage, presentPrecentage
+            }
+        })
+
+
     })
 
 export default app

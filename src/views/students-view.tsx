@@ -12,7 +12,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetStudentEnrollments } from "@/features/student-enrollments/api/use-get-student-enrollments";
 import { useGetStudents } from "@/features/students/api/use-get-students";
-import { Attedance } from "@/features/students/components/attendance";
+import { Attedance } from "@/features/attendances/components/attendance";
 import { columns } from "@/features/students/components/column";
 import { StudentAttendanceFilter } from "@/features/students/components/student-attendance-filter";
 import { StudentFilter } from "@/features/students/components/student-filter";
@@ -46,8 +46,6 @@ export const StudentView = () => {
     slotTime: attendance.timeSlot ?? "",
     date: attendance.date ?? "",
   });
-
-  console.log(enrolledStudents);
 
   const onLoadStudent = () => {
     refetch();

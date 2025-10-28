@@ -9,10 +9,6 @@ export const useGetUsers = () => {
     queryFn: async () => {
       const { data, error } = await authClient.admin.listUsers({ query: {} });
 
-      if (error) {
-        console.error("Error fetching users:", error);
-      }
-
       return data;
     },
   });

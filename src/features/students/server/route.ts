@@ -184,9 +184,17 @@ const app = new Hono<{ Variables: Variables }>()
                         }
                     }
 
+                },
+                Payment: {
+                    orderBy: {
+                        createdAt: "desc"
+                    }
                 }
             }
         })
+
+
+
         if (!student) {
             throw new HTTPException(400, { message: "Student not found" });
         }

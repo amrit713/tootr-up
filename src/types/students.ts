@@ -1,4 +1,4 @@
-import { AttendanceStatus, Student, StudentEnrollment } from "@/generated/prisma";
+import { AttendanceStatus, Student, StudentEnrollment, Payment } from "@/generated/prisma";
 
 export type StudentType = Omit<
   Student,
@@ -27,7 +27,6 @@ export type StudentEnrollmentType = StudentEnrollment & {
 
 }
 
-
 export type StudentDetailType = Omit<
   Student,
   "createdAt" | "updatedAt" | "enrolledDate" | "startedDate"
@@ -36,8 +35,9 @@ export type StudentDetailType = Omit<
   updatedAt: string;
   enrolledDate: string;
   startedDate: string | null;
-  Branch: { name: string },
+  Branch: { name: string };
   StudentEnrollment: {
+    id: string;
     branchProgram: {
       program: {
         name: string;
@@ -47,9 +47,20 @@ export type StudentDetailType = Omit<
       startTime: string;
       endTime: string;
     };
-    id: string;
-  }[]
-}
+  }[];
+  Payment: PaymentType[];
+};
+
+export type PaymentType = Omit<
+  Payment,
+  "createdAt" | "updatedAt" | "lastPaidDate"
+> & {
+  createdAt: string;
+  updatedAt: string;
+  lastPaidDate: string | null;
+};
+
+
 
 
 

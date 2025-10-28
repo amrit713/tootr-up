@@ -7,6 +7,8 @@ import {
 } from "lucide-react";
 import { Info } from "./info";
 import { StudentDetailType } from "@/types";
+import { IndividualAttendance } from "@/features/attendances/components/individual-attendance";
+import { IndividualPayment } from "./individual-payment";
 
 interface StudentDetailTabProps {
   student: StudentDetailType;
@@ -31,7 +33,7 @@ export const StudentDetailTab = ({ student }: StudentDetailTabProps) => {
             <CalendarCheck2 /> Attedance
           </TabsTrigger>
           <TabsTrigger
-            value="payment"
+            value="payments"
             className="bg-background data-[state=active]:border-primary dark:data-[state=active]:border-primary h-full rounded-none border-0 border-b-2 border-transparent data-[state=active]:shadow-none data-[state=active]:!font-bold hover:!font-bold"
           >
             <CreditCard /> Payments
@@ -46,6 +48,15 @@ export const StudentDetailTab = ({ student }: StudentDetailTabProps) => {
         </TabsList>
         <TabsContent value="info" className="">
           <Info student={student} />
+        </TabsContent>
+        <TabsContent value="attendance" className="">
+          <IndividualAttendance
+            studentEnrollments={student.StudentEnrollment}
+          />
+        </TabsContent>
+
+        <TabsContent value="payments" className="">
+          <IndividualPayment payments={student.Payment} />
         </TabsContent>
       </Tabs>
     </div>

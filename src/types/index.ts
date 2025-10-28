@@ -5,9 +5,9 @@
 import { FollowUpStatus, Lead, Priority, } from "@/generated/prisma";
 import { UserWithRole } from "better-auth/plugins";
 
-import { StudentType, StudentEnrollmentType, StudentDetailType } from "./students";
+import { StudentType, StudentEnrollmentType, StudentDetailType, PaymentType } from "./students";
 
-export type { StudentType, StudentEnrollmentType, StudentDetailType }
+export type { StudentType, StudentEnrollmentType, StudentDetailType, PaymentType }
 
 
 

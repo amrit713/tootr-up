@@ -10,6 +10,7 @@ interface Props {
   description?: string;
   icon: LucideIcon;
   percentage?: number;
+  background?: string;
 
   color?: string;
 }
@@ -19,11 +20,12 @@ export const AnalyticsCard = ({
   value,
   description,
   icon: Icon,
+  background,
   percentage,
   color,
 }: Props) => {
   return (
-    <Card className="transition border-none">
+    <Card className={cn("transition border-none ", background)}>
       <CardContent className="flex flex-col gap-2">
         <div className={cn("flex justify-between items-center ")}>
           <p className="font-space font-bold  text-lg ">{title}</p>
