@@ -29,7 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Gender, LeadSource, LeadStatus } from "@/generated/prisma";
+import { Gender, LeadSource, LeadStatus, UserStatus } from "@/generated/prisma";
 import { useGetPrograms } from "@/features/programs/api/use-get-programs";
 import {
   MultiSelect,
@@ -43,6 +43,9 @@ import { useModal } from "@/hooks/use-modal-store";
 import { useGetBranches } from "@/features/branches/api/use-get-branches";
 import { User } from "better-auth";
 import { useGetUsers } from "@/features/auth/api/get-all-user";
+import { useMemo } from "react";
+import { useGetFilterUsers } from "@/features/auth/api/get-filter-users";
+import { Loader } from "lucide-react";
 
 interface CreateLeadFormProps {
   onCancel?: () => void;
@@ -54,7 +57,9 @@ export const CreateLeadForm = ({ onCancel }: CreateLeadFormProps) => {
   const { mutate: createLead, isPending } = useCreateLead();
   const { data: programs } = useGetPrograms();
   const { data: branches } = useGetBranches();
-  const { data } = useGetUsers();
+  const { data: users, isLoading } = useGetFilterUsers({
+    status: UserStatus.ACTIVE,
+  });
 
   const form = useForm<z.infer<typeof leadSchema>>({
     resolver: zodResolver(leadSchema),
@@ -374,7 +379,7 @@ export const CreateLeadForm = ({ onCancel }: CreateLeadFormProps) => {
                 control={form.control}
                 name="assigneeId"
                 render={({ field }) => (
-                  <FormItem className="pl-4 md:pl-0 flex flex-col gap-4 w-full">
+                  <FormItem className="  flex flex-col gap-4 w-full">
                     <FormLabel>Assign To</FormLabel>
                     <FormControl>
                       <Select
@@ -385,7 +390,12 @@ export const CreateLeadForm = ({ onCancel }: CreateLeadFormProps) => {
                           <SelectValue placeholder="Assign Lead to " />
                         </SelectTrigger>
                         <SelectContent>
-                          {data?.users.map((user) => (
+                          {isLoading && (
+                            <div className="w-full h-15 flex items-center justify-center">
+                              <Loader className="animate-spin size-5" />
+                            </div>
+                          )}
+                          {users?.map((user) => (
                             <SelectItem
                               key={user.id}
                               value={user.id}
@@ -398,7 +408,7 @@ export const CreateLeadForm = ({ onCancel }: CreateLeadFormProps) => {
                                   </AvatarFallback>
                                 </Avatar>
                                 <p className="capitalize text-sm font-medium">
-                                  {user.name}
+                                  {user.name}{" "}
                                 </p>
                               </div>
                             </SelectItem>

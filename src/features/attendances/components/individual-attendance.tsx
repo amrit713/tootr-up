@@ -38,7 +38,7 @@ interface Props {
 export function IndividualAttendance({ studentEnrollments }: Props) {
   const [value, setValue] = useState<string>(studentEnrollments[0].id);
 
-  const { data: analytics, isLoading } = useGetStudentEnrollmentAnalytics({
+  const { data: analytics } = useGetStudentEnrollmentAnalytics({
     enrollmentId: value,
   });
 
