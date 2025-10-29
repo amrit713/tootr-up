@@ -6,6 +6,7 @@ import { auth, Variables } from "@/lib/auth";
 import { HTTPException } from "hono/http-exception";
 import { db } from "@/lib/db";
 import { UserStatus } from "@/generated/prisma";
+import { authMiddleware } from "@/lib/hono-middleware";
 
 const app = new Hono<{
     Variables: Variables
@@ -59,6 +60,34 @@ const app = new Hono<{
         })
 
     })
+    .get("/users", authMiddleware, zValidator("query", z.object({
+        status: z.nativeEnum(UserStatus).optional()
+    })), async (c) => {
+        const user = c.get("user")
+        if (!user) {
+            throw new HTTPException(401, { message: "Unauthorized" });
+        }
+
+        const { status } = c.req.valid("query")
+
+
+
+        const users = await db.user.findMany({
+            where: {
+                status: status ? status : undefined
+            }
+        })
+
+        if (!users) {
+            throw new HTTPException(500, { message: "User not found" });
+        }
+
+        return c.json({
+
+            data: users
+        })
+    })
+
     .on(["POST", "GET"], "/*", (c) => {
         return auth.handler(c.req.raw);
     })

@@ -16,6 +16,8 @@ export const auth = betterAuth({
     },
 
     user: {
+
+
         additionalFields: {
             status: {
                 type: "string",

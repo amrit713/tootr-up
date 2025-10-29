@@ -10,7 +10,7 @@ import {
   Select,
   SelectSeparator,
 } from "@/components/ui/select";
-import { LeadStatus } from "@/generated/prisma";
+import { LeadStatus, UserStatus } from "@/generated/prisma";
 import { useLeadFilters } from "@/hooks/use-filter";
 
 import { snakeCaseToTitleCase } from "@/lib/utils";
@@ -19,12 +19,15 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useGetUsers } from "@/features/auth/api/get-all-user";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useGetFilterUsers } from "@/features/auth/api/get-filter-users";
 
 export const LeadFilter = () => {
   const { status, search, dueDate, setFilter, assigneeId, resetFilters } =
     useLeadFilters();
 
-  const { data } = useGetUsers();
+  const { data: users, isLoading } = useGetFilterUsers({
+    status: UserStatus.ACTIVE,
+  });
 
   const onStatusChange = (value: string) => {
     if (value === "all") {
@@ -97,7 +100,7 @@ export const LeadFilter = () => {
         <SelectContent>
           <SelectItem value={"all"}>All Assignee</SelectItem>
           <SelectSeparator />
-          {data?.users.map((user) => (
+          {users?.map((user) => (
             <SelectItem key={user.id} value={user.id}>
               <div className="flex items-center gap-2">
                 <Avatar className="size-6 hover:opacity-75 transition border border-netural-400  ">
