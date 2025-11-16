@@ -19,19 +19,22 @@ interface Props {
   due_date?: string;
   priority: FollowUpPriority;
   remark?: string | null;
-  name: string;
-  email: string;
+  assginee?: {
+    name: string;
+    email: string;
+  } | null;
   status: FollowUpStatus;
   id: string;
 }
+
 
 export const Followup = ({
   due_date,
   priority,
   remark,
-  email,
+  assginee,
   status,
-  name,
+
   id,
 }: Props) => {
   return (
@@ -55,19 +58,27 @@ export const Followup = ({
       </CardContent>
       <Separator />
       <CardFooter className="flex justify-between ">
-        <div className="flex gap-4 items-center">
-          <Avatar className="size-10  font-semibold uppercase ">
-            <AvatarFallback className="bg-green-600/10">
-              {name.charAt(0)}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col gap-0">
-            <span className="text-sm font-medium  capitalize">{name}</span>
-            <span className="text-xs text-gray-600 dark:text-gray-300">
-              {email}
-            </span>
+        {assginee ? (
+          <div className="flex gap-4 items-center">
+            <Avatar className="size-10  font-semibold uppercase ">
+              <AvatarFallback className="bg-green-600/10">
+                {assginee.name.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col gap-0">
+              <span className="text-sm font-medium  capitalize">
+                {assginee.name}
+              </span>
+              <span className="text-xs text-gray-600 dark:text-gray-300">
+                {assginee.email}
+              </span>
+            </div>
           </div>
-        </div>
+        ) : (
+          <p className="text-xs text-gray-400 dark:text-gray-500">
+            Lead is not assigneed
+          </p>
+        )}
 
         <Badge variant={status} className="">
           {status}

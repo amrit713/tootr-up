@@ -21,7 +21,7 @@ enum UserStatus {
 }
 
 model User {
-  id            String     @id @default(uuid())
+  id            String    @id @default(uuid())
   name          String
   email         String
   emailVerified Boolean
@@ -30,7 +30,6 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
-  FollowUp      FollowUp[]
 
   // ✅ Leads created by this user
   createdLeads Lead[] @relation("CreatedLeads")
@@ -38,11 +37,13 @@ model User {
   // ✅ Leads assigned to this user
   assignedLeads Lead[] @relation("AssignedLeads")
 
-  status     UserStatus @default(PENDING)
-  role       String     @default("user")
-  banned     Boolean?   @default(false)
-  banReason  String?
-  banExpires DateTime?
+  status           UserStatus @default(PENDING)
+  role             String     @default("user")
+  banned           Boolean?   @default(false)
+  banReason        String?
+  banExpires       DateTime?
+  assignedFollowUp FollowUp[] @relation("AssignedFollowUp")
+  createdFollowUp  FollowUp[] @relation("createdFollowUp")
 
   @@unique([email])
   @@map("user")
@@ -147,7 +148,10 @@ model FollowUp {
   lead   Lead   @relation(fields: [leadId], references: [id])
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation("createdFollowUp", fields: [userId], references: [id])
+
+  assigneeId String?
+  assignee   User?   @relation("AssignedFollowUp", fields: [assigneeId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -156,7 +160,7 @@ model FollowUp {
 //!student part started
 model Branch {
   id   String @id @default(uuid())
-  name String
+  name String @unique
 
   programs  BranchProgram[]
   students  Student[]
