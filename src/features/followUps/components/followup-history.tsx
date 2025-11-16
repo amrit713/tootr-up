@@ -51,7 +51,7 @@ export const FollowupHistory = ({ status }: { status?: LeadStatus }) => {
           {status !== LeadStatus.CONVERTED ? (
             <Button
               onClick={() => onOpen("createFollowUp")}
-              disabled={status === LeadStatus.LOST}
+              // disabled={status === LeadStatus.LOST}
             >
               New follow up
             </Button>
@@ -74,8 +74,7 @@ export const FollowupHistory = ({ status }: { status?: LeadStatus }) => {
                 due_date={followup.due_date ? followup.due_date : undefined}
                 priority={followup.priority}
                 remark={followup.remark}
-                name={followup.user.name}
-                email={followup.user.email}
+                assginee={followup.assignee}
                 status={followup.status}
                 id={followup.id}
               />

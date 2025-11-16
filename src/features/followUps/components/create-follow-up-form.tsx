@@ -34,16 +34,23 @@ import {
 } from "@/components/ui/select";
 import { useModal } from "@/hooks/use-modal-store";
 import { DatePicker } from "@/components/global/date-picker";
-import { FollowUpStatus, Priority } from "@/generated/prisma";
+import { FollowUpStatus, Priority, UserStatus } from "@/generated/prisma";
 import { Textarea } from "@/components/ui/textarea";
 import { ButtonLoader } from "@/components/global/button-loader";
 import { useCreateFollowUp } from "../api/use-create-follow-up";
 import { useLeadId } from "@/features/leads/hooks/use-lead-id";
+import { useGetFilterUsers } from "@/features/auth/api/get-filter-users";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Loader } from "lucide-react";
 
 export const CreateFollowUpForm = () => {
   const { onClose } = useModal();
   const leadId = useLeadId();
   const { mutate: createFollowUp, isPending } = useCreateFollowUp();
+
+  const { data: users, isLoading } = useGetFilterUsers({
+    status: UserStatus.ACTIVE,
+  });
 
   const form = useForm<z.infer<typeof followUpSchema>>({
     resolver: zodResolver(followUpSchema),
@@ -158,6 +165,51 @@ export const CreateFollowUpForm = () => {
                 )}
               />
             </div>
+            <FormField
+              control={form.control}
+              name="assigneeId"
+              render={({ field }) => (
+                <FormItem className="  flex flex-col gap-4 w-full">
+                  <FormLabel>Assign To</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Assign Lead to " />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {isLoading && (
+                          <div className="w-full h-15 flex items-center justify-center">
+                            <Loader className="animate-spin size-5" />
+                          </div>
+                        )}
+                        {users?.map((user) => (
+                          <SelectItem
+                            key={user.id}
+                            value={user.id}
+                            className="capitalize"
+                          >
+                            <div className="flex items-center gap-2">
+                              <Avatar className="size-6 hover:opacity-75 transition border border-netural-400  ">
+                                <AvatarFallback className="bg-primary/10 font-medium text-primary dark:text-white flex items-center justify-center ">
+                                  {user.name.charAt(0).toUpperCase()}
+                                </AvatarFallback>
+                              </Avatar>
+                              <p className="capitalize text-sm font-medium">
+                                {user.name}{" "}
+                              </p>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}

@@ -121,7 +121,7 @@ export const UpdateLeadForm = () => {
                     <FormControl>
                       <Input
                         required
-                        maxLength={10}
+                        maxLength={15}
                         disabled={isPending}
                         placeholder="Enter a number"
                         {...field}

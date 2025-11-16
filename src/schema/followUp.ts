@@ -7,7 +7,8 @@ export const followUpSchema = z.object({
     priority: z.nativeEnum(Priority, { required_error: "Required" }),
     remark: z.string().optional(),
     status: z.nativeEnum(FollowUpStatus, { required_error: "Required" }),
-    leadId: z.string().min(1, "required")
+    leadId: z.string().min(1, "required"),
+    assigneeId: z.string().optional(),
 })
 export const updateFollowUpSchema = z.object({
     due_date: z.coerce.date().optional(),

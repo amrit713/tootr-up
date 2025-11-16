@@ -113,7 +113,7 @@ export const CreateLeadForm = ({ onCancel }: CreateLeadFormProps) => {
                     <FormControl>
                       <Input
                         required
-                        maxLength={10}
+                        maxLength={15}
                         disabled={isPending}
                         placeholder="Enter a number"
                         {...field}

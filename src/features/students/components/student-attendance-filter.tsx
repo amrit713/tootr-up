@@ -81,7 +81,6 @@ export const StudentAttendanceFilter = ({
             <Calendar
               mode="single"
               onSelect={(date) => setFilter("date", date?.toISOString())}
-              disabled={(date) => !isSaturday(date)}
             />
           </PopoverContent>
         </Popover>

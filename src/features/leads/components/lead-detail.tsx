@@ -77,16 +77,31 @@ export const LeadDetail = ({ lead }: Props) => {
             </Badge>
           </div>
           <Separator />
-          <div className="">
-            <p className="font-space font-semibold">Created By:</p>
-            <div className=" flex items-center gap-2 text-gray-700 dark:text-gray-300">
-              <Avatar className="capitalize font-semibold">
-                <AvatarFallback className="bg-green-600/10">
-                  {lead?.user.name.charAt(0)}
-                </AvatarFallback>
-              </Avatar>
-              <p className="capitalize">{lead?.user.name}</p>
+          <div className="flex gap-4  justify-between">
+            <div className="">
+              <p className="font-space font-semibold">Created By:</p>
+              <div className=" flex items-center gap-2 text-gray-700 dark:text-gray-300">
+                <Avatar className="capitalize font-semibold">
+                  <AvatarFallback className="bg-green-600/10">
+                    {lead?.user.name.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+                <p className="capitalize">{lead?.user.name}</p>
+              </div>
             </div>
+            {lead?.assignee && (
+              <div className="">
+                <p className="font-space font-semibold">Assigned To:</p>
+                <div className=" flex items-center gap-2 text-gray-700 dark:text-gray-300">
+                  <Avatar className="capitalize font-semibold">
+                    <AvatarFallback className="bg-green-600/10">
+                      {lead?.assignee?.name.charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <p className="capitalize">{lead?.assignee?.name}</p>
+                </div>
+              </div>
+            )}
           </div>
 
           <Separator />

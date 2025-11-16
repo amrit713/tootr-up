@@ -1,16 +1,21 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
-// import { z } from "zod";
+import z from "zod";
 import { HTTPException } from "hono/http-exception";
 import { endOfMonth, startOfMonth, subMonths } from "date-fns";
 
 
 import { Variables } from "@/lib/auth"
 import { authMiddleware } from "@/lib/hono-middleware";
-import { leadSchema, updateLeadSchema } from "@/schema";
+import { leadItemSchema, leadSchema, updateLeadSchema } from "@/schema";
 import { db } from "@/lib/db";
 import { LeadStatus, Priority } from "@/generated/prisma";
-import z from "zod";
+
+
+
+
+
+
 
 
 
@@ -42,6 +47,8 @@ const app = new Hono<{ Variables: Variables }>()
             throw new HTTPException(409, { message: "Lead with this number already exist" })
         }
 
+
+
         const lead = await db.lead.create({
             data: {
                 number, parentName, age: age ? Number(age) : undefined, grade, gender, studentName, schoolName, address, status, source, branchId, userId: user.id, email, programs: programs && [...programs], assigneeId,
@@ -65,6 +72,8 @@ const app = new Hono<{ Variables: Variables }>()
         })
 
     })
+
+
     .get("/", authMiddleware, zValidator("query", filterSchema), async (c) => {
         const user = c.get("user")
         if (!user) {
@@ -150,6 +159,82 @@ const app = new Hono<{ Variables: Variables }>()
             totalLead: leads.length,
             data: leads,
             startOfDay, endOfDay
+        })
+    })
+    .post("/bulk-create", authMiddleware, zValidator("json", z.array(leadItemSchema)), async (c) => {
+        const user = c.get("user")
+        if (!user) {
+            throw new HTTPException(401, { message: "Unauthorized" });
+        }
+
+        const data = c.req.valid("json")
+
+
+        const branches = await db.branch.findMany({
+            select: { id: true, name: true },
+        });
+
+        const branchMap = Object.fromEntries(
+            branches.map((b) => [b.name.toLowerCase(), b.id])
+        );
+
+
+        const seen = new Set();
+
+        const uniqueRows = data.filter((row) => {
+            if (seen.has(row.number)) return false;
+            seen.add(row.number);
+            return true;
+        });
+
+        const leadsToInsert = uniqueRows.map(lead => ({
+            userId: user.id,
+            number: lead.number,
+            email: lead.email,
+            grade: lead.grade,
+            address: lead.address,
+
+            createdAt: lead.createdAt ? new Date(lead.createdAt) : new Date(),
+            status: lead.status as LeadStatus ?? "NEW",
+            due_date: lead.dueDate ? new Date(lead.dueDate) : undefined,
+
+            parentName: lead.parentName,
+            programs: lead.programId ? [lead.programId] : undefined,
+            branchId: lead.branch ? branchMap[lead.branch] : undefined,
+        }));
+
+
+        const result = await db.lead.createMany({
+            data: leadsToInsert,
+            skipDuplicates: true
+        })
+
+
+        if (!result) {
+            throw new HTTPException(500, { message: "Server Error" })
+        }
+
+        const createdLeads = await db.lead.findMany({
+            where: {
+                number: { in: uniqueRows.map(r => r.number) }
+            }
+        });
+
+        const followupsToInsert = createdLeads.map((lead, i) => ({
+            leadId: lead.id,
+            userId: user.id,
+            priority: Priority.LOW,
+            remark: uniqueRows[i].remark ?? "",
+            status: uniqueRows[i].status as LeadStatus ?? "NEW",
+        }));
+
+        await db.followUp.createMany({
+            data: followupsToInsert
+        });
+
+
+        return c.json({
+            data: result
         })
     })
     .get("/analytics", authMiddleware, async (c) => {

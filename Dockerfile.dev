@@ -1,0 +1,23 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install needed OS packages
+RUN apk add --no-cache openssl
+
+# Copy only package files first to leverage cache on install
+COPY package*.json ./
+
+# Install all deps (dev included for tooling)
+RUN npm install
+
+# Copy Prisma schema for client generation
+COPY prisma ./prisma
+
+# Generate Prisma client (will re-run on container start too)
+RUN npx prisma generate || true
+
+# Default command for dev; actual app code is bind-mounted
+CMD ["sh", "-c", "npm install && npx prisma generate && npm run dev"]
+
+

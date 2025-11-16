@@ -68,7 +68,7 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       {/* server side filtering */}
-      <div>
+      <div className="overflow-hidden">
         {isLoading ? (
           <LoadingState
             title="Loading Leads"

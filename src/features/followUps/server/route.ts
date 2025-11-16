@@ -28,7 +28,13 @@ const app = new Hono<{ Variables: Variables }>()
                 leadId
             },
             include: {
-                user: true
+
+                assignee: {
+                    select: {
+                        name: true,
+                        email: true
+                    }
+                }
             },
 
 
@@ -61,7 +67,7 @@ const app = new Hono<{ Variables: Variables }>()
 
         //TODO: need to check lead exist with this id or not first
 
-        const { due_date, remark, priority, status, leadId } = c.req.valid("json")
+        const { due_date, remark, priority, status, leadId, assigneeId } = c.req.valid("json")
 
 
 
@@ -78,7 +84,7 @@ const app = new Hono<{ Variables: Variables }>()
         const followUp = await db.followUp.create({
             data: {
                 leadId,
-                due_date, status, remark, priority, userId: user.id
+                due_date, status, remark, priority, userId: user.id, assigneeId: assigneeId ?? undefined
             }
         })
 
@@ -93,7 +99,8 @@ const app = new Hono<{ Variables: Variables }>()
             },
             data: {
                 status: followUp.status,
-                due_date: followUp.due_date
+                due_date: followUp.due_date,
+                assigneeId: followUp.assigneeId
             }
         })
 
