@@ -53,19 +53,30 @@ const numberFromCSV = z
 
 const statusEnum = z
     .string()
+    .nullable()
     .optional()
     .transform((v) => (v?.trim() === "" ? undefined : v))
     .refine(
         (v) =>
             v === undefined ||
-            ["NEW", "ONGOING", "CRITICAL", "CONVERTED", "LOST", "DEMO", "CALL_NOT_RECEIVED"].includes(
-                v
-            ),
+            [
+                "NEW",
+                "ONGOING",
+                "CRITICAL",
+                "CONVERTED",
+                "LOST",
+                "DEMO",
+                "CALL_NOT_RECEIVED",
+            ].includes(v),
         {
             message:
                 "Status must be NEW | ONGOING | CRITICAL | CONVERTED | LOST | DEMO | CALL_NOT_RECEIVED",
         }
-    );
+    )
+    // Default NEW if missing
+    .transform((v) => v ?? "NEW");
+
+
 
 
 const dateFromCSV = z

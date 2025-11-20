@@ -10,6 +10,7 @@ import { authMiddleware } from "@/lib/hono-middleware";
 import { leadItemSchema, leadSchema, updateLeadSchema } from "@/schema";
 import { db } from "@/lib/db";
 import { LeadStatus, Priority } from "@/generated/prisma";
+import { parseCSVDate } from "@/lib/utils";
 
 
 
@@ -170,6 +171,8 @@ const app = new Hono<{ Variables: Variables }>()
         const data = c.req.valid("json")
 
 
+
+
         const branches = await db.branch.findMany({
             select: { id: true, name: true },
         });
@@ -190,18 +193,22 @@ const app = new Hono<{ Variables: Variables }>()
         const leadsToInsert = uniqueRows.map(lead => ({
             userId: user.id,
             number: lead.number,
-            email: lead.email,
-            grade: lead.grade,
-            address: lead.address,
+            email: lead.email ?? undefined,
+            grade: lead.grade ?? undefined,
+            address: lead.address ?? undefined,
 
-            createdAt: lead.createdAt ? new Date(lead.createdAt) : new Date(),
+
+            createdAt: parseCSVDate(lead.createdAt) ?? new Date(),
             status: lead.status as LeadStatus ?? "NEW",
-            due_date: lead.dueDate ? new Date(lead.dueDate) : undefined,
+            due_date: parseCSVDate(lead.dueDate),
 
             parentName: lead.parentName,
             programs: lead.programId ? [lead.programId] : undefined,
             branchId: lead.branch ? branchMap[lead.branch] : undefined,
+            studentName: lead.studentName ?? undefined
         }));
+
+
 
 
         const result = await db.lead.createMany({

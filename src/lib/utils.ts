@@ -56,3 +56,31 @@ export function vatCalculate(amount: number | string = 0) {
 
   return num * 13 / 100
 }
+
+
+export function parseCSVDate(input: any): Date | undefined {
+  if (!input) return undefined;
+
+  // When CSV gives object like { $type, value }
+  let raw = typeof input === "string" ? input : input.value;
+
+  if (!raw) return undefined;
+
+  raw = raw.toString().trim();
+
+  // Fix weird "+012025" prefix
+  raw = raw.replace(/^\+0*/, "").replace(/^\+/, "");
+
+  let date = new Date(raw);
+
+  // If still invalid → try DD/MM/YYYY or DD-MM-YYYY
+  if (isNaN(date.getTime())) {
+    const m = raw.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+    if (m) {
+      const [_, d, mn, y] = m;
+      date = new Date(`${y}-${mn.padStart(2, "0")}-${d.padStart(2, "0")}`);
+    }
+  }
+
+  return isNaN(date.getTime()) ? undefined : date;
+}
