@@ -20,6 +20,7 @@ import { useSelectProgram } from "@/hooks/use-select-program";
 import { toast } from "sonner";
 import { useCreateBulkLeads } from "@/features/leads/api/use-create-bulk-lead";
 import { LeadStatus } from "@/generated/prisma";
+import { parseCSVDate } from "@/lib/utils";
 
 enum VARIANTS {
   LIST = "LIST",
@@ -68,13 +69,13 @@ export const LeadsView = () => {
       studentName: value.studentName ?? undefined,
       age: value.age ?? undefined,
       branch: value.branch ?? undefined,
-      createdAt: value.createdAt ?? undefined,
+      createdAt: parseCSVDate(value.createdAt) ?? undefined,
       remark: value.remark ?? undefined,
       parentName: value.parentName ?? undefined,
       address: value.address ?? undefined,
       status: (value.status as LeadStatus) ?? undefined,
       grade: value.grade ?? undefined,
-      dueDate: value.dueDate ?? undefined,
+      dueDate: parseCSVDate(value.dueDate) ?? undefined,
       email: value.email ?? undefined,
     }));
 

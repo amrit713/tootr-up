@@ -14,12 +14,6 @@ import { parseCSVDate } from "@/lib/utils";
 
 
 
-
-
-
-
-
-
 const filterSchema = z.object({
     search: z.string().nullish(),
     dueDate: z.string().nullish(),
@@ -173,6 +167,7 @@ const app = new Hono<{ Variables: Variables }>()
 
 
 
+
         const branches = await db.branch.findMany({
             select: { id: true, name: true },
         });
@@ -198,9 +193,9 @@ const app = new Hono<{ Variables: Variables }>()
             address: lead.address ?? undefined,
 
 
-            createdAt: parseCSVDate(lead.createdAt) ?? new Date(),
+            // createdAt: lead.createdAt,
             status: lead.status as LeadStatus ?? "NEW",
-            due_date: parseCSVDate(lead.dueDate),
+            // due_date: lead.dueDate,
 
             parentName: lead.parentName,
             programs: lead.programId ? [lead.programId] : undefined,
@@ -250,11 +245,11 @@ const app = new Hono<{ Variables: Variables }>()
             throw new HTTPException(401, { message: "Unauthorized" });
         }
 
-        const now = new Date();
-        const thisMonthStart = startOfMonth(now);
-        const thisMonthEnd = endOfMonth(now);
-        const lastMonthStart = startOfMonth(subMonths(now, 1));
-        const lastMonthEnd = endOfMonth(subMonths(now, 1));
+        // const now = new Date();
+        // const thisMonthStart = startOfMonth(now);
+        // const thisMonthEnd = endOfMonth(now);
+        // const lastMonthStart = startOfMonth(subMonths(now, 1));
+        // const lastMonthEnd = endOfMonth(subMonths(now, 1));
 
         const totalLeadCount = await db.lead.count({})
         const convertedLead = await db.lead.count({

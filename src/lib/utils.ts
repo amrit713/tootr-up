@@ -58,11 +58,14 @@ export function vatCalculate(amount: number | string = 0) {
 }
 
 
-export function parseCSVDate(input: any): Date | undefined {
+export function parseCSVDate(input: any): string | undefined {
   if (!input) return undefined;
 
   // When CSV gives object like { $type, value }
   let raw = typeof input === "string" ? input : input.value;
+
+
+
 
   if (!raw) return undefined;
 
@@ -82,5 +85,7 @@ export function parseCSVDate(input: any): Date | undefined {
     }
   }
 
-  return isNaN(date.getTime()) ? undefined : date;
+  return isNaN(date.getTime()) ? undefined : date.toISOString();
 }
+
+
