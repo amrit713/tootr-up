@@ -10,12 +10,7 @@ import { authMiddleware } from "@/lib/hono-middleware";
 import { leadItemSchema, leadSchema, updateLeadSchema } from "@/schema";
 import { db } from "@/lib/db";
 import { LeadStatus, Priority } from "@/generated/prisma";
-
-
-
-
-
-
+import { parseCSVDate } from "@/lib/utils";
 
 
 
@@ -170,6 +165,9 @@ const app = new Hono<{ Variables: Variables }>()
         const data = c.req.valid("json")
 
 
+
+
+
         const branches = await db.branch.findMany({
             select: { id: true, name: true },
         });
@@ -190,18 +188,22 @@ const app = new Hono<{ Variables: Variables }>()
         const leadsToInsert = uniqueRows.map(lead => ({
             userId: user.id,
             number: lead.number,
-            email: lead.email,
-            grade: lead.grade,
-            address: lead.address,
+            email: lead.email ?? undefined,
+            grade: lead.grade ?? undefined,
+            address: lead.address ?? undefined,
 
-            createdAt: lead.createdAt ? new Date(lead.createdAt) : new Date(),
+
+            // createdAt: lead.createdAt,
             status: lead.status as LeadStatus ?? "NEW",
-            due_date: lead.dueDate ? new Date(lead.dueDate) : undefined,
+            // due_date: lead.dueDate,
 
             parentName: lead.parentName,
             programs: lead.programId ? [lead.programId] : undefined,
             branchId: lead.branch ? branchMap[lead.branch] : undefined,
+            studentName: lead.studentName ?? undefined
         }));
+
+
 
 
         const result = await db.lead.createMany({
@@ -243,11 +245,11 @@ const app = new Hono<{ Variables: Variables }>()
             throw new HTTPException(401, { message: "Unauthorized" });
         }
 
-        const now = new Date();
-        const thisMonthStart = startOfMonth(now);
-        const thisMonthEnd = endOfMonth(now);
-        const lastMonthStart = startOfMonth(subMonths(now, 1));
-        const lastMonthEnd = endOfMonth(subMonths(now, 1));
+        // const now = new Date();
+        // const thisMonthStart = startOfMonth(now);
+        // const thisMonthEnd = endOfMonth(now);
+        // const lastMonthStart = startOfMonth(subMonths(now, 1));
+        // const lastMonthEnd = endOfMonth(subMonths(now, 1));
 
         const totalLeadCount = await db.lead.count({})
         const convertedLead = await db.lead.count({
