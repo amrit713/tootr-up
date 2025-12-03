@@ -69,8 +69,8 @@ export function UserTable<TData, TValue>({
       <div className="rounded-md border  ">
         {isLoading ? (
           <LoadingState
-            title="Loading Leads"
-            description="Just a moment, preparing your lead list."
+            title="Loading users "
+            description="Just a moment, preparing your team member."
           />
         ) : (
           <Table className="overflow-x-scroll ">
