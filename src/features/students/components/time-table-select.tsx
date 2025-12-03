@@ -51,7 +51,7 @@ export const TimeTableSelect = ({
           disabled={isPending}
         >
           <SelectTrigger className="w-full bg-background shadow-none">
-            <SelectValue placeholder="Select a Branch " />
+            <SelectValue placeholder="Select a time " />
           </SelectTrigger>
           <SelectContent className="w-full">
             {data?.map((time) => (
