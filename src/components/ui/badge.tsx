@@ -11,7 +11,7 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default:
-          "border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90 ",
+          "border-transparent bg-primary/10 border-primary/50  text-primary [a&]:hover:bg-primary/90 ",
         secondary:
           "border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90",
         destructive:
@@ -19,19 +19,19 @@ const badgeVariants = cva(
         outline:
           "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
         [LeadStatus.LOST]:
-          "border-transparent bg-red-400 text-neutral-900  hover:bg-red-400/80",
+          "border-transparent bg-rose-500/10 border-rose-500/50  text-rose-800  hover:bg-red-400/80",
         [LeadStatus.CRITICAL]:
-          "border-transparent bg-orange-400 text-neutral-900 hover:bg-orange-400/80",
+          "border-transparent bg-orange-500/10 text-orange-500 border-orange-500/50 hover:bg-orange-400/20",
         [LeadStatus.ONGOING]:
-          "border-transparent bg-pink-400 text-neutral-900  hover:bg-pink-400/80",
+          "border-transparent bg-pink-500/10 text-pink-500 border-pink-500/50 hover:bg-pink-400/20",
         [LeadStatus.NEW]:
-          "border-transparent bg-blue-400 text-neutral-900 hover:bg-blue-400/80",
+          "border-transparent bg-blue-500/10 text-blue-500 border-blue-500/50 hover:bg-blue-400/20",
         [LeadStatus.CONVERTED]:
-          "border-transparent bg-emerald-400 text-neutral-900 hover:bg-emerald-400/80",
+          "border-transparent bg-emerald-500/10 text-emerald-500 border-emerald-500/50 hover:bg-emerald-400/20",
         [LeadStatus.DEMO]:
-          "border-transparent bg-yellow-400 text-neutral-900 hover:bg-yellow-400/80",
+          "border-transparent bg-yellow-500/10 text-yellow-500 border-yellow-500/50 hover:bg-yellow-400/20",
         [LeadStatus.CALL_NOT_RECEIVED]:
-          "border-transparent bg-cyan-400 text-neutral-900 hover:bg-cyan-400/80",
+          "border-transparent bg-cyan-500/10 text-cyan-500 border-cyan-500/50 hover:bg-cyan-400/20",
       },
     },
     defaultVariants: {

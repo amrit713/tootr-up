@@ -71,8 +71,8 @@ export const AttedanceCard = ({
               {enrolledStudent.student.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <div className="flex flex-col justify-center font-space">
-            <span className="capitalize text-sm font-bold ">
+          <div className="flex flex-col justify-center ">
+            <span className="capitalize text-sm  font-semibold">
               {enrolledStudent.student.name}
             </span>
             <span className="text-xs text-muted-foreground">

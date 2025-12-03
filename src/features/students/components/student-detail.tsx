@@ -27,8 +27,8 @@ function StudentDetail({
     <div className=" flex justify-between ">
       <div className="flex gap-4 items-center">
         <div className="relative  ">
-          <Avatar className="size-24 border-green-500 border-2 ">
-            <AvatarFallback className="bg-green-500/15 text-4xl font-space font-bold">
+          <Avatar className="size-24 border-green-500/50 border-2 ">
+            <AvatarFallback className="bg-green-500/15 text-4xl text-green-600  font-semibold">
               {name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
@@ -43,7 +43,7 @@ function StudentDetail({
           </Button>
         </div>
         <div className="flex flex-col ">
-          <p className="text-2xl capitalize font-bold font-space ">{name}</p>
+          <p className="text-2xl capitalize font-semibold ">{name}</p>
           <p className="flex items-center text-muted-foreground gap-2 font-medium">
             <span className="size-2 rounded-full bg-green-500" /> STUDENT
           </p>

@@ -58,15 +58,13 @@ export const LeadDetail = ({ lead }: Props) => {
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
           <div className="flex flex-col gap-2 items-center justify-center">
-            <Avatar className="size-20 text-4xl  font-space text-primary font-bold  ">
+            <Avatar className="size-20 text-4xl  text-primary font-semibold">
               <AvatarFallback className="capitalize dark:bg-blue-600/10 dark:text-white">
                 {lead?.parentName ? lead.parentName.charAt(0) : "L"}
               </AvatarFallback>
             </Avatar>
             <div className="">
-              <p className="capialize text-xl font-semibold font-space">
-                {lead?.number}
-              </p>
+              <p className="capialize text-xl font-semibold">{lead?.number}</p>
               <p className=" text-neutral-500 text-sm">
                 {lead?.email ? lead.email : "lead@gamil.com"}
               </p>
