@@ -42,7 +42,7 @@ export const Navbar = () => {
           <SidebarTrigger size={"lg"} />
         </Button>
         <div className="flex flex-col ">
-          <p className="text-lg font-bold ">{title}</p>
+          <p className="text-lg font-semibold ">{title}</p>
           <span className="text-neutral-500 text-sm">{description}</span>
         </div>
       </div>

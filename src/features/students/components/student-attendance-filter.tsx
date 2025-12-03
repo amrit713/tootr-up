@@ -47,20 +47,12 @@ export const StudentAttendanceFilter = ({
   const { data: programs } = useGetBranchPrograms({ branchId: branch });
   const { data: times } = useGetTimes({ branchProgramId: program });
 
-  const isSaturday = (date: Date) => {
-    return date.getDay() === 6;
-  };
-
   const onBranchChange = (value: string) => {
     setFilter("branch", value);
   };
 
   const onProgramChange = (value: string) => {
     setFilter("program", value);
-  };
-
-  const onClickHandler = () => {
-    onLoadStudent();
   };
 
   return (

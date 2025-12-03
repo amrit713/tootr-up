@@ -22,7 +22,7 @@ export const columns: ColumnDef<StudentType>[] = [
     accessorKey: "studentInfo",
     header: () => {
       return (
-        <div className="py-2 font-space font-bold flex gap-2 items-center">
+        <div className="py-2  font-semibold flex gap-2 items-center">
           <GraduationCap className="size-4" /> Student Info
         </div>
       );
@@ -33,7 +33,7 @@ export const columns: ColumnDef<StudentType>[] = [
         <div className="flex items-center gap-2">
           <div className="flex flex-col ">
             <p className="capitalize text-sm font-medium">{student.name}</p>
-            <div className="flex gap-2 font-space text-xs text-muted-foreground">
+            <div className="flex gap-2  text-xs text-muted-foreground">
               <p className="">{student.age}</p>
               <p className="">{student.gender}</p>
             </div>
@@ -46,7 +46,7 @@ export const columns: ColumnDef<StudentType>[] = [
     accessorKey: "ParentInfo",
     header: () => {
       return (
-        <div className="py-2 font-space font-bold flex gap-2 items-center">
+        <div className="py-2  font-semibold flex gap-2 items-center">
           <User className="size-4" /> Parent Info
         </div>
       );
@@ -59,7 +59,7 @@ export const columns: ColumnDef<StudentType>[] = [
             <p className="capitalize text-sm font-medium">
               {student.parentName}
             </p>
-            <div className="flex flex-col  font-space text-xs text-muted-foreground">
+            <div className="flex flex-col   text-xs text-muted-foreground">
               <p className="">{student.number}</p>
             </div>
           </div>
@@ -72,7 +72,7 @@ export const columns: ColumnDef<StudentType>[] = [
     accessorKey: "schoolInfo",
     header: () => {
       return (
-        <div className="py-2 font-space font-bold flex gap-2 items-center">
+        <div className="py-2  font-semibold flex gap-2 items-center">
           <School className="size-4" /> School
         </div>
       );
@@ -85,7 +85,7 @@ export const columns: ColumnDef<StudentType>[] = [
             <p className="capitalize text-sm font-medium">
               {student.schoolName}
             </p>
-            <div className="flex flex-col  font-space text-xs text-muted-foreground">
+            <div className="flex flex-col   text-xs text-muted-foreground">
               <p className="">Grade: {student.grade}</p>
             </div>
           </div>
@@ -98,7 +98,7 @@ export const columns: ColumnDef<StudentType>[] = [
     accessorKey: "address",
     header: () => {
       return (
-        <div className="py-2 font-space font-bold flex gap-2 items-center">
+        <div className="py-2  font-semibold flex gap-2 items-center">
           <MapPin className="size-4" /> Address
         </div>
       );
@@ -114,7 +114,7 @@ export const columns: ColumnDef<StudentType>[] = [
     accessorKey: "branch Info",
     header: () => {
       return (
-        <div className="py-2 font-space font-bold flex gap-2 items-center">
+        <div className="py-2  font-semibold flex gap-2 items-center">
           <Calendar className="size-4" /> Joined
         </div>
       );
@@ -126,7 +126,7 @@ export const columns: ColumnDef<StudentType>[] = [
           <p className="capitalize text-sm font-medium ">
             {student.Branch.name}
           </p>
-          <p className="font-space text-xs text-muted-foreground">
+          <p className=" text-xs text-muted-foreground">
             {format(new Date(student.createdAt), "yyy MMM dd")}
           </p>
         </div>
@@ -137,7 +137,7 @@ export const columns: ColumnDef<StudentType>[] = [
     accessorKey: "Payment Status",
     header: () => {
       return (
-        <div className="py-2 font-space font-bold flex gap-2 items-center">
+        <div className="py-2  font-semibold flex gap-2 items-center">
           <Calendar className="size-4" /> Payment Status
         </div>
       );
@@ -146,19 +146,19 @@ export const columns: ColumnDef<StudentType>[] = [
       const student = row.original;
 
       return (
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 ">
           <Badge
             className={cn(
               "text-xs",
               student.Payment[0].dueAmount !== 0
-                ? "bg-orange-500"
-                : "bg-emerald-500"
+                ? "bg-orange-500/10 text-orange-500 border-orange-500/50"
+                : "bg-emerald-500/10 text-emerald-500 border-emerald-500/50"
             )}
           >
             {snakeCaseToTitleCase(student.Payment[0].paymentStatus)}
           </Badge>
           {student.Payment[0].dueAmount !== 0 && (
-            <p className={cn("font-space text-xs  text-orange-500")}>
+            <p className={cn(" text-xs   font-semibold")}>
               Due: {currencyFormatter(student.Payment[0].dueAmount)}
             </p>
           )}

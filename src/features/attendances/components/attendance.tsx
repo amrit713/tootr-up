@@ -1,6 +1,6 @@
 "use client ";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { StudentEnrollmentType } from "@/types";
-import { Search, UserCheck, Users, UserStar, UserX } from "lucide-react";
+import { Search, UserCheck, Users, UserX } from "lucide-react";
 import { AttedanceCard } from "./attendance-card";
 import { useEffect, useMemo, useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -66,19 +66,7 @@ export const Attedance = ({ enrolledStudents }: AttedanceProps) => {
       <CardContent className="flex flex-col gap-8">
         <div className="flex flex-col md:flex-row md:justify-between  gap-2 md:gap-10">
           <div className="relative w-full md:min-w-xs md:max-w-3xl">
-            <Input placeholder="Number..." />
-            {/* {search ? (
-              <Button
-                className="absolute top-[50%] right-0  -translate-y-[50%] "
-                variant={"link"}
-                size={"icon"}
-                
-              >
-                <XIcon className="size-4 text-gray-500 dark:text-gray-400" />
-              </Button>
-            ) : (
-              
-            )} */}
+            <Input placeholder="Student name..." />
 
             <Search className="size-4 absolute top-[50%] right-2.5 -translate-y-[50%] text-gray-500 dark:text-gray-400" />
           </div>

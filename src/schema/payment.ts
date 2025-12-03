@@ -17,7 +17,7 @@ export const createPaymentSchema = z.object({
 
 
 export const updatePaymentSchema = z.object({
-    dueAmount: z.number(),
+    dueAmount: z.coerce.number(),
 })
 
 
