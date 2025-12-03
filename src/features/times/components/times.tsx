@@ -13,7 +13,7 @@ export const Times = ({ branchProgramId }: { branchProgramId: string }) => {
       <ScrollArea className=" h-12  w-[35rem] lg:w-[45rem]">
         <div className=" gap-2 flex ">
           {data?.map((time) => (
-            <Badge className=" bg-emerald-600/10 dark:bg-emerald-600/20 hover:bg-emerald-600/10 text-emerald-600 p-2 shadow-none rounded-none font-space font-bold">
+            <Badge className=" bg-emerald-600/10 dark:bg-emerald-600/20 hover:bg-emerald-600/10 text-emerald-600  border-emerald-500/50 p-2 shadow-none rounded-xl font-semibold">
               {time.startTime}- {time.endTime}
             </Badge>
           ))}

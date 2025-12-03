@@ -78,9 +78,11 @@ export const columns: ColumnDef<UserWithRole>[] = [
       return (
         <Badge
           className={cn(
-            "bg-amber-500",
-            UserStatus.ACTIVE === status && "bg-emerald-500",
-            UserStatus.DISABLE === status && "bg-rose-500"
+            "bg-amber-500/10 border-amber-500/50 text-amber-500",
+            UserStatus.ACTIVE === status &&
+              "bg-emerald-500/10 border-emerald-500/50 text-emerald-500",
+            UserStatus.DISABLE === status &&
+              "bg-rose-500/10 border-rose-500/50 text-rose-500"
           )}
         >
           {status}
