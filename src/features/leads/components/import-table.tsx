@@ -6,7 +6,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { TableHeadSelect } from "./table-head-select";
 
 type Props = {
   headers: string[];
@@ -40,13 +39,6 @@ export const ImportTable = ({
                   className=" font-semibold flex items-center justify-start"
                   style={{ width: `${200}px` }}
                 >
-                  {/* <TableHeadSelect
-                    columnIndex={index}
-                    header={item}
-                    selectedColumns={selectedColumns}
-                    onChange={onTableHeadSelectedChange}
-                  /> */}
-
                   {item}
                 </TableHead>
               );
