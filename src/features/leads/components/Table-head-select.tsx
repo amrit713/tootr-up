@@ -39,8 +39,6 @@ export const TableHeadSelect = ({
 }: Props) => {
   const currentSelection = selectedColumns[`column_${columnIndex}`];
 
-  const matchHeader = options.find((option) => option === header);
-
   return (
     <Select
       value={header}
