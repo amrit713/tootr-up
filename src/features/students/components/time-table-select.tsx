@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useGetTimes } from "@/features/times/api/use-get-times";
-import { studentSchema } from "@/schema";
+import { studentSchema, updateStudentSchema } from "@/schema";
 
 type StudentFormType = z.infer<typeof studentSchema>;
 
@@ -34,6 +34,10 @@ export const TimeTableSelect = ({
     (p) => p.branchProgramId !== branchProgramId
   );
 
+  const defaultSelected = selectedPrograms.find(
+    (p) => p.branchProgramId === branchProgramId
+  )?.timeTableId;
+
   return (
     <div className=" w-full ">
       {!data || data.length === 0 ? (
@@ -48,6 +52,7 @@ export const TimeTableSelect = ({
               { branchProgramId, timeTableId: value },
             ])
           }
+          defaultValue={defaultSelected}
           disabled={isPending}
         >
           <SelectTrigger className="w-full bg-background shadow-none">

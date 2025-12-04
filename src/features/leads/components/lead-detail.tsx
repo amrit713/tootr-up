@@ -64,7 +64,9 @@ export const LeadDetail = ({ lead }: Props) => {
               </AvatarFallback>
             </Avatar>
             <div className="">
-              <p className="capialize text-xl font-semibold">{lead?.number}</p>
+              <p className="capialize text-xl text-center font-semibold">
+                {lead?.number}
+              </p>
               <p className=" text-neutral-500 text-sm">
                 {lead?.email ? lead.email : "lead@gamil.com"}
               </p>

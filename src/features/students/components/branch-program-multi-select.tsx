@@ -1,11 +1,10 @@
 "use client";
-import { studentSchema } from "@/schema";
+import { studentSchema, updateStudentSchema } from "@/schema";
 import { z } from "zod";
-import { ControllerRenderProps, UseFormReturn } from "react-hook-form";
+import { UseFormReturn } from "react-hook-form";
 import { useGetBranchPrograms } from "@/features/branches/api/use-get-branch-program";
 import { LoadingState } from "@/components/global/loading-state";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useGetTimes } from "@/features/times/api/use-get-times";
 import { TimeTableSelect } from "./time-table-select";
 
 type StudentFormType = z.infer<typeof studentSchema>;

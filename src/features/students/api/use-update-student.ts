@@ -4,17 +4,14 @@ import { InferRequestType, InferResponseType } from "hono";
 import { client } from "@/lib/rpc";
 import { toast } from "sonner";
 
-type ResponseType = InferResponseType<(typeof client.api.followups)["$post"]>;
-type RequestType = InferRequestType<(typeof client.api.followups)["$post"]>;
-
-export const useCreateFollowUp = () => {
+type ResponseType = InferResponseType<(typeof client.api.students)[":id"]["$patch"]>;
+type RequestType = InferRequestType<(typeof client.api.students)[":id"]["$patch"]>;
+export const useUpdateStudent = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
-    mutationFn: async ({ json }) => {
-      const response = await client.api.followups.$post({
-        json,
-      });
+    mutationFn: async ({ json, param }) => {
+      const response = await client.api.students[":id"]["$patch"]({ json, param });
 
       if (!response.ok) {
         const error = await response.text();
@@ -23,10 +20,9 @@ export const useCreateFollowUp = () => {
       return await response.json();
     },
     onSuccess: () => {
-      toast.success("follow up created");
-      queryClient.invalidateQueries({ queryKey: ["followUps"] });
-      queryClient.invalidateQueries({ queryKey: ["lead"] });
-      queryClient.invalidateQueries({ queryKey: ["analytics"] });
+      toast.success("Student updated");
+      queryClient.invalidateQueries({ queryKey: ["students"] });
+      queryClient.invalidateQueries({ queryKey: ["student"] });
     },
     onError: (error) => {
       toast.error(error.message);

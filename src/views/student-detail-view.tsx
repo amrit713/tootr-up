@@ -23,7 +23,11 @@ export const StudentDetailView = () => {
           student && (
             <>
               <div className=" flex flex-col gap-6">
-                <StudentDetail name={student.name} image={student.image} />
+                <StudentDetail
+                  name={student.name}
+                  image={student.image}
+                  id={student.id}
+                />
                 <Separator className="" />
               </div>
               <StudentDetailTab student={student} />

@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,62 +28,61 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useRouter } from "next/navigation";
 
-import { studentSchema } from "@/schema";
+import { studentSchema, updateStudentSchema } from "@/schema";
 
 import { useGetBranches } from "@/features/branches/api/use-get-branches";
-import { LeadDetailType } from "@/types";
+import { StudentDetailType } from "@/types";
 import { Gender } from "@/generated/prisma";
 import { snakeCaseToTitleCase } from "@/lib/utils";
 
-import { Banknote, GraduationCap, MapPin } from "lucide-react";
+import { GraduationCap, MapPin } from "lucide-react";
 import { BranchProgramMultiSelect } from "./branch-program-multi-select";
 import { Button } from "@/components/ui/button";
-import { PaymentField } from "./payment-filed";
-import { useCreateStudent } from "../api/use-create-student";
 import { ButtonLoader } from "@/components/global/button-loader";
-import { useRouter } from "next/navigation";
+import { useUpdateStudent } from "../api/use-update-student";
 import { DatePicker } from "@/components/global/date-picker";
 
-interface CreateStudentProps {
-  lead?: LeadDetailType;
+interface UpdateStudentProps {
+  student: StudentDetailType;
 }
 
-export const CreateStudentForm = ({ lead }: CreateStudentProps) => {
+export const UpdateStudentForm = ({ student }: UpdateStudentProps) => {
   const router = useRouter();
 
   const { data: branches } = useGetBranches();
-  const { mutate: createStudent, isPending } = useCreateStudent();
+  const { mutate: updateStudent, isPending } = useUpdateStudent();
 
   const form = useForm<z.infer<typeof studentSchema>>({
     resolver: zodResolver(studentSchema),
-    defaultValues: {},
+    defaultValues: {
+      name: student.name,
+      age: `${student.age}`,
+      gender: student.gender,
+      grade: student.grade,
+      schoolName: student.schoolName,
+      address: student.address,
+      parentName: student.parentName,
+      email: student.email ?? undefined,
+      number: student.number,
+      secondaryNumber: student.secondaryNumber,
+      branchId: student.branchId,
+      joinedDate: new Date(student.enrolledDate),
+
+      enrolledPrograms: student.StudentEnrollment.map((program) => ({
+        id: program.id,
+        branchProgramId: program.branchProgram.id,
+        timeTableId: program.timeTable.id,
+      })),
+    },
   });
 
   const branchId = form.watch("branchId");
-  const selectedPrograms = form.watch("enrolledPrograms") || [];
 
-  useEffect(() => {
-    if (lead) {
-      form.reset({
-        name: lead.studentName ?? "",
-        number: lead.number ?? "",
-        parentName: lead.parentName ?? "",
-        email: lead.email ?? "",
-        schoolName: lead.schoolName ?? "",
-        address: lead.address ?? "",
-        grade: lead.grade ?? "",
-        gender: lead.gender ?? undefined,
-        enrolledPrograms: [],
-        branchId: lead.branchId ?? "",
-        age: lead.age ? `${lead.age}` : "",
-      });
-    }
-  }, [lead, form]);
-
-  const onSubmit = (values: z.infer<typeof studentSchema>) => {
-    createStudent(
-      { json: values },
+  const onSubmit = (values: z.infer<typeof updateStudentSchema>) => {
+    updateStudent(
+      { json: values, param: { id: student.id } },
       {
         onSuccess({ data }) {
           form.reset();
@@ -104,11 +102,11 @@ export const CreateStudentForm = ({ lead }: CreateStudentProps) => {
         <Card className="md:min-w-xs  max-w-4xl mx-auto shadow-none">
           <CardHeader className="text-center ">
             <CardTitle className="font-semibold text-xl ">
-              Create Your Student Account
+              Update Your Student Account
             </CardTitle>
             <CardDescription>
-              This quick registration step ensures you receive your unique
-              student ID and personalized account credentials.
+              This brief update process guarantees that your student ID and
+              personalized account details stay current.
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
@@ -389,8 +387,7 @@ export const CreateStudentForm = ({ lead }: CreateStudentProps) => {
                 <span className="">Select Program</span>
               </CardTitle>
               <CardDescription>
-                Everything looks right! Simply confirm the total amount and
-                proceed to secure your spot.
+                Everything looks right! Simply confirm to secure your spot.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -414,30 +411,12 @@ export const CreateStudentForm = ({ lead }: CreateStudentProps) => {
           </Card>
         )}
 
-        {selectedPrograms.length > 0 && (
-          <Card className="md:min-w-xs  max-w-4xl mx-auto shadow-none">
-            <CardHeader className="">
-              <CardTitle className="font-bold text-xl font-space flex items-center gap-2 ">
-                <Banknote />
-                <span className="">Fee Payment</span>
-              </CardTitle>
-              <CardDescription>
-                Everything looks right! Simply confirm the total amount and
-                proceed to secure your spot.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <PaymentField form={form} isPending={isPending} />
-            </CardContent>
-          </Card>
-        )}
-
         <div className="flex justify-end md:min-w-xs  max-w-4xl mx-auto">
           <Button type="submit" disabled={isPending}>
             <ButtonLoader
               isLoading={isPending}
-              label={"Create Student"}
-              loadingText="Creating"
+              label={"Update Student"}
+              loadingText="Updating"
             />
           </Button>
         </div>
