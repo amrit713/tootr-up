@@ -40,24 +40,27 @@ export const PaymentField = ({ form, isPending }: Props) => {
     const programFee = form.getValues("programFee");
     const discountPercent = form.getValues("discountPercent");
 
-    form.setValue("totalFee", selectedPrograms.length * programFee);
+    form.setValue(
+      "totalFee",
+      selectedPrograms.length * (programFee ? programFee : 0)
+    );
 
     const totalFee = form.getValues("totalFee");
 
     if (discountPercent) {
-      form.setValue("discountPrice", (discountPercent * totalFee) / 100);
+      form.setValue("discountPrice", (discountPercent * (totalFee ?? 0)) / 100);
     }
     const discountPrice = form.getValues("discountPrice");
 
     if (discountPrice) {
-      form.setValue("totalFeeAfterDiscount", totalFee - discountPrice);
+      form.setValue("totalFeeAfterDiscount", (totalFee ?? 0) - discountPrice);
     } else {
       form.setValue("totalFeeAfterDiscount", totalFee);
     }
 
     const totalFeeAfterDiscount = form.getValues("totalFeeAfterDiscount");
 
-    form.setValue("taxableAmount", totalFeeAfterDiscount / 1.13);
+    form.setValue("taxableAmount", (totalFeeAfterDiscount ?? 0) / 1.13);
     const taxableAmount = form.getValues("taxableAmount");
 
     form.setValue("vatAmount", vatCalculate(taxableAmount));
@@ -173,7 +176,8 @@ export const PaymentField = ({ form, isPending }: Props) => {
               <p className="">Total Amount:</p>
               <p>
                 {currencyFormatter(
-                  form.getValues("taxableAmount") + form.getValues("vatAmount")
+                  form.getValues("taxableAmount") ??
+                    0 + (form.getValues("vatAmount") ?? 0)
                 )}
               </p>
             </div>
@@ -194,6 +198,7 @@ export const PaymentField = ({ form, isPending }: Props) => {
                         onChange={(e) => field.onChange(e.target.valueAsNumber)}
                         value={field.value ?? undefined}
                         disabled={!form.watch("programFee") || isPending}
+                        required
                       />
                     </FormControl>
                     <FormMessage />

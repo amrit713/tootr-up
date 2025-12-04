@@ -7,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { router } from "better-auth/api";
 import {
   Edit,
   EditIcon,
@@ -14,15 +15,20 @@ import {
   PlusIcon,
   TrashIcon,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 function StudentDetail({
   name,
+  id,
   image,
 }: {
   name: string;
   image: string | null;
+  id: string;
 }) {
+  const router = useRouter();
+
   return (
     <div className=" flex justify-between ">
       <div className="flex gap-4 items-center">
@@ -57,7 +63,7 @@ function StudentDetail({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push(`/students/${id}/edit`)}>
             <EditIcon /> Edit
           </DropdownMenuItem>
 

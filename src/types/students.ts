@@ -39,6 +39,7 @@ export type StudentDetailType = Omit<
   StudentEnrollment: {
     id: string;
     branchProgram: {
+      id: string;
       program: {
         name: string;
       };
@@ -46,6 +47,7 @@ export type StudentDetailType = Omit<
     timeTable: {
       startTime: string;
       endTime: string;
+      id: string;
     };
   }[];
   Payment: PaymentType[];

@@ -96,7 +96,7 @@ export const UpdateLeadForm = () => {
   "
     >
       <CardHeader className="flex px-6 ">
-        <CardTitle className="font-bold text-xl font-space  text-center w-full">
+        <CardTitle className="font-semibold text-xl   text-center w-full">
           Update a Lead
         </CardTitle>
       </CardHeader>

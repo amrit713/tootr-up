@@ -17,19 +17,21 @@ export const studentSchema = z.object({
     address: z.string(),
 
     // payment section
-    programFee: z.number(),
-    totalFee: z.number(),
-    totalFeeAfterDiscount: z.number(),
-    taxableAmount: z.number(),
+    programFee: z.number().optional(),
+    totalFee: z.number().optional(),
+    totalFeeAfterDiscount: z.number().optional(),
+    taxableAmount: z.number().optional(),
     discountPercent: z.number().optional(),
     discountPrice: z.number().optional(),
-    vatAmount: z.number(),
-    paidAmount: z.number(),
+    vatAmount: z.number().optional(),
+    paidAmount: z.number().optional(),
+    joinedDate: z.coerce.date().optional(),
 
     branchId: z.string(),
     enrolledPrograms: z
         .array(
             z.object({
+
                 branchProgramId: z.string().min(1, "Program must be selected"),
                 timeTableId: z.string().min(1, "Please select a time slot for each program"),
             })
@@ -42,29 +44,25 @@ export const studentSchema = z.object({
 })
 export const updateStudentSchema = z.object({
     number: z.string().regex(/^\d{10}$/, "Invalid phone number"),
-    secondaryNumber: z.string().regex(/^\d{10}$/, "Invalid phone number").optional(),
-    parentName: z.string().optional(),
-    name: z.string().optional(),
+    secondaryNumber: z.string().regex(/^\d{10}$/, "Invalid phone number"),
+    parentName: z.string(),
+    name: z.string(),
     email: z.string().email().optional(),
     age: z.string().regex(/^\d+$/, {
         message: "Input must be a valid number (digits only)",
     }).optional(),
-    grade: z.string().optional(),
-    gender: z.nativeEnum(Gender).optional(),
-    schoolName: z.string().optional(),
-    address: z.string().optional(),
-    branch: z.string().optional(),
+    grade: z.string(),
+    gender: z.nativeEnum(Gender),
+    schoolName: z.string(),
+    address: z.string(),
+    joinedDate: z.coerce.date().optional(),
 
-    // payment section
-    programFee: z.number(),
-    totalFee: z.number(),
-    totalFeeAfterDiscount: z.number(),
-    taxableAmount: z.number(),
-    discountPrice: z.number().optional(),
 
     // studentEnrollment
+    branchId: z.string(),
     enrolledPrograms: z.array(z.object({
+        id: z.string().optional(),
         timeTableId: z.string(),
-        branchProgramId: z.string()
-    })).min(1, "At least student should enrolled to one program").optional()
+        branchProgramId: z.string(),
+    })).min(1, "At least student should enrolled to one program")
 })
