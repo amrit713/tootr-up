@@ -28,6 +28,8 @@ export const useGetLeads = ({
                 },
             });
 
+
+
             if (!response.ok) {
                 throw new Error("failed to fetch leads");
             }
