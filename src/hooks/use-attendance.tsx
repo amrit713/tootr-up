@@ -5,6 +5,9 @@ type StudentFilter = {
   timeSlot?: string;
   program?: string;
   date?: string;
+  joinDate?: string;
+  attendanceStatus?: string;
+  name?: string;
 };
 
 type AttedanceFilter = StudentFilter & {
@@ -20,6 +23,9 @@ export const useAttendanceFilters = create<AttedanceFilter>((set) => ({
   timeSlot: undefined,
   program: undefined,
   date: undefined,
+  joinDate: undefined,
+  attendanceStatus: undefined,
+  name: undefined,
   setFilter: (key, value) =>
     set((state) => ({
       ...state,
@@ -31,5 +37,8 @@ export const useAttendanceFilters = create<AttedanceFilter>((set) => ({
       timeSlot: undefined,
       program: undefined,
       date: undefined,
+      joinDate: undefined,
+      attendanceStatus: undefined,
+      name: undefined,
     }),
 }));

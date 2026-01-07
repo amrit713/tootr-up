@@ -21,6 +21,7 @@ import { useAttendanceFilters } from "@/hooks/use-attendance";
 import { useStudentFilters } from "@/hooks/use-student-filter";
 
 import { useRouter } from "next/navigation";
+import { AttendanceStatus } from "@/generated/prisma";
 
 export const StudentView = () => {
   const router = useRouter();
@@ -40,11 +41,13 @@ export const StudentView = () => {
     data: enrolledStudents,
     refetch,
     isFetching,
-    error,
   } = useGetStudentEnrollments({
     program: attendance.program ?? "",
     slotTime: attendance.timeSlot ?? "",
     date: attendance.date ?? "",
+    attendanceStatus:
+      (attendance.attendanceStatus as AttendanceStatus) ?? undefined,
+    name: attendance.name ?? undefined,
   });
 
   const onLoadStudent = () => {
@@ -98,7 +101,10 @@ export const StudentView = () => {
             />
           ) : (
             enrolledStudents && (
-              <Attedance enrolledStudents={enrolledStudents} />
+              <Attedance
+                enrolledStudents={enrolledStudents}
+                onLoadStudent={onLoadStudent}
+              />
             )
           )}
         </TabsContent>
