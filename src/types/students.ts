@@ -18,7 +18,8 @@ export type StudentType = Omit<
 };
 
 
-export type StudentEnrollmentType = StudentEnrollment & {
+export type StudentEnrollmentType = Omit<StudentEnrollment, "enrolledDate"> & {
+  enrolledDate: string | null;
   student: {
     name: string,
     number: string

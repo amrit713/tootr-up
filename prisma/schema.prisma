@@ -202,11 +202,12 @@ model TimeTable {
 }
 
 model StudentEnrollment {
-  id              String  @id @default(uuid())
+  id              String    @id @default(uuid())
   studentId       String
   timeTableId     String
   branchProgramId String
-  isActive        Boolean @default(true)
+  isActive        Boolean   @default(true)
+  enrolledDate    DateTime? @default(now())
 
   branchProgram BranchProgram @relation(fields: [branchProgramId], references: [id], onDelete: Cascade)
   student       Student       @relation(fields: [studentId], references: [id])
@@ -218,8 +219,8 @@ model StudentEnrollment {
 
 model Student {
   id              String    @id @default(uuid())
-  number          String    @unique
-  secondaryNumber String    @unique
+  number          String
+  secondaryNumber String
   name            String
   parentName      String
   email           String?

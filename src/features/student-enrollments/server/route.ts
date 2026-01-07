@@ -15,9 +15,13 @@ const filterSchema = z.object({
     program: z.string(),
     slotTime: z.string(),
     date: z.string().nullish(),
+    attendanceStatus: z.nativeEnum(AttendanceStatus).nullish(),
+    name: z.string().nullish()
 
 
 })
+
+
 
 const app = new Hono<{ Variables: Variables }>()
 
@@ -27,27 +31,36 @@ const app = new Hono<{ Variables: Variables }>()
             throw new HTTPException(401, { message: "Unauthorized" });
         }
 
-        const { program, slotTime, date } = c.req.valid("query")
-
-
-
+        const { program, slotTime, date, name } = c.req.valid("query")
 
         const studentEnrollments = await db.studentEnrollment.findMany({
             where: {
                 branchProgramId: program,
-                timeTableId: slotTime
+                timeTableId: slotTime,
+                student: (name || date) ? {
+                    name: name ? {
+                        contains: name,
+                        mode: 'insensitive'
+                    } : undefined,
+                    enrolledDate: date ? { lte: new Date(date) } : undefined,
+                } : undefined,
             }
+
             ,
             include: {
                 student: {
+
                     select: {
                         name: true,
                         number: true
                     }
                 }, attendance: {
                     where: {
-                        date: date ? new Date(date) : undefined
+
+                        date: date ? new Date(date) : undefined,
+
                     },
+
                     select: {
                         id: true, status: true, date: true
                     }

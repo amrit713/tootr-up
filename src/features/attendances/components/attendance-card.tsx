@@ -1,8 +1,8 @@
 "use client";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+
 import { useCreateAttendance } from "@/features/attendances/api/api/use-create-attendance";
 import { useGetAttendance } from "@/features/attendances/api/api/use-get-attendance";
 import { AttendanceStatus } from "@/generated/prisma";

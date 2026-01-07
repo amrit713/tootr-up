@@ -32,14 +32,7 @@ const app = new Hono<{ Variables: Variables }>()
         const { name, number, secondaryNumber, parentName, email, age, grade, gender, schoolName, address, branchId, totalFee, totalFeeAfterDiscount, taxableAmount, discountPrice, vatAmount, paidAmount, enrolledPrograms, joinedDate } = c.req.valid("json")
 
 
-        const existingStudent = await db.student.findUnique({
-            where: {
-                number
-            }
-        })
-        if (existingStudent) {
-            throw new HTTPException(500, { message: "Student with this number is already exist" })
-        }
+
 
         const dueAmount = (totalFeeAfterDiscount ?? 0) - (paidAmount ?? 0)
 
@@ -49,7 +42,7 @@ const app = new Hono<{ Variables: Variables }>()
                 StudentEnrollment: {
                     create: enrolledPrograms.map((p) => ({
                         branchProgramId: p.branchProgramId,
-                        timeTableId: p.timeTableId
+                        timeTableId: p.timeTableId, enrolledDate: joinedDate ?? new Date()
                     }))
                 },
 

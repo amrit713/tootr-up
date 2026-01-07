@@ -25,7 +25,7 @@ export const LeadFilter = () => {
   const { status, search, dueDate, setFilter, assigneeId, resetFilters } =
     useLeadFilters();
 
-  const { data: users, isLoading } = useGetFilterUsers({
+  const { data: users } = useGetFilterUsers({
     status: UserStatus.ACTIVE,
   });
 
