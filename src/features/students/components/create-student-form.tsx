@@ -321,19 +321,40 @@ export const CreateStudentForm = ({ lead }: CreateStudentProps) => {
                 )}
               />
             </div>
-            <FormField
-              control={form.control}
-              name="joinedDate"
-              render={({ field }) => (
-                <FormItem className=" flex flex-col gap-4">
-                  <FormLabel>Joined Date</FormLabel>
-                  <FormControl>
-                    <DatePicker {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex flex-col md:flex-row gap-4 w-full">
+              <FormField
+                control={form.control}
+                name="joinedDate"
+                render={({ field }) => (
+                  <FormItem className="  flex flex-col gap-2 w-full">
+                    <FormLabel>Joined Date</FormLabel>
+                    <FormControl>
+                      <DatePicker {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="attendance"
+                render={({ field }) => (
+                  <FormItem className=" flex flex-col gap-2 w-full">
+                    <FormLabel> Attendance</FormLabel>
+                    <FormControl>
+                      <Input
+                        // type={"number"}
+                        disabled={isPending}
+                        placeholder="Enter attendance"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </CardContent>
         </Card>
 

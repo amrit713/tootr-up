@@ -16,6 +16,7 @@ export const studentSchema = z.object({
     schoolName: z.string(),
     address: z.string(),
 
+
     // payment section
     programFee: z.number().optional(),
     totalFee: z.number().optional(),
@@ -26,6 +27,7 @@ export const studentSchema = z.object({
     vatAmount: z.number().optional(),
     paidAmount: z.number().optional(),
     joinedDate: z.coerce.date().optional(),
+    attendance: z.coerce.number().optional(),
 
     branchId: z.string(),
     enrolledPrograms: z

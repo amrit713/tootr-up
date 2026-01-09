@@ -60,6 +60,42 @@ const app = new Hono<{
         })
 
     })
+    .post("/admin/role", zValidator("query", z.object({
+        userId: z.string(), role: z.string()
+    })), async (c) => {
+        const user = c.get("user")
+        if (!user) {
+            throw new HTTPException(401, { message: "Unauthorized" });
+        }
+
+        if (user.role !== "admin") {
+            throw new HTTPException(401, { message: "Unauthorized to perform this action" });
+        }
+
+        const { userId, role } = c.req.valid("query")
+
+
+
+        const updatedUser = await db.user.update({
+            where: {
+                id: userId
+            },
+            data: {
+                role
+            }
+
+        })
+
+        if (!updatedUser) {
+            throw new HTTPException(500, { message: "Unable to update user" });
+        }
+
+
+        return c.json({
+            message: "updated successfully"
+        })
+
+    })
     .get("/users", authMiddleware, zValidator("query", z.object({
         status: z.nativeEnum(UserStatus).optional()
     })), async (c) => {

@@ -9,6 +9,8 @@ export default async function Home() {
     redirect("/sign-in");
   }
 
+  console.log("user", user);
+
   return (
     <div className="">
       <DashboardView />
