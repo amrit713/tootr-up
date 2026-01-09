@@ -29,9 +29,7 @@ const app = new Hono<{ Variables: Variables }>()
             throw new HTTPException(401, { message: "Unauthorized" });
         }
 
-        const { name, number, secondaryNumber, parentName, email, age, grade, gender, schoolName, address, branchId, totalFee, totalFeeAfterDiscount, taxableAmount, discountPrice, vatAmount, paidAmount, enrolledPrograms, joinedDate } = c.req.valid("json")
-
-
+        const { name, number, secondaryNumber, parentName, email, age, grade, gender, schoolName, address, branchId, totalFee, totalFeeAfterDiscount, taxableAmount, discountPrice, vatAmount, paidAmount, enrolledPrograms, joinedDate, attendance } = c.req.valid("json")
 
 
         const dueAmount = (totalFeeAfterDiscount ?? 0) - (paidAmount ?? 0)
@@ -56,6 +54,29 @@ const app = new Hono<{ Variables: Variables }>()
 
         if (!student) {
             throw new HTTPException(500, { message: "Unable to created student" })
+        }
+
+
+        if (attendance && attendance > 0) {
+            const enrolledPrograms = await db.studentEnrollment.findMany({
+                where: {
+                    studentId: student.id
+                }
+            })
+
+            for (let i = 0; i < attendance; i++) {
+
+                const attendanceDate = new Date(student.enrolledDate.getTime() + i * 7 * 24 * 60 * 60 * 1000);
+                for (let j = 0; j < enrolledPrograms.length; j++) {
+                    await db.attendance.create({
+                        data: {
+                            studentEnrollmentId: enrolledPrograms[j].id,
+                            status: "PRESENT",
+                            date: attendanceDate,
+                        }
+                    })
+                }
+            }
         }
 
         return c.json({ data: student })

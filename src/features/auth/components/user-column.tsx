@@ -12,6 +12,14 @@ import { User, UserStatus } from "@/generated/prisma";
 import { format } from "date-fns";
 import { useUpdateUserStatus } from "../api/use-update-status";
 import { UserType } from "@/types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useUpdateUserRole } from "../api/use-update-role";
 
 export const columns: ColumnDef<UserWithRole>[] = [
   {
@@ -56,8 +64,26 @@ export const columns: ColumnDef<UserWithRole>[] = [
       );
     },
     cell: ({ row }) => {
-      const { role } = row.original;
-      return <p className="capitalize font-medium ">{role}</p>;
+      const { role, id } = row.original;
+      const { mutate } = useUpdateUserRole();
+      const changeRole = (role: string) => {
+        mutate({ query: { userId: id, role } });
+      };
+      return (
+        <Select
+          onValueChange={(value) => changeRole(value)}
+          defaultValue={role}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select a Branch " />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={"admin"}>Admin</SelectItem>
+            <SelectItem value={"user"}>User</SelectItem>
+            <SelectItem value={"trainer"}>Trainer</SelectItem>
+          </SelectContent>
+        </Select>
+      );
     },
   },
   {
@@ -115,7 +141,7 @@ export const columns: ColumnDef<UserWithRole>[] = [
     cell: ({ row }) => {
       const { status, id } = row.original as UserType;
 
-      const { mutate, isPending } = useUpdateUserStatus();
+      const { mutate } = useUpdateUserStatus();
       const changeStatus = (status: UserStatus) => {
         mutate({ query: { userId: id, status } });
       };

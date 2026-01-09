@@ -58,6 +58,10 @@ const app = new Hono<{ Variables: Variables }>()
             throw new HTTPException(401, { message: "Unauthorized" });
         }
 
+        if (user.role !== "trainer") {
+            throw new HTTPException(401, { message: "Only trainers can mark attendance" });
+        }
+
 
         const { date, studentEnrollmentId, status } = c.req.valid("json")
 
