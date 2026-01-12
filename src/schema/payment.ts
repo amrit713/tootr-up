@@ -9,6 +9,7 @@ export const createPaymentSchema = z.object({
     totalFeeAfterDiscount: z.number(),
     taxableAmount: z.number(),
     discountPercent: z.number().optional(),
+    discountAmount: z.number().default(0).optional(),
     discountPrice: z.number().optional(),
     vatAmount: z.number(),
     paidAmount: z.number(),
