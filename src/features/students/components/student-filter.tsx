@@ -10,7 +10,7 @@ import {
   Select,
   SelectSeparator,
 } from "@/components/ui/select";
-import { LeadStatus, PaymentStatus } from "@/generated/prisma/enums";
+import { LeadStatus, PaymentStatus } from "@/generated/prisma/browser";
 import { useLeadFilters } from "@/hooks/use-filter";
 
 import { DatePicker } from "@/components/global/date-picker";

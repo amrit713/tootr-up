@@ -1,14 +1,14 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Check, MoreVertical, TicketCheck, X } from "lucide-react";
+import { ArrowUpDown, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { UserWithRole } from "better-auth/plugins";
-import { User, UserStatus } from "@/generated/prisma/enums";
+import { UserStatus } from "@/generated/prisma/browser";
 import { format } from "date-fns";
 import { useUpdateUserStatus } from "../api/use-update-status";
 import { UserType } from "@/types";

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { FollowUpStatus, Priority } from "@/generated/prisma/enums";
+import { FollowUpStatus, Priority } from "@/generated/prisma/browser";
 
 export const followUpSchema = z.object({
     due_date: z.coerce.date().optional(),

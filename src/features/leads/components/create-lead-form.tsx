@@ -34,7 +34,7 @@ import {
   LeadSource,
   LeadStatus,
   UserStatus,
-} from "@/generated/prisma/enums";
+} from "@/generated/prisma/browser";
 import { useGetPrograms } from "@/features/programs/api/use-get-programs";
 import {
   MultiSelect,

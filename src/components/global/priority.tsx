@@ -1,12 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-export enum LeadPriority {
-  CRITICAL = "CRITICAL",
-  HIGH = "HIGH",
-  MEDIUM = "MEDIUM",
-  LOW = "LOW",
-}
+import { Priority as LeadPriority } from "@/generated/prisma/browser";
 
 import { ChevronsUpIcon } from "lucide-react";
 
@@ -48,7 +43,7 @@ export const Priority = ({
   className,
   isHideLabel,
 }: PriorityProps) => {
-  const { color, icon: Icon, label, background } = priorities[priority];
+  const { color, icon: Icon, label } = priorities[priority];
 
   return (
     <div

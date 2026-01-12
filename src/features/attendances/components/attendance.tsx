@@ -30,7 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { AttendanceStatus } from "@/generated/prisma/enums";
+import { AttendanceStatus } from "@/generated/prisma/browser";
 import { snakeCaseToTitleCase } from "@/lib/utils";
 import { useAttendanceFilters } from "@/hooks/use-attendance";
 

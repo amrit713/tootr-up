@@ -10,7 +10,7 @@ import {
   Select,
   SelectSeparator,
 } from "@/components/ui/select";
-import { LeadStatus, UserStatus } from "@/generated/prisma/enums";
+import { LeadStatus, UserStatus } from "@/generated/prisma/browser";
 import { useLeadFilters } from "@/hooks/use-filter";
 
 import { snakeCaseToTitleCase } from "@/lib/utils";

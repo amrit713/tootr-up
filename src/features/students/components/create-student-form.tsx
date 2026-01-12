@@ -34,7 +34,7 @@ import { studentSchema } from "@/schema";
 
 import { useGetBranches } from "@/features/branches/api/use-get-branches";
 import { LeadDetailType } from "@/types";
-import { Gender } from "@/generated/prisma/enums";
+import { Gender } from "@/generated/prisma/browser";
 import { snakeCaseToTitleCase } from "@/lib/utils";
 
 import { Banknote, GraduationCap, MapPin } from "lucide-react";

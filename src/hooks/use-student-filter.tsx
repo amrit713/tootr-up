@@ -1,4 +1,4 @@
-import { PaymentStatus } from "@/generated/prisma/enums";
+import { PaymentStatus } from "@/generated/prisma/browser";
 import { create } from "zustand";
 
 type StudentFilters = {

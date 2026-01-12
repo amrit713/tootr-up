@@ -5,7 +5,7 @@ import { zValidator } from "@hono/zod-validator";
 import { auth, Variables } from "@/lib/auth";
 import { HTTPException } from "hono/http-exception";
 import { db } from "@/lib/db";
-import { UserStatus } from "@/generated/prisma/enums";
+import { UserStatus } from "@/generated/prisma/browser";
 import { authMiddleware } from "@/lib/hono-middleware";
 
 const app = new Hono<{
