@@ -7,7 +7,7 @@ import { HTTPException } from "hono/http-exception";
 import { authMiddleware } from "@/lib/hono-middleware";
 import { Variables } from "@/lib/auth"
 import { db } from "@/lib/db";
-import { AttendanceStatus } from "@/generated/prisma";
+import { AttendanceStatus } from "@/generated/prisma/enums";
 
 
 

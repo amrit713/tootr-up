@@ -2,7 +2,7 @@
 
 
 
-import { FollowUpStatus, Lead, Priority, } from "@/generated/prisma";
+import { FollowUpStatus, Lead, Priority, } from "@/generated/prisma/enums";
 import { UserWithRole } from "better-auth/plugins";
 
 import { StudentType, StudentEnrollmentType, StudentDetailType, PaymentType } from "./students";

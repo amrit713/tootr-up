@@ -19,7 +19,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useSelectProgram } from "@/hooks/use-select-program";
 import { toast } from "sonner";
 import { useCreateBulkLeads } from "@/features/leads/api/use-create-bulk-lead";
-import { LeadStatus } from "@/generated/prisma";
+import { LeadStatus } from "@/generated/prisma/enums";
 import { parseCSVDate } from "@/lib/utils";
 
 enum VARIANTS {

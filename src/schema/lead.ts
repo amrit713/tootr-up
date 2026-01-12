@@ -1,5 +1,5 @@
 
-import { Gender, LeadSource, LeadStatus } from "@/generated/prisma"
+import { Gender, LeadSource, LeadStatus } from "@/generated/prisma/enums"
 import { z } from "zod"
 
 export const leadSchema = z.object({

@@ -1,7 +1,12 @@
 "use client";
 
-import { cn, snakeCaseToTitleCase } from "@/lib/utils";
-import { Priority as LeadPriority } from "@/generated/prisma";
+import { cn } from "@/lib/utils";
+export enum LeadPriority {
+  CRITICAL = "CRITICAL",
+  HIGH = "HIGH",
+  MEDIUM = "MEDIUM",
+  LOW = "LOW",
+}
 
 import { ChevronsUpIcon } from "lucide-react";
 

@@ -29,7 +29,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Gender, LeadSource, LeadStatus, UserStatus } from "@/generated/prisma";
+import {
+  Gender,
+  LeadSource,
+  LeadStatus,
+  UserStatus,
+} from "@/generated/prisma/enums";
 import { useGetPrograms } from "@/features/programs/api/use-get-programs";
 import {
   MultiSelect,

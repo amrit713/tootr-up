@@ -11,7 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import {
   Priority as FollowUpPriority,
   FollowUpStatus,
-} from "@/generated/prisma";
+} from "@/generated/prisma/enums";
 import { FollowUpDate } from "./follow-up-date";
 import { FollowRemark } from "./follow-remark";
 
@@ -26,7 +26,6 @@ interface Props {
   status: FollowUpStatus;
   id: string;
 }
-
 
 export const Followup = ({
   due_date,

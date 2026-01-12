@@ -1,4 +1,4 @@
-import { LeadStatus } from "@/generated/prisma";
+import { LeadStatus } from "@/generated/prisma/enums";
 import { create } from "zustand";
 
 type LeadFilters = {
