@@ -58,11 +58,11 @@ export const CreateStudentForm = ({ lead }: CreateStudentProps) => {
 
   const form = useForm<z.infer<typeof studentSchema>>({
     resolver: zodResolver(studentSchema),
-    defaultValues: {},
   });
 
   const branchId = form.watch("branchId");
   const selectedPrograms = form.watch("enrolledPrograms") || [];
+  console.log(form.getValues());
 
   useEffect(() => {
     if (lead) {
@@ -77,12 +77,13 @@ export const CreateStudentForm = ({ lead }: CreateStudentProps) => {
         gender: lead.gender ?? undefined,
         enrolledPrograms: [],
         branchId: lead.branchId ?? "",
-        age: lead.age ? `${lead.age}` : "",
+        age: lead.age ? lead.age : 0,
       });
     }
   }, [lead, form]);
 
   const onSubmit = (values: z.infer<typeof studentSchema>) => {
+    console.log("Submitting form with values:", values);
     createStudent(
       { json: values },
       {
