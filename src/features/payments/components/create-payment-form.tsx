@@ -22,7 +22,7 @@ import { cn, currencyFormatter, vatCalculate } from "@/lib/utils";
 
 import { ButtonLoader } from "@/components/global/button-loader";
 import { useModal } from "@/hooks/use-modal-store";
-import { useUpdatePayment } from "../api/use-update-payment";
+
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { useStudentId } from "@/features/leads/hooks/use-student-id";
@@ -42,17 +42,23 @@ export const CreatePaymentForm = () => {
 
   const handleCalculate = () => {
     form.setValue("studentId", studentId);
-    const discountPercent = form.getValues("discountPercent");
+    const discountPrice = form.getValues("discountPrice");
 
     const totalFee = form.getValues("totalFee");
 
-    if (discountPercent) {
-      form.setValue("discountPrice", (discountPercent * totalFee) / 100);
+    if (discountPrice) {
+      form.setValue(
+        "discountPercent",
+        ((discountPrice / (totalFee ?? 0)) * 100).toFixed(
+          2
+        ) as unknown as number
+      );
+    } else {
+      form.setValue("discountPercent", 0);
     }
-    const discountPrice = form.getValues("discountPrice");
 
     if (discountPrice) {
-      form.setValue("totalFeeAfterDiscount", totalFee - discountPrice);
+      form.setValue("totalFeeAfterDiscount", (totalFee ?? 0) - discountPrice);
     } else {
       form.setValue("totalFeeAfterDiscount", totalFee);
     }
@@ -123,17 +129,16 @@ export const CreatePaymentForm = () => {
               />
               <FormField
                 control={form.control}
-                name="discountPercent"
+                name="discountPrice"
                 render={({ field }) => (
                   <FormItem className="">
-                    <FormLabel>Discount Percent</FormLabel>
+                    <FormLabel>Discount Price</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
-                        placeholder="0.00%"
+                        placeholder="Rs. 00.00"
                         {...field}
                         onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                        // value={field.value ?? 0}
                         disabled={!form.watch("totalFee") || isPending}
                       />
                     </FormControl>
@@ -251,9 +256,9 @@ export const CreatePaymentForm = () => {
 
             <div className="flex items-center  gap-4 ">
               <Button
-                variant={"secondary"}
+                variant={"outline"}
                 type="button"
-                className={cn("flex-1")}
+                className={cn("flex-1 shadow-none")}
                 onClick={onClose}
               >
                 Cancel
