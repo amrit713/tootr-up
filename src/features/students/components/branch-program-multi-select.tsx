@@ -50,7 +50,7 @@ export const BranchProgramMultiSelect = ({
         return (
           <div
             key={branchProgram.id}
-            className="hover:bg-accent/10 flex items-start gap-3 rounded-lg border p-3 has-[[aria-checked=true]]:border-primary has-[[aria-checked=true]]:bg-primary/5 dark:has-[[aria-checked=true]]:border-primary dark:has-[[aria-checked=true]]:bg-primary/10"
+            className="hover:bg-accent/10 flex items-start gap-3 rounded-lg border p-3 has-[[aria-checked=true]]:border-primary has-aria-checked:bg-primary/5 dark:has-[[aria-checked=true]]:border-primary dark:has-[[aria-checked=true]]:bg-primary/10"
           >
             <Checkbox
               id="toggle-2"

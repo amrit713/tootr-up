@@ -128,12 +128,18 @@ export const IndividualPayment = ({
 
             <div className="flex justify-between items-center font-bold   ">
               <p className="">
-                Remaining Cash(
-                {(
-                  (latestPayment.dueAmount * 100) /
-                  latestPayment.totalFeeAfterDiscount
-                ).toFixed(2)}
-                % ):
+                Remaining Cash
+                {latestPayment.dueAmount !== 0 && (
+                  <>
+                    (
+                    {(
+                      (latestPayment.dueAmount * 100) /
+                      latestPayment.totalFeeAfterDiscount
+                    ).toFixed(2)}
+                    % )
+                  </>
+                )}
+                :
               </p>
               <p className="">{currencyFormatter(latestPayment.dueAmount)}</p>
             </div>
