@@ -38,7 +38,7 @@ export const PaymentField = ({ form, isPending }: Props) => {
   const handleCalculate = () => {
     const selectedPrograms = form.getValues("enrolledPrograms");
     const programFee = form.getValues("programFee");
-    const discountPercent = form.getValues("discountPercent");
+    const discountPrice = form.getValues("discountPrice");
 
     form.setValue(
       "totalFee",
@@ -47,10 +47,16 @@ export const PaymentField = ({ form, isPending }: Props) => {
 
     const totalFee = form.getValues("totalFee");
 
-    if (discountPercent) {
-      form.setValue("discountPrice", (discountPercent * (totalFee ?? 0)) / 100);
+    if (discountPrice) {
+      form.setValue(
+        "discountPercent",
+        ((discountPrice / (totalFee ?? 0)) * 100).toFixed(
+          2
+        ) as unknown as number
+      );
+    } else {
+      form.setValue("discountPercent", 0);
     }
-    const discountPrice = form.getValues("discountPrice");
 
     if (discountPrice) {
       form.setValue("totalFeeAfterDiscount", (totalFee ?? 0) - discountPrice);
@@ -91,17 +97,16 @@ export const PaymentField = ({ form, isPending }: Props) => {
         />
         <FormField
           control={form.control}
-          name="discountPercent"
+          name="discountPrice"
           render={({ field }) => (
             <FormItem className="">
-              <FormLabel>Discount Percent</FormLabel>
+              <FormLabel>Discount Price</FormLabel>
               <FormControl>
                 <Input
                   type="number"
-                  placeholder="0.00%"
+                  placeholder="Rs. 00.00"
                   {...field}
                   onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                  // value={field.value ?? 0}
                   disabled={!form.watch("programFee") || isPending}
                 />
               </FormControl>
