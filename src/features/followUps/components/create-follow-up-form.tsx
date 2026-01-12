@@ -34,7 +34,7 @@ import {
 } from "@/components/ui/select";
 import { useModal } from "@/hooks/use-modal-store";
 import { DatePicker } from "@/components/global/date-picker";
-import { FollowUpStatus, Priority, UserStatus } from "@/generated/prisma";
+import { FollowUpStatus, Priority, UserStatus } from "@/generated/prisma/enums";
 import { Textarea } from "@/components/ui/textarea";
 import { ButtonLoader } from "@/components/global/button-loader";
 import { useCreateFollowUp } from "../api/use-create-follow-up";

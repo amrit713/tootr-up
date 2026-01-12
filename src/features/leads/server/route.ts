@@ -9,7 +9,7 @@ import { Variables } from "@/lib/auth"
 import { authMiddleware } from "@/lib/hono-middleware";
 import { leadItemSchema, leadSchema, updateLeadSchema } from "@/schema";
 import { db } from "@/lib/db";
-import { LeadStatus, Priority } from "@/generated/prisma";
+import { LeadStatus, Priority } from "@/generated/prisma/enums";
 import { parseCSVDate } from "@/lib/utils";
 
 

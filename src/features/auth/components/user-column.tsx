@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { UserWithRole } from "better-auth/plugins";
-import { User, UserStatus } from "@/generated/prisma";
+import { User, UserStatus } from "@/generated/prisma/enums";
 import { format } from "date-fns";
 import { useUpdateUserStatus } from "../api/use-update-status";
 import { UserType } from "@/types";

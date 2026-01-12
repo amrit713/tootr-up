@@ -13,7 +13,7 @@ import { useGetFollowUps } from "@/features/followUps/api/use-get-followups";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Followup } from "./followup";
 import { useModal } from "@/hooks/use-modal-store";
-import { LeadStatus } from "@/generated/prisma";
+import { LeadStatus } from "@/generated/prisma/enums";
 import { ErrorState } from "@/components/global/error-state";
 import { LoadingState } from "@/components/global/loading-state";
 import { useRouter } from "next/navigation";

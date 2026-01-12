@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { client } from "@/lib/rpc";
-import { AttendanceStatus } from "@/generated/prisma";
+import { AttendanceStatus } from "@/generated/prisma/enums";
 
 
 interface useGetStudentEnrollmentsProps {

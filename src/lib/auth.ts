@@ -4,7 +4,7 @@ import { admin as adminPlugin, openAPI } from "better-auth/plugins";
 import { createAuthMiddleware, APIError } from "better-auth/api";
 
 import { db } from "./db";
-import { User, UserStatus } from "@/generated/prisma";
+import { User, UserStatus } from "@/generated/prisma/enums";
 
 export const auth = betterAuth({
     database: prismaAdapter(db, {

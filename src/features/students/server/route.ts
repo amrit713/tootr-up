@@ -7,7 +7,7 @@ import { Variables } from "@/lib/auth"
 import { authMiddleware } from "@/lib/hono-middleware";
 import { db } from "@/lib/db";
 import { studentSchema, updateStudentSchema } from "@/schema";
-import { PaymentStatus } from "@/generated/prisma";
+import { PaymentStatus } from "@/generated/prisma/enums";
 
 
 
