@@ -94,7 +94,7 @@ export const UpdatePaymentForm = ({
 
             <div className="flex items-center  gap-4 ">
               <Button
-                variant={"secondary"}
+                variant={"outline"}
                 type="button"
                 className={cn("flex-1")}
                 onClick={onClose}
