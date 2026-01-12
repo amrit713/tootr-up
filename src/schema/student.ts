@@ -5,13 +5,12 @@ import { Gender } from "@/generated/prisma/browser";
 export const studentSchema = z.object({
     number: z.string().regex(/^\d{10}$/),
     secondaryNumber: z.string().regex(/^\d{10}$/),
-
     parentName: z.string().min(3),
     name: z.string().min(3),
-
     email: z.string().email().optional().or(z.literal("")),
 
-    age: z.coerce.number().min(0),
+    // Coerce is fine, but ensure the base type is optional for the resolver
+    age: z.coerce.number().min(0).optional(),
 
     grade: z.string(),
     gender: z.nativeEnum(Gender),
@@ -23,8 +22,9 @@ export const studentSchema = z.object({
     totalFeeAfterDiscount: z.coerce.number().optional(),
     taxableAmount: z.coerce.number().optional(),
 
-    discountPercent: z.coerce.number().default(0),
-    discountPrice: z.coerce.number().default(0),
+    // Change .default(0) to .optional()
+    discountPercent: z.coerce.number().optional(),
+    discountPrice: z.coerce.number().optional(),
 
     vatAmount: z.coerce.number().optional(),
     paidAmount: z.coerce.number().optional(),

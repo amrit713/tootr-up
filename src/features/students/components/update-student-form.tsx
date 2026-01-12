@@ -58,7 +58,7 @@ export const UpdateStudentForm = ({ student }: UpdateStudentProps) => {
     resolver: zodResolver(studentSchema),
     defaultValues: {
       name: student.name,
-      age: `${student.age}`,
+      age: student.age,
       gender: student.gender,
       grade: student.grade,
       schoolName: student.schoolName,

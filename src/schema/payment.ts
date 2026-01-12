@@ -3,17 +3,17 @@ import { z } from "zod";
 
 
 export const createPaymentSchema = z.object({
-    // payment section
-    studentId: z.string(),
-    totalFee: z.number(),
-    totalFeeAfterDiscount: z.number(),
-    taxableAmount: z.number(),
+    studentId: z.string().min(1, "Student ID is required"),
+    totalFee: z.number().min(0),
+    totalFeeAfterDiscount: z.number().min(0),
+    taxableAmount: z.number().min(0),
+    vatAmount: z.number().min(0),
+    paidAmount: z.number().min(0),
+    // Use optional() to match the Form's requirement for nullable inputs
     discountPercent: z.number().optional(),
-    discountAmount: z.number().optional().default(0),
-    discountPrice: z.number().optional().default(0),
-    vatAmount: z.number(),
-    paidAmount: z.number(),
-})
+    discountAmount: z.number().optional(),
+    discountPrice: z.number().optional(),
+});
 
 
 

@@ -35,7 +35,17 @@ export const CreatePaymentForm = () => {
 
   const form = useForm<z.infer<typeof createPaymentSchema>>({
     resolver: zodResolver(createPaymentSchema),
-    defaultValues: {},
+    defaultValues: {
+      studentId: studentId,
+      totalFee: 0,
+      totalFeeAfterDiscount: 0,
+      taxableAmount: 0,
+      vatAmount: 0,
+      paidAmount: 0,
+      discountAmount: 0, // Keeps the UI safe
+      discountPrice: 0,
+      discountPercent: 0,
+    },
   });
 
   const [calculated, setCalculated] = useState(false);
