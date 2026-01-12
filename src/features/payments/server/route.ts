@@ -7,7 +7,7 @@ import { Variables } from "@/lib/auth"
 import { authMiddleware } from "@/lib/hono-middleware";
 import { db } from "@/lib/db";
 import { createPaymentSchema, updatePaymentSchema } from "@/schema";
-import { PaymentStatus } from "@/generated/prisma/enums";
+import { PaymentStatus } from "@/generated/prisma/browser";
 
 
 const app = new Hono<{ Variables: Variables }>()

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { LeadStatus } from "@/generated/prisma/enums/";
+import { LeadStatus } from "@/generated/prisma/browser";
 
 import { client } from "@/lib/rpc";
 

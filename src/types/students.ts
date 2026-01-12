@@ -1,4 +1,4 @@
-import { AttendanceStatus, Student, StudentEnrollment, Payment } from "@/generated/prisma/enums";
+import { AttendanceStatus, Student, StudentEnrollment, Payment } from "@/generated/prisma/browser";
 
 export type StudentType = Omit<
   Student,

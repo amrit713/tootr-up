@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { Gender } from "@/generated/prisma/enums";
+import { Gender } from "@/generated/prisma/browser";
 
 export const studentSchema = z.object({
     number: z.string().regex(/^\d{10}$/, "Invalid phone number"),

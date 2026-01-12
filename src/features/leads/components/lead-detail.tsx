@@ -271,7 +271,7 @@ export const LeadDetail = ({ lead }: Props) => {
                 <p className=" font-medium">Interested Program</p>
                 <div className="flex overflow-x-auto gap-2 mt-2 ">
                   {lead?.programs.length !== 0 ? (
-                    lead?.programs.map((program, idx) => (
+                    lead?.programs.map((program: string, idx: number) => (
                       <Badge
                         key={idx}
                         className="bg-green-300/20 dark:text-white text-black"

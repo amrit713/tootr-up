@@ -11,7 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import {
   Priority as FollowUpPriority,
   FollowUpStatus,
-} from "@/generated/prisma/enums";
+} from "@/generated/prisma/browser";
 import { FollowUpDate } from "./follow-up-date";
 import { FollowRemark } from "./follow-remark";
 

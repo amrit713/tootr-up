@@ -21,7 +21,7 @@ import { useAttendanceFilters } from "@/hooks/use-attendance";
 import { useStudentFilters } from "@/hooks/use-student-filter";
 
 import { useRouter } from "next/navigation";
-import { AttendanceStatus } from "@/generated/prisma/enums";
+import { AttendanceStatus } from "@/generated/prisma/browser";
 
 export const StudentView = () => {
   const router = useRouter();

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 import { useCreateAttendance } from "@/features/attendances/api/api/use-create-attendance";
 import { useGetAttendance } from "@/features/attendances/api/api/use-get-attendance";
-import { AttendanceStatus } from "@/generated/prisma/enums";
+import { AttendanceStatus } from "@/generated/prisma/browser";
 import { useAttendanceFilters } from "@/hooks/use-attendance";
 import { cn } from "@/lib/utils";
 

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { UserStatus } from "@/generated/prisma/enums";
+import { UserStatus } from "@/generated/prisma/browser";
 import { client } from "@/lib/rpc";
 
 export const useGetFilterUsers = ({ status }: { status: UserStatus }) => {
