@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import z from "zod";
 import { HTTPException } from "hono/http-exception";
-import { endOfMonth, startOfMonth, subMonths } from "date-fns";
+
 
 
 import { Variables } from "@/lib/auth"
@@ -10,7 +10,7 @@ import { authMiddleware } from "@/lib/hono-middleware";
 import { leadItemSchema, leadSchema, updateLeadSchema } from "@/schema";
 import { db } from "@/lib/db";
 import { LeadStatus, Priority } from "@/generated/prisma/browser";
-import { parseCSVDate } from "@/lib/utils";
+
 
 
 
@@ -155,6 +155,49 @@ const app = new Hono<{ Variables: Variables }>()
             data: leads,
             startOfDay, endOfDay
         })
+    })
+
+    .post("/website-lead", zValidator("json", leadSchema), async (c) => {
+
+        const { number, parentName, age, grade, gender, schoolName, address, status, branchId, email, programs, assigneeId, studentName, branchName } = c.req.valid("json")
+
+
+
+        let branch;
+        if (branchName) {
+            branch = await db.branch.findFirst({
+                where: {
+                    name: branchName
+                },
+                select: {
+                    id: true
+                }
+            })
+        }
+
+        const lead = await db.lead.create({
+            data: {
+                number, parentName, age: age ? Number(age) : undefined, grade, gender, studentName, schoolName, address, status, source: "WEBSITE", branchId: branchId ? branchId : branch?.id, userId: "fgkZt9XtGa4jS1M7VMm6Myt3MGMWOHHv", email, programs: programs && [...programs], assigneeId,
+
+                followups: {
+                    create: {
+                        priority: Priority.LOW,
+                        userId: "fgkZt9XtGa4jS1M7VMm6Myt3MGMWOHHv",
+
+                    }
+                }
+            }
+
+        })
+        if (!lead) {
+            throw new HTTPException(500, { message: "Server Error" })
+        }
+
+        return c.json({
+            data: lead
+        })
+
+
     })
     .post("/bulk-create", authMiddleware, zValidator("json", z.array(leadItemSchema)), async (c) => {
         const user = c.get("user")
