@@ -3,12 +3,18 @@ import { useQuery } from "@tanstack/react-query";
 import { UserStatus } from "@/generated/prisma/browser";
 import { client } from "@/lib/rpc";
 
-export const useGetFilterUsers = ({ status }: { status: UserStatus }) => {
+export const useGetFilterUsers = ({
+  status,
+  role,
+}: {
+  status: UserStatus;
+  role?: string;
+}) => {
   const query = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
       const response = await client.api.auth.users.$get({
-        query: { status },
+        query: { status, role },
       });
 
       if (!response.ok) {

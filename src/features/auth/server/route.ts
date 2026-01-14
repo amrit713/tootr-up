@@ -97,20 +97,22 @@ const app = new Hono<{
 
     })
     .get("/users", authMiddleware, zValidator("query", z.object({
-        status: z.nativeEnum(UserStatus).optional()
+        status: z.nativeEnum(UserStatus).optional(),
+        role: z.string().optional(),
     })), async (c) => {
         const user = c.get("user")
         if (!user) {
             throw new HTTPException(401, { message: "Unauthorized" });
         }
 
-        const { status } = c.req.valid("query")
+        const { status, role } = c.req.valid("query")
 
 
 
         const users = await db.user.findMany({
             where: {
-                status: status ? status : undefined
+                status: status ? status : undefined,
+                role: role ? role : undefined
             }
         })
 
