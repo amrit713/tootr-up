@@ -1,7 +1,6 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import Link from "next/link";
 
 import {
   Sidebar,
@@ -16,11 +15,13 @@ import { SIDEBAR_MENU_ITEM } from "@/constants";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { Logo } from "./logo";
+import { authClient } from "@/lib/auth-client";
 
 export const AppSidebar = () => {
   const pathname = usePathname();
   const path = pathname.split("/")[1];
   const router = useRouter();
+  const { data } = authClient.useSession();
 
   return (
     <Sidebar collapsible="icon">
@@ -45,6 +46,9 @@ export const AppSidebar = () => {
                         "text-black bg-white dark:bg-gray-800 dark:text-white"
                     )}
                     onClick={() => router.push(`/${item.href}`)}
+                    disabled={
+                      data?.user.role === "trainer" && item.href === "leads"
+                    }
                   >
                     <div className={cn("flex flex-items-center gap-2 ")}>
                       <item.icon
