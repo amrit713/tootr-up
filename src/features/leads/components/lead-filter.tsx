@@ -27,6 +27,7 @@ export const LeadFilter = () => {
 
   const { data: users } = useGetFilterUsers({
     status: UserStatus.ACTIVE,
+    role: "user",
   });
 
   const onStatusChange = (value: string) => {
