@@ -54,8 +54,8 @@ export const UpdateStudentForm = ({ student }: UpdateStudentProps) => {
   const { data: branches } = useGetBranches();
   const { mutate: updateStudent, isPending } = useUpdateStudent();
 
-  const form = useForm<z.infer<typeof studentSchema>>({
-    resolver: zodResolver(studentSchema),
+  const form = useForm<z.infer<typeof updateStudentSchema>>({
+    resolver: zodResolver(updateStudentSchema), // Use updateStudentSchema here
     defaultValues: {
       name: student.name,
       age: student.age,
@@ -64,12 +64,11 @@ export const UpdateStudentForm = ({ student }: UpdateStudentProps) => {
       schoolName: student.schoolName,
       address: student.address,
       parentName: student.parentName,
-      email: student.email ?? undefined,
+      email: student.email || "", // Use empty string instead of undefined
       number: student.number,
       secondaryNumber: student.secondaryNumber,
       branchId: student.branchId,
       joinedDate: new Date(student.enrolledDate),
-
       enrolledPrograms: student.StudentEnrollment.map((program) => ({
         id: program.id,
         branchProgramId: program.branchProgram.id,
@@ -81,6 +80,8 @@ export const UpdateStudentForm = ({ student }: UpdateStudentProps) => {
   const branchId = form.watch("branchId");
 
   const onSubmit = (values: z.infer<typeof updateStudentSchema>) => {
+    console.log("🚀 ~ onSubmit ~ values:", values);
+
     updateStudent(
       { json: values, param: { id: student.id } },
       {

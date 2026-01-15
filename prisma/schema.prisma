@@ -207,6 +207,7 @@ model StudentEnrollment {
   branchProgramId String
   isActive        Boolean   @default(true)
   enrolledDate    DateTime? @default(now())
+  endDate         DateTime?
 
   branchProgram BranchProgram @relation(fields: [branchProgramId], references: [id], onDelete: Cascade)
   student       Student       @relation(fields: [studentId], references: [id])
@@ -232,6 +233,7 @@ model Student {
   isActive        Boolean   @default(true)
   image           String?
   startedDate     DateTime?
+  endDate         DateTime?
 
   // Optional: if you still want to track which lead converted
 

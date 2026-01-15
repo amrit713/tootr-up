@@ -13,7 +13,6 @@ import { columns } from "@/features/leads/components/dashboard-column";
 
 import { useGetLeads } from "../features/leads/api/use-get-leads";
 import { useMemo } from "react";
-import { format } from "date-fns";
 import { LeadPieChart } from "../features/leads/components/lead-pie-chart";
 import { ErrorState } from "@/components/global/error-state";
 import { LoadingState } from "@/components/global/loading-state";

@@ -22,6 +22,7 @@ import { useStudentFilters } from "@/hooks/use-student-filter";
 
 import { useRouter } from "next/navigation";
 import { AttendanceStatus } from "@/generated/prisma/browser";
+import { DashboardStudents } from "@/features/students/components/dashboard-students";
 
 export const StudentView = () => {
   const router = useRouter();
@@ -107,6 +108,9 @@ export const StudentView = () => {
               />
             )
           )}
+        </TabsContent>
+        <TabsContent value={"record"} className="flex flex-col gap-4">
+          <DashboardStudents />
         </TabsContent>
       </Tabs>
     </div>

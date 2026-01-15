@@ -221,32 +221,68 @@ const app = new Hono<{ Variables: Variables }>()
         })
     })
     .patch("/:id", authMiddleware, zValidator("json", updateStudentSchema), async (c) => {
-        const user = c.get("user")
+        const user = c.get("user");
         if (!user) {
             throw new HTTPException(401, { message: "Unauthorized" });
         }
 
-        const { id } = c.req.param()
+        const { id } = c.req.param();
+        const {
+            name, number, secondaryNumber, parentName, email,
+            isActive,
+            age, grade, gender, schoolName, address,
+            branchId, joinedDate, enrolledPrograms
+        } = c.req.valid("json");
 
-        const { name, number, secondaryNumber, parentName, email, age, grade, gender, schoolName, address, branchId, joinedDate } = c.req.valid("json")
+        // 1. Fetch current enrollments to see what already exists
+        const existingEnrollments = await db.studentEnrollment.findMany({
+            where: { studentId: id }
+        });
+
+        const existingBranchProgramIds = existingEnrollments.map(e => e.branchProgramId);
+
+        // 2. Separate new programs from existing ones
+        // We only "create" if the student isn't already in that program
+        const newPrograms = enrolledPrograms?.filter(
+            (p) => !existingBranchProgramIds.includes(p.branchProgramId)
+        ) || [];
 
         const student = await db.student.update({
-            where: {
-                id
-            },
+            where: { id },
             data: {
-                name, number, secondaryNumber, parentName, grade, gender, schoolName, address, email, branchId, age: age ? Number(age) : undefined, enrolledDate: joinedDate ?? new Date(),
+                name,
+                number,
+                secondaryNumber,
+                parentName,
+                grade,
+                gender,
+                schoolName,
+                address,
+                email,
+                branchId,
+                age: age ? Number(age) : undefined,
+                enrolledDate: joinedDate ?? undefined,
+                StudentEnrollment: {
+                    // Only create the ones that don't exist yet
+                    create: newPrograms.map((p) => ({
+                        branchProgramId: p.branchProgramId,
+                        timeTableId: p.timeTableId,
+                        enrolledDate: joinedDate ?? new Date()
+                    })),
+                    // If you want to update timetables for existing enrollments:
+                    updateMany: enrolledPrograms?.filter(p => p.id).map(p => ({
+                        where: { id: p.id },
+                        data: { timeTableId: p.timeTableId }
+                    }))
+                },
             }
-        })
-
+        });
 
         if (!student) {
-            throw new HTTPException(400, { message: "Student not found" });
+            throw new HTTPException(400, { message: "Student update failed" });
         }
 
-        return c.json({
-            data: student
-        })
+        return c.json({ data: student });
     })
 
 
