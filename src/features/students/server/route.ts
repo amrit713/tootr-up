@@ -127,6 +127,9 @@ const app = new Hono<{ Variables: Variables }>()
                 } : undefined,
 
             },
+            orderBy: {
+                name: "desc"
+            },
             include: {
                 Branch: {
                     select: {
