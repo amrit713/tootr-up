@@ -1,17 +1,15 @@
 "use client";
-import { studentSchema, updateStudentSchema } from "@/schema";
-import { z } from "zod";
+
 import { UseFormReturn } from "react-hook-form";
 import { useGetBranchPrograms } from "@/features/branches/api/use-get-branch-program";
 import { LoadingState } from "@/components/global/loading-state";
 import { Checkbox } from "@/components/ui/checkbox";
 import { TimeTableSelect } from "./time-table-select";
-
-type StudentFormType = z.infer<typeof studentSchema>;
+import { Badge } from "@/components/ui/badge"; // Optional: if you have a badge UI
 
 interface Props {
   branchId: string;
-  form: UseFormReturn<StudentFormType>;
+  form: UseFormReturn<any>;
   isPending?: boolean;
 }
 
@@ -23,40 +21,45 @@ export const BranchProgramMultiSelect = ({
   const { data: branchPrograms, isLoading: programLoading } =
     useGetBranchPrograms({ branchId });
 
-  const selectedPrograms = form.watch("enrolledPrograms") || [];
+  const selectedPrograms: any[] = form.watch("enrolledPrograms") || [];
 
   return (
     <div className="flex flex-col gap-2">
       {programLoading && (
         <LoadingState
           title="Loading Programs"
-          description="This will only take a few seconds."
-          className=" bg-background"
+          description="Fetching available courses..."
+          className="bg-background"
         />
       )}
 
-      {branchPrograms?.length === 0 && (
-        <p className=" text-center text-muted-foreground">
-          No program in this branch
+      {branchPrograms?.length === 0 && !programLoading && (
+        <p className="text-center text-muted-foreground py-4">
+          No programs found in this branch.
         </p>
       )}
 
       {branchPrograms?.map((branchProgram) => {
+        // Find if the student is currently associated with this program in the form
         const enrolledProgram = selectedPrograms.find(
           (p) => p.branchProgramId === branchProgram.id
         );
+
         const isChecked = !!enrolledProgram;
+
+        // LOCK LOGIC: If 'id' exists, it came from the DB and cannot be removed
+        const isAlreadyEnrolled = !!enrolledProgram?.id;
 
         return (
           <div
             key={branchProgram.id}
-            className="hover:bg-accent/10 flex items-start gap-3 rounded-lg border p-3 has-[[aria-checked=true]]:border-primary has-aria-checked:bg-primary/5 dark:has-[[aria-checked=true]]:border-primary dark:has-[[aria-checked=true]]:bg-primary/10"
+            className="flex items-start gap-3 rounded-lg border p-4 transition-colors has-[[aria-checked=true]]:border-primary has-aria-checked:bg-primary/5"
           >
             <Checkbox
-              id="toggle-2"
-              className="data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-white dark:data-[state=checked]:border-primary dark:data-[state=checked]:bg-primary/50"
+              id={`prog-${branchProgram.id}`}
               checked={isChecked}
-              disabled={isPending}
+              // Prevent unchecking if already in database OR if global pending
+              disabled={isPending || isAlreadyEnrolled}
               onCheckedChange={(checked) => {
                 if (checked) {
                   form.setValue("enrolledPrograms", [
@@ -73,18 +76,31 @@ export const BranchProgramMultiSelect = ({
                 }
               }}
             />
-            <div className="flex flex-col gap-2 font-normal w-full">
-              <p className="text-sm leading-none font-medium capitalize">
-                {branchProgram.program.name}
-              </p>
+            <div className="flex flex-col gap-2 w-full">
+              <div className="flex justify-between items-center w-full">
+                <label
+                  htmlFor={`prog-${branchProgram.id}`}
+                  className="text-sm font-medium leading-none capitalize cursor-pointer"
+                >
+                  {branchProgram.program.name}
+                </label>
+                {isAlreadyEnrolled && (
+                  <Badge variant="secondary" className="text-[10px] uppercase">
+                    Enrolled
+                  </Badge>
+                )}
+              </div>
 
               {isChecked && (
-                <TimeTableSelect
-                  branchProgramId={enrolledProgram.branchProgramId}
-                  form={form}
-                  isPending={isPending}
-                  selectedPrograms={selectedPrograms}
-                />
+                <div className="mt-1">
+                  <TimeTableSelect
+                    branchProgramId={branchProgram.id}
+                    form={form}
+                    // If already enrolled, you might also want to lock the timetable selection
+                    isPending={isPending || isAlreadyEnrolled}
+                    selectedPrograms={selectedPrograms}
+                  />
+                </div>
               )}
             </div>
           </div>

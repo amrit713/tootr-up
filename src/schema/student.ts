@@ -43,16 +43,27 @@ export const studentSchema = z.object({
 });
 
 
+const phoneSchema = z
+    .string()
+    .regex(/^\d{10}$/, "Must be a valid 10-digit number");
+
 export const updateStudentSchema = z.object({
-    number: z.string().regex(/^\d{10}$/, "Invalid phone number").optional(),
-    secondaryNumber: z.string().regex(/^\d{10}$/, "Invalid phone number").optional(),
+    number: phoneSchema.optional(),
+    secondaryNumber: phoneSchema.optional(),
+    isActive: z.boolean().optional(),
+    parentName: z.string().trim().optional(),
+    name: z.string().trim().optional(),
 
-    parentName: z.string().optional(),
-    name: z.string().optional(),
+    email: z
+        .union([z.string().email("Invalid email"), z.literal("")])
+        .optional(),
 
-    email: z.string().email().optional().or(z.literal("")),
-
-    age: z.coerce.number().min(1).optional(),
+    age: z.coerce
+        .number()
+        .int("Age must be an integer")
+        .min(0, "Age cannot be negative")
+        .max(120, "Age seems invalid")
+        .optional(),
 
     grade: z.string().optional(),
     gender: z.nativeEnum(Gender).optional(),
@@ -60,16 +71,18 @@ export const updateStudentSchema = z.object({
     schoolName: z.string().optional(),
     address: z.string().optional(),
 
-    joinedDate: z.coerce.date().optional(),
+    joinedDate: z.coerce
+        .date()
+        .optional(),
 
     branchId: z.string().optional(),
 
     enrolledPrograms: z
         .array(
             z.object({
-                id: z.string().optional(),
-                branchProgramId: z.string().min(1),
-                timeTableId: z.string().min(1),
+                id: z.string().optional(), // present when updating
+                branchProgramId: z.string().min(1, "Program is required"),
+                timeTableId: z.string().min(1, "Time table is required"),
             })
         )
         .min(1, "At least one program must be selected")

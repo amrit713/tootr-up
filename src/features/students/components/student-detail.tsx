@@ -7,10 +7,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { router } from "better-auth/api";
+
 import {
-  Edit,
   EditIcon,
+  GraduationCap,
   MoreVertical,
   PlusIcon,
   TrashIcon,
@@ -34,12 +34,12 @@ function StudentDetail({
         <div className="relative  ">
           <Avatar className="size-24 border-green-500/50 border-2 ">
             <AvatarFallback className="bg-green-500/15 text-4xl text-green-600  font-semibold">
-              {name.charAt(0).toUpperCase()}
+              <GraduationCap className="size-12" />
             </AvatarFallback>
           </Avatar>
 
           <Button
-            className=" rounded-full absolute right-0 bottom-[-6px] shadow-none "
+            className=" rounded-full absolute right-0 -bottom-1.5 shadow-none "
             size={"icon"}
             variant={"secondary"}
           >
