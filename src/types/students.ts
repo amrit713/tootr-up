@@ -2,12 +2,13 @@ import { AttendanceStatus, Student, StudentEnrollment, Payment } from "@/generat
 
 export type StudentType = Omit<
   Student,
-  "createdAt" | "updatedAt" | "enrolledDate" | "startedDate"
+  "createdAt" | "updatedAt" | "enrolledDate" | "startedDate" | "endDate"
 > & {
   createdAt: string;
   updatedAt: string;
   enrolledDate: string;
   startedDate: string | null;
+  endDate: string | Date | null;
   Branch: {
     name: string;
   };
@@ -18,8 +19,9 @@ export type StudentType = Omit<
 };
 
 
-export type StudentEnrollmentType = Omit<StudentEnrollment, "enrolledDate"> & {
+export type StudentEnrollmentType = Omit<StudentEnrollment, "enrolledDate" | "endDate"> & {
   enrolledDate: string | null;
+  endDate: string | Date | null;
   student: {
     name: string,
     number: string
@@ -30,12 +32,13 @@ export type StudentEnrollmentType = Omit<StudentEnrollment, "enrolledDate"> & {
 
 export type StudentDetailType = Omit<
   Student,
-  "createdAt" | "updatedAt" | "enrolledDate" | "startedDate"
+  "createdAt" | "updatedAt" | "enrolledDate" | "startedDate" | "endDate"
 > & {
   createdAt: string;
   updatedAt: string;
   enrolledDate: string;
   startedDate: string | null;
+  endDate: string | Date | null;
   Branch: { name: string };
   StudentEnrollment: {
     id: string;
@@ -61,6 +64,7 @@ export type PaymentType = Omit<
   createdAt: string;
   updatedAt: string;
   lastPaidDate: string | null;
+
 };
 
 
