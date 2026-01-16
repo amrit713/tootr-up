@@ -27,7 +27,7 @@ import { DashboardStudents } from "@/features/students/components/dashboard-stud
 export const StudentView = () => {
   const router = useRouter();
   const attendance = useAttendanceFilters();
-  const { search, branch, program, joinDate, paymentStatus } =
+  const { search, branch, program, joinDate, paymentStatus, isActive } =
     useStudentFilters();
 
   const { data: students, isLoading } = useGetStudents({
@@ -36,6 +36,7 @@ export const StudentView = () => {
     program,
     joinDate,
     paymentStatus,
+    isActive,
   });
 
   const {

@@ -8,6 +8,7 @@ type StudentFilter = {
   joinDate?: string;
   attendanceStatus?: string;
   name?: string;
+  isActive: boolean;
 };
 
 type AttedanceFilter = StudentFilter & {
@@ -25,6 +26,8 @@ export const useAttendanceFilters = create<AttedanceFilter>((set) => ({
   date: undefined,
   joinDate: undefined,
   attendanceStatus: undefined,
+  isActive: true,
+
   name: undefined,
   setFilter: (key, value) =>
     set((state) => ({

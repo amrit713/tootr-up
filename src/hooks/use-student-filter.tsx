@@ -7,6 +7,7 @@ type StudentFilters = {
   joinDate?: string;
   program?: string;
   paymentStatus?: PaymentStatus;
+  isActive?: string;
 };
 
 type StudentFilterStore = StudentFilters & {
@@ -23,6 +24,7 @@ export const useStudentFilters = create<StudentFilterStore>((set) => ({
   joinDate: undefined,
   program: undefined,
   paymentStatus: undefined,
+  isActive: undefined,
   setFilter: (key, value) =>
     set((state) => ({
       ...state,
@@ -35,5 +37,6 @@ export const useStudentFilters = create<StudentFilterStore>((set) => ({
       joinDate: undefined,
       program: undefined,
       paymentStatus: undefined,
+      isActive: undefined,
     }),
 }));

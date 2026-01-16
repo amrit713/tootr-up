@@ -1,6 +1,12 @@
 "use client";
 
-import { ListChecksIcon, Search, XIcon } from "lucide-react";
+import {
+  CheckCircle,
+  ListChecksIcon,
+  Search,
+  XCircleIcon,
+  XIcon,
+} from "lucide-react";
 
 import {
   SelectTrigger,
@@ -10,8 +16,7 @@ import {
   Select,
   SelectSeparator,
 } from "@/components/ui/select";
-import { LeadStatus, PaymentStatus } from "@/generated/prisma/browser";
-import { useLeadFilters } from "@/hooks/use-filter";
+import { PaymentStatus } from "@/generated/prisma/browser";
 
 import { DatePicker } from "@/components/global/date-picker";
 import { Input } from "@/components/ui/input";
@@ -28,6 +33,7 @@ export const StudentFilter = () => {
     branch,
     search,
     paymentStatus,
+    isActive,
     setFilter,
     resetFilters,
   } = useStudentFilters();
@@ -55,6 +61,14 @@ export const StudentFilter = () => {
       setFilter("paymentStatus", undefined);
     } else {
       setFilter("paymentStatus", value as PaymentStatus);
+    }
+  };
+
+  const onStudentStatusChange = (value: string) => {
+    if (value === "all") {
+      setFilter("isActive", undefined);
+    } else {
+      setFilter("isActive", value);
     }
   };
 
@@ -126,6 +140,32 @@ export const StudentFilter = () => {
                 {snakeCaseToTitleCase(status)}
               </SelectItem>
             ))}
+          </SelectContent>
+        </Select>
+
+        <Select
+          defaultValue={isActive && "active"}
+          onValueChange={(value) => onStudentStatusChange(value)}
+        >
+          <SelectTrigger className="w-full md:w-auto ">
+            <div className="flex items-center pr-2">
+              <SelectValue placeholder="Student Status" />
+            </div>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={"all"}>All Status</SelectItem>
+            <SelectSeparator />
+            <SelectItem value={"active"}>
+              <div className="flex items-center gap-2">
+                <CheckCircle className=" size-4" />
+                Active
+              </div>
+            </SelectItem>
+            <SelectItem value={"inActive"} className="">
+              <div className="flex items-center gap-2">
+                <XCircleIcon className=" size-4" /> In Active
+              </div>
+            </SelectItem>
           </SelectContent>
         </Select>
 
