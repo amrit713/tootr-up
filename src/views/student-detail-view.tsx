@@ -27,6 +27,7 @@ export const StudentDetailView = () => {
                   name={student.name}
                   image={student.image}
                   id={student.id}
+                  isActive={student.isActive}
                 />
                 <Separator className="" />
               </div>

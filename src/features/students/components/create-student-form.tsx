@@ -62,7 +62,6 @@ export const CreateStudentForm = ({ lead }: CreateStudentProps) => {
 
   const branchId = form.watch("branchId");
   const selectedPrograms = form.watch("enrolledPrograms") || [];
-  console.log(form.getValues());
 
   useEffect(() => {
     if (lead) {
@@ -83,7 +82,6 @@ export const CreateStudentForm = ({ lead }: CreateStudentProps) => {
   }, [lead, form]);
 
   const onSubmit = (values: z.infer<typeof studentSchema>) => {
-    console.log("Submitting form with values:", values);
     createStudent(
       { json: values },
       {

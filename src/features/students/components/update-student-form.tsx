@@ -80,8 +80,6 @@ export const UpdateStudentForm = ({ student }: UpdateStudentProps) => {
   const branchId = form.watch("branchId");
 
   const onSubmit = (values: z.infer<typeof updateStudentSchema>) => {
-    console.log("🚀 ~ onSubmit ~ values:", values);
-
     updateStudent(
       { json: values, param: { id: student.id } },
       {

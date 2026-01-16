@@ -10,9 +10,10 @@ interface useGetStudentEnrollmentsProps {
     date?: string
     attendanceStatus?: AttendanceStatus,
     name?: string
+    isActive?: boolean
 }
 
-export const useGetStudentEnrollments = ({ program, slotTime, date, attendanceStatus, name }: useGetStudentEnrollmentsProps) => {
+export const useGetStudentEnrollments = ({ program, slotTime, date, attendanceStatus, name, isActive }: useGetStudentEnrollmentsProps) => {
 
     const query = useQuery({
         enabled: false,
@@ -21,7 +22,7 @@ export const useGetStudentEnrollments = ({ program, slotTime, date, attendanceSt
 
             const response = await client.api["student-enrollments"].$get({
                 query: {
-                    program, slotTime, date, attendanceStatus, name
+                    program, slotTime, date, attendanceStatus, name, isActive
                 }
             })
 

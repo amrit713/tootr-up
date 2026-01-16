@@ -12,12 +12,14 @@ import { PaymentStatus } from "@/generated/prisma/browser";
 
 
 
+
 const filterSchema = z.object({
     search: z.string().nullish(),
     joinDate: z.string().nullish(),
     branch: z.string().nullish(),
     program: z.string().nullish(),
-    paymentStatus: z.nativeEnum(PaymentStatus).nullish()
+    paymentStatus: z.nativeEnum(PaymentStatus).nullish(),
+    isActive: z.string().optional(),
 
 })
 
@@ -87,10 +89,10 @@ const app = new Hono<{ Variables: Variables }>()
             throw new HTTPException(401, { message: "Unauthorized" });
         }
 
-        const { search, joinDate, branch, program, paymentStatus } = c.req.valid("query")
+        const { search, joinDate, branch, program, paymentStatus, isActive } = c.req.valid("query")
 
 
-
+        const activeState = isActive ? isActive === "active" ? true : false : undefined
 
 
         let startOfDay;
@@ -125,6 +127,8 @@ const app = new Hono<{ Variables: Variables }>()
                         }
                     }
                 } : undefined,
+
+                isActive: activeState,
 
             },
             orderBy: {
@@ -232,7 +236,6 @@ const app = new Hono<{ Variables: Variables }>()
         const { id } = c.req.param();
         const {
             name, number, secondaryNumber, parentName, email,
-            isActive,
             age, grade, gender, schoolName, address,
             branchId, joinedDate, enrolledPrograms
         } = c.req.valid("json");
@@ -286,6 +289,85 @@ const app = new Hono<{ Variables: Variables }>()
         }
 
         return c.json({ data: student });
+    })
+    .patch("/:id/toggle", authMiddleware, zValidator("json", z.object({
+        isActive: z.boolean()
+    })), async (c) => {
+        const user = c.get("user");
+        if (!user) {
+            throw new HTTPException(401, { message: "Unauthorized" });
+        }
+        const { id } = c.req.param();
+        const { isActive } = c.req.valid("json");
+
+        const existingStudent = await db.student.findUnique({
+            where: { id }
+        });
+
+        if (!existingStudent) {
+            throw new HTTPException(404, { message: "Student not found" });
+        }
+        const student = await db.student.update({
+            where: { id },
+            data: {
+                isActive: isActive,
+                endDate: isActive === true ? null : new Date(),
+
+                StudentEnrollment: {
+                    updateMany: {
+                        where: { studentId: id },
+                        data: {
+                            isActive: isActive,
+                            endDate: isActive === true ? null : new Date(),
+                        }
+                    }
+                }
+            }
+        });
+
+
+
+
+        return c.json({ data: student });
+    })
+    .delete("/:id", authMiddleware, async (c) => {
+        const user = c.get("user");
+
+        if (!user) {
+            throw new HTTPException(401, { message: "Unauthorized" });
+        }
+
+        const { id } = c.req.param();
+        await db.$transaction(async (tx) => {
+
+            const enrollments = await tx.studentEnrollment.findMany({
+                where: { studentId: id },
+                select: { id: true }
+            });
+
+            const enrollmentIds = enrollments.map(e => e.id);
+
+            // 2. Delete Attendance records linked to those enrollments
+            await tx.attendance.deleteMany({
+                where: {
+                    studentEnrollmentId: { in: enrollmentIds }
+                }
+            });
+
+            // 3. Delete the Enrollments
+            await tx.studentEnrollment.deleteMany({
+                where: { studentId: id }
+            });
+
+            // 4. Finally, delete the Student
+            return await tx.student.delete({
+                where: { id }
+            });
+        });
+
+
+        return c.json({ data: "student deleted successfully" });
+
     })
 
 

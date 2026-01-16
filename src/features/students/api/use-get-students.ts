@@ -10,19 +10,20 @@ interface useGetStudentsProps {
     joinDate?: string,
     search?: string,
     paymentStatus?: PaymentStatus
+    isActive?: string
 
 }
 
 
-export const useGetStudents = ({ branch, program, joinDate, search, paymentStatus }: useGetStudentsProps) => {
+export const useGetStudents = ({ branch, program, joinDate, search, paymentStatus, isActive }: useGetStudentsProps) => {
 
     const query = useQuery({
-        queryKey: ["students", branch, program, joinDate, search, paymentStatus],
+        queryKey: ["students", branch, program, joinDate, search, paymentStatus, isActive],
         queryFn: async () => {
 
             const response = await client.api.students.$get({
                 query: {
-                    branch, program, joinDate, search, paymentStatus
+                    branch, program, joinDate, search, paymentStatus, isActive
                 }
             })
 

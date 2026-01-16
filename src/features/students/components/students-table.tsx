@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button";
 
 import { useRouter } from "next/navigation";
 import { LoadingState } from "@/components/global/loading-state";
+import { cn } from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -105,7 +106,12 @@ export function StudentsTable<TData, TValue>({
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && "selected"}
-                      className="cursor-pointer !border-x-1 !border-y-1  shadow-none bg-background p-1 rounded-lg hover:bg-primary/5 flex"
+                      className={cn(
+                        "cursor-pointer !border-x-1 !border-y-1  shadow-none bg-background p-1 rounded-lg hover:bg-primary/5 flex",
+                        (row.original as any).isActive
+                          ? ""
+                          : "opacity-80 bg-rose-600/10 text-rose-700 dark:text-rose-300"
+                      )}
                       onClick={() => {
                         router.push(
                           `/students/${(row.original as any).id}` as any
