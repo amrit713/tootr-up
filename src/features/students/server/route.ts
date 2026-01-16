@@ -34,6 +34,18 @@ const app = new Hono<{ Variables: Variables }>()
         const { name, number, secondaryNumber, parentName, email, age, grade, gender, schoolName, address, branchId, totalFee, totalFeeAfterDiscount, taxableAmount, discountPrice, vatAmount, paidAmount, enrolledPrograms, joinedDate, attendance } = c.req.valid("json")
 
 
+        const studentExists = await db.student.findFirst({
+            where: {
+                number,
+                name
+            }
+        })
+
+        if (studentExists) {
+            throw new HTTPException(400, { message: "Student with the same name and number already exists" })
+        }
+
+
         const dueAmount = (totalFeeAfterDiscount ?? 0) - (paidAmount ?? 0)
 
         const student = await db.student.create({
